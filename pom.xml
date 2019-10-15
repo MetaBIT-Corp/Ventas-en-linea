@@ -53,6 +53,16 @@
 		  <groupId>org.slf4j</groupId>
 		  <artifactId>slf4j-log4j12</artifactId>
 		</dependency>
+		
+		<!-- Dependencia de Oracle -->
+		<!--  
+		<dependency>
+		     <groupId>com.oracle</groupId>
+		     <artifactId>ojdbc8</artifactId>
+		     <version>12.2.0.1</version>
+		 </dependency>
+		-->
+		
 	</dependencies>
 
 	<build>
