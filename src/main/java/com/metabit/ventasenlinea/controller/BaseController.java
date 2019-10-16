@@ -11,7 +11,7 @@ public class BaseController {
 	
 	@GetMapping("")
 	public ModelAndView base() {
-		ModelAndView modelAndView = new ModelAndView("base");
+		ModelAndView modelAndView = new ModelAndView("login");
 		return modelAndView;
 	}
 	
