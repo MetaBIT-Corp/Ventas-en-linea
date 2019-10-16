@@ -44,7 +44,7 @@ public class ClienteController {
 	public String store(@ModelAttribute("cliente") Cliente cliente, @ModelAttribute("user") User user, RedirectAttributes redirAttrs) {
 		String codigo = codigo();
 		
-		if(!user.getPassword().equals(user.getPasswordConfirm())) {
+		if(!user.getPassword().equals(user.getPasswordConfirm()) || user.getPassword() == "") {
 			redirAttrs.addFlashAttribute("message", "Las contraseñas no coinciden");
 			return "redirect:/cliente/crear-cliente";
 		}
@@ -59,6 +59,8 @@ public class ClienteController {
 		
 		userServiceImpl.createUser(user);
 		clienteServiceImpl.createCliente(cliente);
+		
+		redirAttrs.addFlashAttribute("success", "succeess");
 		
 		return "redirect:/cliente/verificar-codigo/"+user.getIdUser();
 	}
