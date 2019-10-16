@@ -8,6 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 @Entity
 @Table(name = "clientes")
 public class Cliente {
@@ -15,13 +23,13 @@ public class Cliente {
 	@Id
 	@GeneratedValue
 	@Column(name = "id_ciente", nullable = false)
-	private int id_cliente;
+	private int idCliente;
 
 	@Column(name = "nombre_cliente", nullable = false)
-	private String nombre_cliente;
+	private String nombreCliente;
 
 	@Column(name = "apellido_cliente", nullable = false)
-	private String apellido_cliente;
+	private String apellidoCliente;
 
 	@Column(name = "direccion", nullable = false)
 	private String direccion;
@@ -32,37 +40,37 @@ public class Cliente {
 	public Cliente() {
 	}
 
-	public Cliente(int id_cliente, String nombre_cliente, String apellido_cliente, String direccion, User user) {
+	public Cliente(int idCliente, String nombreCliente, String apellidoCliente, String direccion, User user) {
 		super();
-		this.id_cliente = id_cliente;
-		this.nombre_cliente = nombre_cliente;
-		this.apellido_cliente = apellido_cliente;
+		this.idCliente = idCliente;
+		this.nombreCliente = nombreCliente;
+		this.apellidoCliente = apellidoCliente;
 		this.direccion = direccion;
 		this.user = user;
 	}
 
-	public int getId_cliente() {
-		return id_cliente;
+	public int getIdCliente() {
+		return idCliente;
 	}
 
-	public void setId_cliente(int id_cliente) {
-		this.id_cliente = id_cliente;
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
 	}
 
-	public String getNombre_cliente() {
-		return nombre_cliente;
+	public String getNombreCliente() {
+		return nombreCliente;
 	}
 
-	public void setNombre_cliente(String nombre_cliente) {
-		this.nombre_cliente = nombre_cliente;
+	public void setNombreCliente(String nombreCliente) {
+		this.nombreCliente = nombreCliente;
 	}
 
-	public String getApellido_cliente() {
-		return apellido_cliente;
+	public String getApellidoCliente() {
+		return apellidoCliente;
 	}
 
-	public void setApellido_cliente(String apellido_cliente) {
-		this.apellido_cliente = apellido_cliente;
+	public void setApellidoCliente(String apellidoCliente) {
+		this.apellidoCliente = apellidoCliente;
 	}
 
 	public String getDireccion() {
@@ -82,4 +90,3 @@ public class Cliente {
 	}
 
 }
-

@@ -3,53 +3,58 @@ package com.metabit.ventasenlinea.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "users")
 public class User {
-	
-	@Id 
+
+	@Id
 	@GeneratedValue
 	@Column(name = "id_user", nullable = false)
-	private int id_user;
-	
+	private int idUser;
+
 	@Column(name = "email", nullable = false)
 	private String email;
-	
+
 	@Column(name = "password", nullable = false)
 	private String password;
-	
+
+	@Transient
+	private String passwordConfirm;
+
 	@Column(name = "codigo_verificacion", nullable = false)
-	private String codigo_verificacion;
-	
+	private String codigoVerificacion;
+
 	@Column(name = "verifyed", nullable = false)
 	private int verifyed;
-	
+
 	@Column(name = "role", nullable = false)
 	private int role;
-	
+
 	public User() {
 	}
 
-	public User(int id_user, String email, String password, String codigo_verificacion, int verifyed, int role) {
+	public User(int idUser, String email, String password, String passwordConfirm, String codigoVerificacion,
+			int verifyed, int role) {
 		super();
-		this.id_user = id_user;
+		this.idUser = idUser;
 		this.email = email;
 		this.password = password;
-		this.codigo_verificacion = codigo_verificacion;
+		this.passwordConfirm = passwordConfirm;
+		this.codigoVerificacion = codigoVerificacion;
 		this.verifyed = verifyed;
-		this.role = role;
+		this.role = role; //0: admin; 1: encargado bodega; 2: encargado ventas; 3: cliente
 	}
 
-	public int getId_user() {
-		return id_user;
+	public int getIdUser() {
+		return idUser;
 	}
 
-	public void setId_user(int id_user) {
-		this.id_user = id_user;
+	public void setIdUser(int idUser) {
+		this.idUser = idUser;
 	}
 
 	public String getEmail() {
@@ -68,12 +73,20 @@ public class User {
 		this.password = password;
 	}
 
-	public String getCodigo_verificacion() {
-		return codigo_verificacion;
+	public String getPasswordConfirm() {
+		return passwordConfirm;
 	}
 
-	public void setCodigo_verificacion(String codigo_verificacion) {
-		this.codigo_verificacion = codigo_verificacion;
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getCodigoVerificacion() {
+		return codigoVerificacion;
+	}
+
+	public void setCodigoVerificacion(String codigoVerificacion) {
+		this.codigoVerificacion = codigoVerificacion;
 	}
 
 	public int getVerifyed() {
