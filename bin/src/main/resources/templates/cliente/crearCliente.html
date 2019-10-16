@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Crear cuenta</title>
+	
+	<!-- Custom fonts for this template-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet"/>
+  
+</head>
+
+<body class="bg-gradient-primary">
+
+  <div class="container">
+
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <!-- Nested Row within Card Body -->
+        <div class="row">
+          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+          <div class="col-lg-7">
+            <div class="p-5">
+              <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
+              </div>
+              <div th:if="${message}">
+		     	<div class="alert alert-danger">
+		     		<h4 th:text="${message}"></h4>
+		     	</div>
+      		  </div>
+              <form action="#" th:action="@{/cliente/crear-cliente}" method="post" class="user">
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="text" th:field="*{cliente.nombreCliente}" class="form-control form-control-user" id="exampleFirstName" placeholder="Nombre">
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="text" th:field="*{cliente.apellidoCliente}" class="form-control form-control-user" id="exampleLastName" placeholder="Apellido">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="email" th:field="*{user.email}" class="form-control form-control-user" id="exampleInputEmail" placeholder="Correo electrónico">
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-6 mb-3 mb-sm-0">
+                    <input type="password" th:field="*{user.password}" class="form-control form-control-user" id="exampleInputPassword" placeholder="Contraseña">
+                  </div>
+                  <div class="col-sm-6">
+                    <input type="password" th:field="*{user.passwordConfirm}" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Confirmar contraseña">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <textarea type="text" th:field="*{cliente.direccion}" class="form-control form-control-user" id="exampleInputEmail" placeholder="Dirección"></textarea>
+                </div>
+                <input type="submit" value="Registrar cuenta" class="btn btn-primary btn-user btn-block"/>
+              </form>
+              <hr>
+              <div class="text-center">
+                <a class="small" href="#">Olvidé mi contraseña?</a>
+              </div>
+              <div class="text-center">
+                <a class="small" href="#">ya tienes una cuenta? Login!</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+	<!-- Bootstrap core JavaScript-->
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+</body>
+</html>

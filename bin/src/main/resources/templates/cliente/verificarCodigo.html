@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Confirmar código</title>
+
+<!-- Custom fonts for this template-->
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet"/>
+  
+</head>
+
+<body class="bg-gradient-primary">
+
+  <div class="container my-5">
+
+   <div class="row col-md-12">
+    <!-- Default Card Example -->
+    <div class="col-md-3"></div>
+    <div class="card my-5 ml-5 mr-5 col-md-6">
+      <div class="card-header text-center">
+        Confirmar cuenta
+      </div>
+      
+      <div class="card-body">
+      	<div th:if="${message}">
+	     	<div class="alert alert-danger">
+	     		<h4 th:text="${message}"></h4>
+	     	</div>
+      	</div>
+      	
+      	<div th:if="${success}">
+	     	<div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+			   <div class="modal-dialog" role="document">
+			      <div class="modal-content">
+			         <div class="modal-header">
+			        	<h5 class="modal-title" id="exampleModalLabel">Cuenta registrada</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+			     	</div>
+			         <div class="modal-body">
+			            <h4>Para hacer uso de esta cuenta es necesario verifcarla mediante el código que enviamos a su correo electrónico</h4>    
+			     	</div>
+			         <div class="modal-footer">
+			        <a href="#" data-dismiss="modal" class="btn btn-primary">Aceptar</a>
+			     </div>
+			      </div>
+			   </div>
+			</div>
+      	</div>
+      	
+        <form action="#" th:action="@{/cliente/verificar-codigo}" method="post" class="user">
+        	<div th:object="${user}"></div>
+        	<input type="hidden" th:value="${user.idUser}" name="id_user"/>
+            <div class="form-group">
+              <input type="text" class="form-control form-control-user" name="codigo" placeholder="Código de confirmación">
+            </div>
+            <input type="submit" value="Verificar código" class="btn btn-secondary btn-user btn-block"/>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+   </div>
+  </div>
+  
+	<!-- Bootstrap core JavaScript-->
+  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script th:src="@{/js/sb-admin-2.min.js}"></script>
+  
+  <script>
+      $(document).ready(function()
+      {
+         $("#mostrarmodal").modal("show");
+      });
+  </script>
+  
+  </body>
+</html>

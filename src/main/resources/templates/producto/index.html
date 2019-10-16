@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>MetaBit Store Online | Productos</title>
+
+<!-- Custom fonts for this template-->
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}"
+	rel="stylesheet">
+
+</head>
+<body>
+	<div id="wrapper">
+		<div th:insert="fragments/sidebar::sidebar"></div>
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<!-- Main Content -->
+			<div id="content">
+				<div th:insert="fragments/topbar::topbar"></div>
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+					<!-- ESPACIO DE TRABAJO  -->
+
+					<div class="row ml-5 mr-4">
+						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;"
+							th:each=producto:${productos}>
+							<img th:src=${producto.imagen} class="card-img-top">
+							<div class="card-body">
+								<h5 class="card-title" th:text=${producto.titulo}>
+									<strong>$50.00</strong>
+								</h5>
+								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
+							</div>
+							<div class="card-footer"><a href="#" class="btn btn-primary">Añadir a Carrito</a></div>
+						</div>
+					</div>
+					<!-- FIN DE ESPACIO DE TRABAJO -->
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div th:insert="fragments/modallogout::modallogout"></div>
+</body>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+</html>
