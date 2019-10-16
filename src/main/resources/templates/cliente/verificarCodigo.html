@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Confirmar código</title>
+
+<!-- Custom fonts for this template-->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet"/>
+  
+</head>
+
+<body class="bg-gradient-primary">
+
+  <div class="container my-5">
+
+   <div class="row col-md-12">
+    <!-- Default Card Example -->
+    <div class="col-md-3"></div>
+    <div class="card my-5 ml-5 mr-5 col-md-6">
+      <div class="card-header text-center">
+        Confirmar cuenta
+      </div>
+      <div class="card-body">
+      	<div th:if="${message}">
+	     	<div class="alert alert-danger">
+	     		<h4 th:text="${message}"></h4>
+	     	</div>
+      	</div>
+        <form action="#" th:action="@{/cliente/verificar-codigo}" method="post" class="user">
+        	<div th:object="${user}"></div>
+        	<input type="hidden" th:value="${user.idUser}" name="id_user"/>
+            <div class="form-group">
+              <input type="text" class="form-control form-control-user" name="codigo" placeholder="Código de confirmación">
+            </div>
+            <input type="submit" value="Verificar código" class="btn btn-secondary btn-user btn-block"/>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+   </div>
+
+  </div>
+	<!-- Bootstrap core JavaScript-->
+  <script th:src="@{/js/jquery/jquery.min.js}"></script>
+  <script th:src="@{/js/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script th:src="@{/js/jquery-easing/jquery.easing.min.js}"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script th:src="@{/js/sb-admin-2.min.js}"></script>
+  </body>
+</html>
