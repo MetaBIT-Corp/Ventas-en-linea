@@ -13,13 +13,16 @@ import com.metabit.ventasenlinea.service.ProductoService;
 @Controller
 @RequestMapping("/producto")
 public class ProductoController {
+	
+	private static final String INDEX_VIEW="/producto/index";
+	
 	@Autowired
 	@Qualifier("productoServiceImpl")
 	private ProductoService productService;
 
 	@GetMapping("/index")
 	public ModelAndView indexProducto() {
-		ModelAndView mav = new ModelAndView("/producto/index");
+		ModelAndView mav = new ModelAndView(INDEX_VIEW);
 
 		// Borramos toda la BD para evitar que se repitan
 		productService.deleteAll();
@@ -47,6 +50,9 @@ public class ProductoController {
 		productService.addProduct(p3);
 
 		/*
+		 * Por si quieren probar con mas datos
+		 * 
+		 
 		Producto p4 = new Producto();
 		p4.setImagen("/img_products/nintendo.jpg");
 		p4.setMarca("Nintento");

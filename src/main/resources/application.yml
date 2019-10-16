@@ -6,6 +6,7 @@ spring:
     #Username Ricardo :v
     #username: admin
     #password: ues
+    
     username: root
     password:
 
