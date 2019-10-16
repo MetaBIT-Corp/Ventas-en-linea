@@ -10,4 +10,6 @@ import com.metabit.ventasenlinea.entity.User;
 @Repository("userJpaRepository")
 public interface UserJpaRepository extends JpaRepository<User, Serializable>{
 	public abstract User findByIdUser(int id_user);
+	
+	public abstract User findByEmail(String email);
 }

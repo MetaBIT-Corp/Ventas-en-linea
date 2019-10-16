@@ -2,6 +2,7 @@ package com.metabit.ventasenlinea.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +51,9 @@ public class ClienteController {
 		user.setCodigoVerificacion(codigo);
 		user.setRole(3);
 		user.setVerifyed(0);
+		//user.setPassword();
+		BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+		user.setPassword(pe.encode(user.getPassword())); 
 		
 		cliente.setUser(user);
 		
@@ -75,7 +79,7 @@ public class ClienteController {
 			user.setVerifyed(1);
 			userServiceImpl.createUser(user);
 			redirAttrs.addFlashAttribute("message", "Guud");
-			return "redirect:/cliente/verificar-codigo/"+id_user;
+			return "redirect:/ventas-online/login";
 		}else {
 			redirAttrs.addFlashAttribute("message", "El código ingresado es incorrecto");
 			return "redirect:/cliente/verificar-codigo/"+id_user;

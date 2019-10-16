@@ -53,21 +53,23 @@
 													<div class="text-center">
 														<h1 class="h4 text-gray-900 mb-4">Bienvenido!</h1>
 													</div>
-													<form class="user">
+													<form class="user" th:action="@{/ventas-online/login-check}" method="POST">
+														<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 														<div class="form-group">
 															<input type="email"
 																class="form-control form-control-user"
 																id="exampleInputEmail" aria-describedby="emailHelp"
-																placeholder="Ingresa tu email...">
+																placeholder="Ingresa tu email..." name="exampleInputEmail">
 														</div>
 														<div class="form-group">
 															<input type="password"
 																class="form-control form-control-user"
-																id="exampleInputPassword" placeholder="Password">
+																id="exampleInputPassword" placeholder="Password" name="exampleInputPassword">
 														</div>
 														
-														<a href="#" class="btn btn-primary btn-user btn-block">
-															Login </a>
+														<div th:if="${error != null}" class="alert alert-danger" role="alert">email y/o contraseña no son validos.</div>
+														<div th:if="${logout != null}" class="alert alert-info" role="alert">Logout exitoso!</div>
+														<input type="submit" value="Login" class="btn btn-primary btn-user btn-block"/>
 														<hr>
 														
 													</form>
@@ -76,7 +78,7 @@
 														<a class="small" href="#">Olvidaste tu contraseña?</a>
 													</div>
 													<div class="text-center">
-														<a class="small" href="#">¿No tienes cuenta?, Registrate aquí!</a>
+														<a class="small" th:href="@{/cliente/crear-cliente}">¿No tienes cuenta?, Registrate aquí!</a>
 													</div>
 												</div>
 											</div>
