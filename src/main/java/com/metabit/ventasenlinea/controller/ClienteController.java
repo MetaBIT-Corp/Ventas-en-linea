@@ -45,6 +45,11 @@ public class ClienteController {
 	@PostMapping("/crear-cliente")
 	public String store(@ModelAttribute("cliente") Cliente cliente, @ModelAttribute("user") User user, RedirectAttributes redirAttrs) {
 		String codigo = codigo();
+		String asunto = "Ventas en linea";
+		String contenido = "Estimado/a "+cliente.getNombreCliente()+
+							":\n\nHemos recibido una solicitud para crear una cuenta en nuestro sistema "+
+							"a través su dirección de correo electrónico."+
+							"\n\n Su código de verificación es:" + codigo;
 		
 		if(!user.getPassword().equals(user.getPasswordConfirm()) || user.getPassword() == "") {
 			redirAttrs.addFlashAttribute("message", "Las contraseñas no coinciden");
@@ -62,6 +67,7 @@ public class ClienteController {
 		userServiceImpl.createUser(user);
 		clienteServiceImpl.createCliente(cliente);
 		
+		sendEmail(user.getEmail(), asunto, contenido);
 		redirAttrs.addFlashAttribute("success", "succeess");
 		
 		return "redirect:/cliente/verificar-codigo/"+user.getIdUser();
@@ -78,11 +84,14 @@ public class ClienteController {
 	
 	@PostMapping("/verificar-codigo")
 	public String verificarCodigoPost(@RequestParam("codigo") String codigo, @RequestParam("id_user") int id_user, RedirectAttributes redirAttrs) {
+		String asunto = "Ventas en linea";
+		String contenido = "Enhorabuena, ya puedes hacer uso de tu cuenta en nuestro sistema de Ventas en línea";
 		User user = userServiceImpl.findById(id_user);
+		
 		if(user.getCodigoVerificacion().equals(codigo)) {
 			user.setVerifyed(1);
 			userServiceImpl.createUser(user);
-			redirAttrs.addFlashAttribute("message", "Guud");
+			sendEmail(user.getEmail(), asunto, contenido);
 			return "redirect:/ventas-online/login";
 		}else {
 			redirAttrs.addFlashAttribute("message", "El código ingresado es incorrecto");
