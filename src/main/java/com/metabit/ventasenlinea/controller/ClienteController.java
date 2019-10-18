@@ -2,6 +2,8 @@ package com.metabit.ventasenlinea.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,6 +100,23 @@ public class ClienteController {
 		
 		return codigo;
 	}
+	
+	//Inyeccion de la dependencia:
+    @Autowired
+    private JavaMailSender mailSender;
+
+    //Pasar por parametros: destinatario, asunto y el mensaje
+    public void sendEmail(String to, String subject, String content) {
+
+        SimpleMailMessage email = new SimpleMailMessage();
+        //Aqui podes Modificarlo por defectp te lo dejo asi
+        //NombreEmpresa <ejemplo@ejemplo.com>
+        email.setFrom("Empresa de Venta <ddjochoa.20@gmail.com>");
+        email.setTo(to);
+        email.setSubject(subject);
+        email.setText(content);       
+        mailSender.send(email);
+    }
 	
 	
 

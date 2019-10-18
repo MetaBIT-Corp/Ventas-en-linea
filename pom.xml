@@ -67,10 +67,15 @@
 		     <version>12.2.0.1</version>
 		 </dependency>
 		-->
-		
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
+	<pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -90,7 +95,7 @@
 		              <outputDirectory>target/generated-sources/java</outputDirectory>
 		              <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
 		            </configuration>
-		          </execution>
+		          	</execution>
 	        	</executions>	
 		        <dependencies>
 		          <dependency>
@@ -102,6 +107,7 @@
 	      </plugin>
 			
 		</plugins>
+		</pluginManagement>
 	</build>
 
 </project>
