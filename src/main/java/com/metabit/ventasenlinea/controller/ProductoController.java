@@ -2,6 +2,10 @@ package com.metabit.ventasenlinea.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +17,9 @@ import com.metabit.ventasenlinea.service.ProductoService;
 @Controller
 @RequestMapping("/producto")
 public class ProductoController {
-	
-	private static final String INDEX_VIEW="/producto/index";
-	
+
+	private static final String INDEX_VIEW = "/producto/index";
+
 	@Autowired
 	@Qualifier("productoServiceImpl")
 	private ProductoService productService;
@@ -52,31 +56,39 @@ public class ProductoController {
 		/*
 		 * Por si quieren probar con mas datos
 		 * 
-		 
-		Producto p4 = new Producto();
-		p4.setImagen("/img_products/nintendo.jpg");
-		p4.setMarca("Nintento");
-		p4.setTitulo("Nintendo Switch");
-		p4.setDescripcionArticulo("Consola de videojuego que puede jugarse en modo portatil y modo Dock");
-		productService.addProduct(p4);
-
-		Producto p5 = new Producto();
-		p5.setImagen("/img_products/play.jpg");
-		p5.setMarca("Sony");
-		p5.setTitulo("Play Station 5");
-		p5.setDescripcionArticulo("Consola de video juego con potencia para correr juegos en 4K");
-		productService.addProduct(p5);
-
-		Producto p6 = new Producto();
-		p6.setImagen("/img_products/xbox.jpg");
-		p6.setMarca("Microsoft");
-		p6.setTitulo("Xbox One S");
-		p6.setDescripcionArticulo("Consola con potencia para 4K, microprocesador Scorpio con 100teraflops");
-		productService.addProduct(p6);*/
+		 * 
+		 * Producto p4 = new Producto(); p4.setImagen("/img_products/nintendo.jpg");
+		 * p4.setMarca("Nintento"); p4.setTitulo("Nintendo Switch"); p4.
+		 * setDescripcionArticulo("Consola de videojuego que puede jugarse en modo portatil y modo Dock"
+		 * ); productService.addProduct(p4);
+		 * 
+		 * Producto p5 = new Producto(); p5.setImagen("/img_products/play.jpg");
+		 * p5.setMarca("Sony"); p5.setTitulo("Play Station 5"); p5.
+		 * setDescripcionArticulo("Consola de video juego con potencia para correr juegos en 4K"
+		 * ); productService.addProduct(p5);
+		 * 
+		 * Producto p6 = new Producto(); p6.setImagen("/img_products/xbox.jpg");
+		 * p6.setMarca("Microsoft"); p6.setTitulo("Xbox One S"); p6.
+		 * setDescripcionArticulo("Consola con potencia para 4K, microprocesador Scorpio con 100teraflops"
+		 * ); productService.addProduct(p6);
+		 */
 
 		// Recuperamos todos los datos de la BD
 		mav.addObject("productos", productService.getProductos());
 
+		// Si el usuario está autenticado devuelve a la vista el username y el role
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (isUserLoggedIn()) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			mav.addObject("user", userDetail.getUsername());
+			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
+		}
+
 		return mav;
+	}
+
+	//Devuelve true si el usuario ha iniciado sesión
+	boolean isUserLoggedIn() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
 	}
 }

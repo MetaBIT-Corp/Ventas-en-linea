@@ -2,6 +2,8 @@ package com.metabit.ventasenlinea.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,10 @@ public class DepartamentoController {
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView(INDEX_VIEW);
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
+		//user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0]);
 		return mav;
 	}
 }
