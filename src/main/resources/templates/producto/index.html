@@ -18,6 +18,23 @@
 <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}"
 	rel="stylesheet">
 
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
 </head>
 <body>
 	<div id="wrapper">
@@ -42,7 +59,7 @@
 								</h5>
 								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
 							</div>
-							<div class="card-footer"><a href="#" class="btn btn-primary">Añadir a Carrito</a></div>
+							<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
 						</div>
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
@@ -59,23 +76,42 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
+
+
+<!-- Modal elimanr Asignación de área a clave-->
+<div class="modal fade" id="agregarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eliminarModalCenterTitle">Agregar a carrito</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="#" th:action="@{/producto/agregar-producto}" method="post">
+        <div class="modal-body" id="agregar-producto">
+          <input type="hidden" value="" id="id-producto" name="producto_id">
+          <div class="form-group">
+            <label for="cantidad-producto">Cantidad*</label>
+            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
+          </div>
+        </div>
+        <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="submit" class="btn btn-primary">Agregar</button>    
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 </body>
 
-<!-- Bootstrap core JavaScript-->
-<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-<!-- Core plugin JavaScript-->
-<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-
-<!-- Custom scripts for all pages-->
-<script th:src="@{/js/sb-admin-2.min.js}"></script>
-
-<!-- Page level plugins -->
-<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
-<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
-
-<!-- Page level custom scripts -->
-<script th:src="@{/js/demo/datatables-demo.js}"></script>
+<script>
+	$('[data-agregar]').on('click', function(){
+		$('#id-producto').attr('value', $(this).val())
+		$('#agregarCarrito').modal('show');
+	})
+</script>
 
 </html>

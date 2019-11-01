@@ -3,6 +3,7 @@ package com.metabit.ventasenlinea.service;
 import java.util.List;
 
 import com.metabit.ventasenlinea.entity.Producto;
+import com.metabit.ventasenlinea.entity.User;
 
 public interface ProductoService {
 	/**
@@ -15,4 +16,6 @@ public interface ProductoService {
 	public abstract void addProduct(Producto producto);
 	
 	public abstract void deleteAll();
+	
+	public abstract Producto findById(int id_producto);
 }
