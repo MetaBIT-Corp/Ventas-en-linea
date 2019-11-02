@@ -36,7 +36,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/cliente/verificar-codigo/{id}",
 				"/cliente/verificar-codigo",
 				"/producto/index",
-				"/producto/agregar-producto"
+				"/producto/agregar-producto",
+				"/producto/nuevo"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

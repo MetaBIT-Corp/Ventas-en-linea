@@ -1,5 +1,9 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +17,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.metabit.ventasenlinea.entity.Producto;
@@ -106,6 +112,11 @@ public class ProductoController {
 
 		return mav;
 	}
+
+	//Devuelve true si el usuario ha iniciado sesión
+	boolean isUserLoggedIn() {
+		return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
+	}
 	
 	@PostMapping("/agregar-producto")
 	public String agregarProducto(HttpServletRequest request, @RequestParam("cantidad") int cantidad, @RequestParam("producto_id") int id) {
@@ -120,9 +131,38 @@ public class ProductoController {
 		
 		return "redirect:/producto/index";
 	}
-
-	//Devuelve true si el usuario ha iniciado sesión
-	boolean isUserLoggedIn() {
-		return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
+	
+	@GetMapping("/nuevo")
+	public ModelAndView createProductoGet() {
+		ModelAndView mav = new ModelAndView("producto/createProducto");
+		
+		mav.addObject("producto", new Producto());
+		
+		return mav;
+	}
+	
+	@PostMapping("/nuevo")
+	public String createProductoPost(@ModelAttribute("producto") Producto producto, @RequestParam("image") MultipartFile image) {
+		String path;
+		
+		try {
+			path = uploadImage(image);
+			producto.setImagen(path);
+			productService.addProduct(producto);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/producto/index";
+	}
+	
+	public String uploadImage(MultipartFile file) throws IOException{
+		String UPLOAD_FOLDER = ".//src//main//resources//static//img_products//";
+		
+		byte[] bytes = file.getBytes();
+		Path path = Paths.get(UPLOAD_FOLDER+file.getOriginalFilename());
+		Files.write(path, bytes);
+		
+		return "/img_products/"+file.getOriginalFilename();
 	}
 }
