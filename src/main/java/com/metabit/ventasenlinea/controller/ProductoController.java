@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -166,7 +168,7 @@ public class ProductoController {
 	}
 	
 	@GetMapping("/nuevo")
-	public ModelAndView createProductoGet() {
+	public ModelAndView createProducto() {
 		ModelAndView mav = new ModelAndView("producto/createProducto");
 		
 		mav.addObject("producto", new Producto());
@@ -175,22 +177,28 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/nuevo")
-	public String createProductoPost(@ModelAttribute("producto") Producto producto, @RequestParam("image") MultipartFile image) {
+	public ModelAndView storeProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
 		String path;
+		ModelAndView mav = new ModelAndView();
 		
-		try {
-			path = uploadImage(image);
-			producto.setImagen(path);
-			productService.addProduct(producto);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(bindingResult.hasErrors()) {
+			mav.setViewName("producto/createProducto");
+			return mav;
+		}else {
+			try {
+				path = uploadImage(image);
+				producto.setImagen(path);
+				productService.addProduct(producto);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			mav.setViewName("producto/index");
+			return mav;
 		}
-		
-		return "redirect:/producto/index";
 	}
 	
 	@GetMapping("/actualizar/{id}")
-	public ModelAndView updateProductoGet(@PathVariable("id") int id) {
+	public ModelAndView editProducto(@PathVariable("id") int id) {
 		ModelAndView mav = new ModelAndView("producto/updateProducto");
 		Producto producto = productService.findById(id);
 		mav.addObject("producto", producto);
@@ -199,31 +207,36 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/actualizar")
-	public String updateProductoPost(@ModelAttribute("producto") Producto producto, @RequestParam("image") MultipartFile image) {
+	public String updateProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
 		String path;
+		//ModelAndView mav = new ModelAndView();
 		Producto p = productService.findById(producto.getIdArticulo());
 
-		System.out.print("-------------------"+producto.getIdArticulo());
-		p.setTitulo(producto.getTitulo());
-		p.setMarca(producto.getMarca());
-		p.setMargenGanancia(producto.getMargenGanancia());
-		p.setPorcentajeDescuento(producto.getPorcentajeDescuento());
-		p.setDescripcionArticulo(producto.getDescripcionArticulo());
-		
-		if(image.isEmpty()) {
-			p.setImagen(producto.getImagen());
-			productService.updateProducto(p);
+		if(bindingResult.hasErrors()) {
+			//mav.setViewName("producto/updateProducto");
+			return "producto/updateProducto";
 		}else {
-			try {
-				path = uploadImage(image);
-				p.setImagen(path);
+			p.setTitulo(producto.getTitulo());
+			p.setMarca(producto.getMarca());
+			p.setMargenGanancia(producto.getMargenGanancia());
+			p.setPorcentajeDescuento(producto.getPorcentajeDescuento());
+			p.setDescripcionArticulo(producto.getDescripcionArticulo());
+			
+			if(image.isEmpty()) {
+				p.setImagen(producto.getImagen());
 				productService.updateProducto(p);
-			} catch (IOException e) {
-				e.printStackTrace();
+			}else {
+				try {
+					path = uploadImage(image);
+					p.setImagen(path);
+					productService.updateProducto(p);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
+			//mav.setViewName("producto/index");
+			return "redirect:/producto/index";
 		}
-		
-		return "redirect:/producto/index";
 	}
 	
 	public String uploadImage(MultipartFile file) throws IOException{
