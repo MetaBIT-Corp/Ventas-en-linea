@@ -235,4 +235,12 @@ public class ProductoController {
 		
 		return "/img_products/"+file.getOriginalFilename();
 	}
+	
+	@GetMapping("/listar")
+	public ModelAndView listProducto() {
+		ModelAndView mav = new ModelAndView("/producto/listProducto");
+		mav.addObject("productos", productService.getProductos());
+		
+		return mav;
+	}
 }
