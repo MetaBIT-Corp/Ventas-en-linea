@@ -18,4 +18,6 @@ public interface ProductoService {
 	public abstract void deleteAll();
 	
 	public abstract Producto findById(int id_producto);
+	
+	public abstract Producto updateProducto(Producto producto);
 }

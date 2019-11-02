@@ -37,4 +37,11 @@ public class ProductoServiceImpl implements ProductoService{
 	public Producto findById(int id_articulo) {
 		return productoRepository.findByIdArticulo(id_articulo);
 	}
+
+	@Override
+	public Producto updateProducto(Producto producto) {
+		return productoRepository.save(producto);
+	}
+	
+	 
 }

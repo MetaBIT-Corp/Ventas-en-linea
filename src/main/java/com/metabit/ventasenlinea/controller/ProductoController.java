@@ -189,6 +189,43 @@ public class ProductoController {
 		return "redirect:/producto/index";
 	}
 	
+	@GetMapping("/actualizar/{id}")
+	public ModelAndView updateProductoGet(@PathVariable("id") int id) {
+		ModelAndView mav = new ModelAndView("producto/updateProducto");
+		Producto producto = productService.findById(id);
+		mav.addObject("producto", producto);
+		
+		return mav;
+	}
+	
+	@PostMapping("/actualizar")
+	public String updateProductoPost(@ModelAttribute("producto") Producto producto, @RequestParam("image") MultipartFile image) {
+		String path;
+		Producto p = productService.findById(producto.getIdArticulo());
+
+		System.out.print("-------------------"+producto.getIdArticulo());
+		p.setTitulo(producto.getTitulo());
+		p.setMarca(producto.getMarca());
+		p.setMargenGanancia(producto.getMargenGanancia());
+		p.setPorcentajeDescuento(producto.getPorcentajeDescuento());
+		p.setDescripcionArticulo(producto.getDescripcionArticulo());
+		
+		if(image.isEmpty()) {
+			p.setImagen(producto.getImagen());
+			productService.updateProducto(p);
+		}else {
+			try {
+				path = uploadImage(image);
+				p.setImagen(path);
+				productService.updateProducto(p);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return "redirect:/producto/index";
+	}
+	
 	public String uploadImage(MultipartFile file) throws IOException{
 		String UPLOAD_FOLDER = ".//src//main//resources//static//img_products//";
 		
