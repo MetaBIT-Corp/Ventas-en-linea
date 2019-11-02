@@ -154,6 +154,33 @@
               </div>
             </li>
 			-->
+
+
+            <div th:if="${esProducto}">
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow">
+              <span class="nav-link dropdown-toggle" id="carrito" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-shopping-cart"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
+              </span>
+              <!-- Dropdown - Alerts -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header text-center">
+                  Productos agregados
+                </h6>
+                <div class="dropdown-item" id="productos_agregados">
+                  <div class="row">
+                    <div class="col">
+                    <span class="float-left font-weight-bold">No hay productos agregados </span>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            </div>
+
+
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->

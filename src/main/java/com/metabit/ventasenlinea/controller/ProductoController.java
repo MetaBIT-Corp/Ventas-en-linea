@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,9 +20,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -101,6 +105,7 @@ public class ProductoController {
 		}
 		
 		mav.addObject("productos", productService.getProductos());
+		mav.addObject("esProducto", 1);
 
 		// Si el usuario está autenticado devuelve a la vista el username y el role
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -119,7 +124,7 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/agregar-producto")
-	public String agregarProducto(HttpServletRequest request, @RequestParam("cantidad") int cantidad, @RequestParam("producto_id") int id) {
+	public String agregarProductoCarrito(HttpServletRequest request, @RequestParam("cantidad") int cantidad, @RequestParam("producto_id") int id) {
 		ProductoCarrito productoCarrito = new ProductoCarrito();
 		Producto producto = productService.findById(id);
 		productoCarrito.setProducto(producto);
@@ -127,7 +132,35 @@ public class ProductoController {
 		
 		productosCarrito.add(productoCarrito);
 		HttpSession session = request.getSession(true);
+		
+		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
+		
+		if(productosCarritos!=null) {
+			for(ProductoCarrito pc : productosCarritos) {
+				if(id == pc.getProducto().getIdArticulo()) {
+					productosCarritos.remove(pc);
+				}
+				break;
+			}
+		}
+		
 		session.setAttribute("productosCarrito", productosCarrito);
+		
+		return "redirect:/producto/index";
+	}
+	
+	@GetMapping("/remover-producto/{id}")
+	public String removeProductoCarrito(@PathVariable("id") int id, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
+		
+		for(ProductoCarrito pc : productosCarritos) {
+			if(id == pc.getProducto().getIdArticulo()) {
+				productosCarritos.remove(pc);
+
+				break;
+			}
+		}
 		
 		return "redirect:/producto/index";
 	}

@@ -39,7 +39,6 @@
 <body>
 	<div id="wrapper">
 		<div th:insert="fragments/sidebar::sidebar"></div>
-
 		<!-- Content Wrapper -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<!-- Main Content -->
@@ -63,6 +62,7 @@
 						</div>
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
+
 				</div>
 			</div>
 		</div>
@@ -111,6 +111,50 @@
 	$('[data-agregar]').on('click', function(){
 		$('#id-producto').attr('value', $(this).val())
 		$('#agregarCarrito').modal('show');
+	})
+
+	$('#carrito').on('click', function(){
+
+		//AJAX
+		$.get('/api/productos-agregados', function(data){
+			html_productos='';
+
+			if(data.length==0){
+				return;
+			}
+
+			for(var i = 0; i < data.length; i++){
+				html_productos += 
+				'<div class="row">'+
+				'<div class="col">'+
+				'<span class="float-left font-weight-bold">' + data[i].producto.titulo + '. Cantidad: '+ data[i].cantidad +' </span>'+
+				'</div>'+
+				'<div class="col">'+
+				'<a href="/producto/remover-producto/'+data[i].producto.idArticulo+'" title="Remover" class="float-right btn btn-sm btn-danger"><i class="fas fa-minus-circle"></i></a>'+
+				'</div>'+
+				'</div>';
+
+				if(i<data.length-1){
+					html_productos += '<hr>';
+				}
+			}
+
+			$('#productos_agregados').html(html_productos);
+		})
+	})
+
+	$(document).ready(function(){
+
+		//AJAX
+		$.get('/api/productos-agregados', function(data){
+
+			if(data.length==0){
+				return;
+			}
+
+			$('#cantidad_agregada').text(data.length+'+');
+		})
+
 	})
 </script>
 
