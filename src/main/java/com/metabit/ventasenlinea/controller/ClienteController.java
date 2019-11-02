@@ -126,7 +126,4 @@ public class ClienteController {
         email.setText(content);       
         mailSender.send(email);
     }
-	
-	
-
 }

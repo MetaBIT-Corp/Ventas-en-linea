@@ -53,12 +53,12 @@
 		            <div class="card-header py-3">
 		              <div class="row">
 		              	<div class="col">
-		              		<h4 class="m-0 font-weight-bold text-primary float-left">Productos</h4>
+		              		<h4 class="m-0 font-weight-bold text-primary float-left">Usuarios</h4>
 		              	</div>
 		              	<div class="col">
-		              		<a class="btn btn-sm mb-3 float-right" th:href="@{/producto/nuevo}" title="Registrar producto">
+		              		<a class="btn btn-sm mb-3 float-right" href="#" title="Registrar empleado">
 			                	<i class="fas fa-plus-circle"></i>
-			                	<b>Registrar Producto</b>
+			                	<b>Registrar empleado</b>
 			           		</a>
 		              	</div>
 		              </div>
@@ -68,39 +68,37 @@
 		                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 		                  <thead>
 		                    <tr>
-		                      <th>Imagen</th>
 		                      <th>Nombre</th>
-		                      <th>Marca</th>
-		                      <th>Descripción</th>
-		                      <th>Margen de ganacia</th>
-		                      <th>Descuento</th>
+		                      <th>Apellidos</th>
+		                      <th>Email</th>
+		                      <th>Dirección</th>
+		                      <th>Rol</th>
 		                      <th>Opciones</th>
 		                    </tr>
 		                  </thead>
 		                  <tfoot>
 		                    <tr>
-		                      <th>Imagen</th>
 		                      <th>Nombre</th>
-		                      <th>Marca</th>
-		                      <th>Descripción</th>
-		                      <th>Margen de ganacia</th>
-		                      <th>Descuento</th>
+		                      <th>Apellidos</th>
+		                      <th>Email</th>
+		                      <th>Dirección</th>
+		                      <th>Rol</th>
 		                      <th>Opciones</th>
 		                    </tr>
 		                  </tfoot>
 		                  <tbody>
-		                    <tr th:each="producto:${productos}">
-		                      <td><img th:src=${producto.imagen} width="110" height="100" class="img-responsive"></td>
-		                      <td th:text="${producto.titulo}"></td>
-		                      <td th:text="${producto.marca}"></td>
-		                      <td th:text="${producto.descripcionArticulo}"></td>
-		                      <td th:text="${producto.margenGanancia}"></td>
-		                      <td th:text="${producto.porcentajeDescuento}"></td>
-		                      <td>
-		                      	<a th:href="@{/producto/actualizar/{id}(id=${producto.idArticulo})}" title="Editar" class="btn btn-sm btn-primary">
-		                      		<i class="fas fa-pencil-alt"></i>
-		                      	</a>
-		                      </td>
+		                    <tr th:each="uc:${usersClient}">
+		                      <td th:text="${uc.nombreCliente}"></td>
+		                      <td th:text="${uc.apellidoCliente}"></td>
+		                      <td th:text="${uc.user.email}"></td>
+		                      <td th:text="${uc.direccion}"></td>
+		                      <div th:switch="${uc.user.role}">
+		                      	<td th:case="${0}">Administrador</td>
+		                      	<td th:case="${1}">Encargado de bodega</td>
+		                      	<td th:case="${2}">Encargado de ventas</td>
+		                      	<td th:case="${3}">Cliente</td>
+		                      </div>
+		                      <td>No definidas</td>
 		                    </tr>
 		                  </tbody>
 		                </table>
