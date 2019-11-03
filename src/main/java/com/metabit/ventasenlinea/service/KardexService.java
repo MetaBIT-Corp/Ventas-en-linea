@@ -1,5 +1,9 @@
 package com.metabit.ventasenlinea.service;
 
-public interface KardexService {
+import java.util.List;
 
+import com.metabit.ventasenlinea.entity.Kardex;
+
+public interface KardexService {
+	public List<Kardex> getAllKardex();
 }
