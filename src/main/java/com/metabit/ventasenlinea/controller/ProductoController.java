@@ -99,12 +99,12 @@ public class ProductoController {
 
 		// Recuperamos todos los datos de la BD
 		
-		if(getProductos != null) {
+		/*if(getProductos != null) {
 			for (ProductoCarrito pc : getProductos) {
 				System.out.print("------------------------------------------------------"+pc.getProducto().getTitulo());
 				System.out.println(" :"+pc.getCantidad());
 			}
-		}
+		}*/
 		
 		mav.addObject("productos", productService.getProductos());
 		mav.addObject("esProducto", 1);
@@ -132,33 +132,61 @@ public class ProductoController {
 		productoCarrito.setProducto(producto);
 		productoCarrito.setCantidad(cantidad);
 		
-		productosCarrito.add(productoCarrito);
 		HttpSession session = request.getSession(true);
+		List<ProductoCarrito> productosSesion = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 		
-		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
-		
-		if(productosCarritos!=null) {
-			for(ProductoCarrito pc : productosCarritos) {
-				if(id == pc.getProducto().getIdArticulo()) {
-					productosCarritos.remove(pc);
+		if(productosSesion!=null) {
+			if(!productosSesion.isEmpty()) {
+				for(ProductoCarrito pc : productosSesion) {
+					if(id == pc.getProducto().getIdArticulo()) {
+						productosCarrito.remove(pc);
+						break;
+					}
 				}
-				break;
 			}
 		}
 		
+		productosCarrito.add(productoCarrito);
 		session.setAttribute("productosCarrito", productosCarrito);
 		
 		return "redirect:/producto/index";
 	}
 	
+	/*@GetMapping("/agregar-producto/{cantidad}/{id}")
+	public @ResponseBody String agregarProductoCarrito(HttpServletRequest request, @PathVariable("cantidad") int cantidad, @PathVariable("id") int id) {
+		ProductoCarrito productoCarrito = new ProductoCarrito();
+		Producto producto = productService.findById(id);
+		productoCarrito.setProducto(producto);
+		productoCarrito.setCantidad(cantidad);
+		
+		HttpSession session = request.getSession(true);
+		List<ProductoCarrito> productosSesion = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
+		
+		if(productosSesion!=null) {
+			if(!productosSesion.isEmpty()) {
+				for(ProductoCarrito pc : productosSesion) {
+					if(id == pc.getProducto().getIdArticulo()) {
+						productosCarrito.remove(pc);
+						break;
+					}
+				}
+			}
+		}
+		
+		productosCarrito.add(productoCarrito);
+		session.setAttribute("productosCarrito", productosCarrito);
+		
+		return "redirect:/producto/index";
+	}*/
+	
 	@GetMapping("/remover-producto/{id}")
 	public String removeProductoCarrito(@PathVariable("id") int id, HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
+		List<ProductoCarrito> productosSesion = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 		
-		for(ProductoCarrito pc : productosCarritos) {
+		for(ProductoCarrito pc : productosSesion) {
 			if(id == pc.getProducto().getIdArticulo()) {
-				productosCarritos.remove(pc);
+				productosSesion.remove(pc);
 
 				break;
 			}

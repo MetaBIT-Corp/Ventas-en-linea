@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8" th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
 <title>MetaBit Store Online | Productos</title>
 
 <!-- Custom fonts for this template-->
@@ -88,7 +88,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="#" th:action="@{/producto/agregar-producto}" method="post">
+      <form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">
         <div class="modal-body" id="agregar-producto">
           <input type="hidden" value="" id="id-producto" name="producto_id">
           <div class="form-group">
@@ -98,7 +98,7 @@
         </div>
         <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-	        <button type="submit" class="btn btn-primary">Agregar</button>    
+	        <button type="submit" id="add" class="btn btn-primary">Agregar</button>    
         </div>
       </form>
     </div>
@@ -108,12 +108,17 @@
 </body>
 
 <script>
-	$('[data-agregar]').on('click', function(){
+	$('[data-agregar]'). on('click', lanzarModal);
+	$('#carrito').on('click', cargarProductosAgregados);
+	$('#agregar').on('click', agregarProductoCarrito);
+	$(document).ready(actualizarCantidadAgregados);
+
+	function lanzarModal(){
 		$('#id-producto').attr('value', $(this).val())
 		$('#agregarCarrito').modal('show');
-	})
+	}
 
-	$('#carrito').on('click', function(){
+	function cargarProductosAgregados(){
 
 		//AJAX
 		$.get('/api/productos-agregados', function(data){
@@ -141,9 +146,9 @@
 
 			$('#productos_agregados').html(html_productos);
 		})
-	})
+	}
 
-	$(document).ready(function(){
+	function actualizarCantidadAgregados(){
 
 		//AJAX
 		$.get('/api/productos-agregados', function(data){
@@ -154,8 +159,21 @@
 
 			$('#cantidad_agregada').text(data.length+'+');
 		})
+	}
 
-	})
+	function agregarProductoCarrito(){
+		var cantidad = $('#cantidad-producto').val();
+		var id = $('#id-producto').val();
+
+		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
+			
+			$('#agregarForm')[0].reset();
+			$('#agregarCarrito').modal('hide');
+			actualizarCantidadAgregados();
+		})
+	}
+
+	
 </script>
 
 </html>
