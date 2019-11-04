@@ -109,4 +109,13 @@
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
 </body>
+
+<script>
+	$(document).ready(function(){
+	  	setTimeout(function() {
+	       $(".alert").fadeOut();           
+	  	},3000);
+	})
+</script>
+
 </html>

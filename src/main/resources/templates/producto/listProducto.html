@@ -47,6 +47,12 @@
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 					<!-- ESPACIO DE TRABAJO  -->
+				
+					<div th:if="${message}">
+				     	<div class="alert alert-success text-center">
+				     		<h4 th:text="${message}"></h4>
+				     	</div>
+	      		  	</div>
 
 					<!--Products DataTale-->
 		          <div class="card shadow mb-4">
@@ -124,5 +130,13 @@
 	<div th:insert="fragments/modallogout::modallogout"></div>
 
 </body>
+
+<script>
+	$(document).ready(function(){
+	  	setTimeout(function() {
+	       $(".alert").fadeOut();           
+	  	},3000);
+	})
+</script>
 
 </html>

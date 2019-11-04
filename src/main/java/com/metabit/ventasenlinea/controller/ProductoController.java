@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
@@ -205,23 +206,22 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/nuevo")
-	public ModelAndView storeProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
+	public String storeProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
 		String path;
-		ModelAndView mav = new ModelAndView();
 		
 		if(bindingResult.hasErrors()) {
-			mav.setViewName("producto/createProducto");
-			return mav;
+			return "producto/createProducto";
 		}else {
 			try {
 				path = uploadImage(image);
 				producto.setImagen(path);
 				productService.addProduct(producto);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			mav.setViewName("producto/index");
-			return mav;
+			redirAttrs.addFlashAttribute("message", "Se ha registrado el producto con éxito");
+			return "redirect:/producto/listar";
 		}
 	}
 	
@@ -235,13 +235,11 @@ public class ProductoController {
 	}
 	
 	@PostMapping("/actualizar")
-	public String updateProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image) {
+	public String updateProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
 		String path;
-		//ModelAndView mav = new ModelAndView();
 		Producto p = productService.findById(producto.getIdArticulo());
 
 		if(bindingResult.hasErrors()) {
-			//mav.setViewName("producto/updateProducto");
 			return "producto/updateProducto";
 		}else {
 			p.setTitulo(producto.getTitulo());
@@ -262,8 +260,8 @@ public class ProductoController {
 					e.printStackTrace();
 				}
 			}
-			//mav.setViewName("producto/index");
-			return "redirect:/producto/index";
+			redirAttrs.addFlashAttribute("message", "Se ha actualizado el producto con éxito");
+			return "redirect:/producto/listar";
 		}
 	}
 	
