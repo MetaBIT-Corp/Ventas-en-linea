@@ -36,7 +36,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/cliente/verificar-codigo/{id}",
 				"/cliente/verificar-codigo",
 				"/producto/index",
-				"/kardex/**"
+				//KARDEX SOLO PARA CONSTRUCCION SE PUSO AQUI
+				"/kardex/**",
+				"/producto/agregar-producto",
+				"/producto/agregar-producto/{cantidad}/{id}",
+				"/producto/remover-producto/{id}",
+				"/api/productos-agregados"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

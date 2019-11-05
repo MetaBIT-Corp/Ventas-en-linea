@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="productos")
@@ -20,18 +22,23 @@ public class Producto {
 	@Column(name="imagen")
 	private String imagen;
 	
+	@NotEmpty(message = "Ingrese la marca del producto")
 	@Column(name="marca",length=50)
 	private String marca;
 	
+	@NotEmpty(message = "Ingrese el título del producto")
 	@Column(name="titulo", length=50)
 	private String titulo;
 	
+	@Min(value=0, message = "El margen de ganancia no puede ser negativo")
 	@Column(name="margen_ganancia")
 	private double margenGanancia;
 	
+	@Min(value=0, message = "El descuento no puede ser negativo")
 	@Column(name="porcentaje_descuento")
 	private double porcentajeDescuento;
 	
+	@NotEmpty(message = "Ingrese la descripción del producto")
 	@Column(name="descripcion_articulo")
 	private String descripcionArticulo;
 

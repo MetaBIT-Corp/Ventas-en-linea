@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.metabit.ventasenlinea.entity.Producto;
+import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.repository.ProductoJpaRepository;
 import com.metabit.ventasenlinea.service.ProductoService;
 
@@ -31,4 +32,16 @@ public class ProductoServiceImpl implements ProductoService{
 	public void deleteAll() {
 		productoRepository.deleteAll();
 	}
+	
+	 @Override
+	public Producto findById(int id_articulo) {
+		return productoRepository.findByIdArticulo(id_articulo);
+	}
+
+	@Override
+	public Producto updateProducto(Producto producto) {
+		return productoRepository.save(producto);
+	}
+	
+	 
 }

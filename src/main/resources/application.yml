@@ -7,8 +7,24 @@ spring:
     username: admin
     password: ues
     
- #   username: root
- #   password:
+#    username: root
+#    password:
+# datasource:
+#   driver-class-name: com.mysql.cj.jdbc.Driver
+#   url: jdbc:mysql://localhost:3306/ventas?serverTimezone=UTC   
+#   username: root
+#   password:
+
+  jpa:
+   show-sql: true
+   hibernate:
+     ddl-auto: update
+     naming:
+       implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+       physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+   properties:
+     hibernate:
+       dialect: org.hibernate.dialect.MySQL5Dialect
 
     
 #Agregado para el manejo de imagenes, a quien corresponda crear producto esta configuracion le servira
@@ -23,7 +39,6 @@ spring:
             
         
 #configuracion oracle
-
 #  jpa:
 #   database: ORACLE
 #   show-sql: true
@@ -38,16 +53,4 @@ spring:
 #   driver-class-name: oracle.jdbc.OracleDriver
 #   url: jdbc:oracle:thin:@localhost:1521:orcl
 #   username: SYSTEM
-#  password: Oracle2019  
-     
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-        
+#  password: Oracle2019

@@ -1,10 +1,14 @@
 package com.metabit.ventasenlinea.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.User;
+import com.metabit.ventasenlinea.repository.ClienteJpaRepository;
 import com.metabit.ventasenlinea.repository.UserJpaRepository;
 import com.metabit.ventasenlinea.service.UserService;
 
@@ -16,6 +20,10 @@ public class UserServiceImpl implements UserService{
 	@Qualifier("userJpaRepository")
 	private UserJpaRepository userJpaRepository;
 	
+	@Autowired
+	@Qualifier("clienteJpaRepository")
+	private ClienteJpaRepository clienteJpaRepository;
+	
 	@Override
 	public void createUser(User user) {
 		userJpaRepository.save(user); 
@@ -25,4 +33,11 @@ public class UserServiceImpl implements UserService{
 	public User findById(int id_user) {
 		return userJpaRepository.findByIdUser(id_user);
 	}
+
+	@Override
+	public List<Cliente> findAllClientes() {
+		return clienteJpaRepository.findAll();
+	}
+	
+	
 }
