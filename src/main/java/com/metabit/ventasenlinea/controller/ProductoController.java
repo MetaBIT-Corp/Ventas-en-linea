@@ -54,7 +54,7 @@ public class ProductoController {
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
 		// Borramos toda la BD para evitar que se repitan
-		/*productService.deleteAll();
+		productService.deleteAll();
 
 		// Agregando productos a la BD
 		Producto p1 = new Producto();
@@ -76,7 +76,7 @@ public class ProductoController {
 		p3.setMarca("Microsoft");
 		p3.setTitulo("Xbox One S");
 		p3.setDescripcionArticulo("Consola con potencia para 4K, microprocesador Scorpio con 100teraflops");
-		productService.addProduct(p3);*/
+		productService.addProduct(p3);
 
 		/*
 		 * Por si quieren probar con mas datos
