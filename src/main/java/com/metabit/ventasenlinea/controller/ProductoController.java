@@ -126,7 +126,7 @@ public class ProductoController {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
 	}
 	
-	@PostMapping("/agregar-producto")
+	/*@PostMapping("/agregar-producto")
 	public String agregarProductoCarrito(HttpServletRequest request, @RequestParam("cantidad") int cantidad, @RequestParam("producto_id") int id) {
 		ProductoCarrito productoCarrito = new ProductoCarrito();
 		Producto producto = productService.findById(id);
@@ -151,9 +151,9 @@ public class ProductoController {
 		session.setAttribute("productosCarrito", productosCarrito);
 		
 		return "redirect:/producto/index";
-	}
+	}*/
 	
-	/*@GetMapping("/agregar-producto/{cantidad}/{id}")
+	@GetMapping("/agregar-producto/{cantidad}/{id}")
 	public @ResponseBody String agregarProductoCarrito(HttpServletRequest request, @PathVariable("cantidad") int cantidad, @PathVariable("id") int id) {
 		ProductoCarrito productoCarrito = new ProductoCarrito();
 		Producto producto = productService.findById(id);
@@ -178,7 +178,7 @@ public class ProductoController {
 		session.setAttribute("productosCarrito", productosCarrito);
 		
 		return "redirect:/producto/index";
-	}*/
+	}
 	
 	@GetMapping("/remover-producto/{id}")
 	public String removeProductoCarrito(@PathVariable("id") int id, HttpServletRequest request) {

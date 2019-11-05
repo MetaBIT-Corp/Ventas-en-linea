@@ -88,7 +88,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">
+      <!--<form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">-->
         <div class="modal-body" id="agregar-producto">
           <input type="hidden" value="" id="id-producto" name="producto_id">
           <div class="form-group">
@@ -98,9 +98,9 @@
         </div>
         <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-	        <button type="submit" id="add" class="btn btn-primary">Agregar</button>    
+	        <button type="button" id="agregar" class="btn btn-primary">Agregar</button>    
         </div>
-      </form>
+      <!--</form>-->
     </div>
   </div>
 </div>
@@ -167,9 +167,11 @@
 
 		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
 			
-			$('#agregarForm')[0].reset();
+			//$('#agregarForm')[0].reset();
 			$('#agregarCarrito').modal('hide');
 			actualizarCantidadAgregados();
+			 $('#cantidad-producto').val("");
+			 $('#id-producto').val("");
 		})
 	}
 
