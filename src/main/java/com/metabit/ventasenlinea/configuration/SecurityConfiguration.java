@@ -26,10 +26,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		auth.userDetailsService(userServiceSecurityImpl).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
+	
+	/*DOCUMENTACION
+	 * .antMatchers: Permite establecer urls que son posibles de acceder sin estar autorizados
+	 * .anyRequest().authenticated(): El resto de urls van a requerir autenticación
+	 * 
+	 * */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		/* Agregar urls que pueden ser accedidas sin estar autenticado en antMatchers
-		 * además si agregar carpetas en static tambien deberan agregarlas*/
+		 * además si agregan carpetas en static tambien deberan agregarlas*/
 		http.authorizeRequests()
 		.antMatchers(
 				"/cliente/crear-cliente",

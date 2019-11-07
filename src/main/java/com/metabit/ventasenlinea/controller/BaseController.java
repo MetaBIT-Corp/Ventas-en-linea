@@ -10,11 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @author joel
+ *
+ */
 @Controller()
-@RequestMapping("/ventas-online")
+@RequestMapping({"/ventas-online","/"})
 public class BaseController {
 		
-	//Funcion que desplega el login
+	/**
+	 * @author joel
+	 * Función que despliega la view del login 
+	 */
 	@GetMapping("/login")
 	public ModelAndView showLoginForm(
 			@RequestParam(name="error", required = false) String error,
@@ -25,21 +32,28 @@ public class BaseController {
 		return modelAndView;
 	}
 	
-	//Funcion que chequea el login
+	/**
+	 * @author joel
+	 * Funcion que chequea el login, previamente en el file de configuration de security se 
+	 * ha definido que esta url hará el check del login  
+	 */
 	@GetMapping({"/loginsuccess","/"})
 	public String loginCheck() {
-	return "redirect:/ventas-online/index";
+	return "redirect:/ventas-online/base";
 		
 	}
 	
-
-	@GetMapping("/index")
+	/**
+	 * @author joel
+	 * Función que despliega la view del base 
+	 */
+	@GetMapping("/base")
 	public ModelAndView index() {
 		ModelAndView modelAndView = new ModelAndView("base");
 		//user de spring: import org.springframework.security.core.userdetails.User;
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		modelAndView.addObject("user", user.getUsername());
-		modelAndView.addObject("role", user.getAuthorities().toArray()[0]);
+		modelAndView.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return modelAndView;
 	}
 

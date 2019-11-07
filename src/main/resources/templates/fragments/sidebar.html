@@ -27,7 +27,7 @@
       </li>
       
         <!-- Nav Item - Tables -->
-      <li class="nav-item" th:if="${role == 1}" >
+      <li class="nav-item" th:if="${role == 'ROLE_ADMIN'}" >
         <a class="nav-link" th:href=@{/departamento/listar}>
           <i class="fas fa-fw fa-table"></i>
           <span>Departamento</span></a>
