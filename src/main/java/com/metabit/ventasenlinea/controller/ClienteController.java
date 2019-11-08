@@ -21,9 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.entity.UserRole;
+import com.metabit.ventasenlinea.repository.UserJpaRepository;
 import com.metabit.ventasenlinea.service.impl.ClienteServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserRoleServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
+import com.sun.mail.handlers.image_gif;
 
 @Controller
 @RequestMapping("/cliente")
@@ -54,13 +56,10 @@ public class ClienteController {
 	@PostMapping("/crear-cliente")
 	public String storeCliente(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingClient ,@Valid @ModelAttribute("user") User user, BindingResult bindingUser, RedirectAttributes redirAttrs) {
 		
-		User existsUser = userServiceImpl.findByEmail(user.getEmail());
-		if(existsUser!=null)
-			System.out.print("------------------------------------"+existsUser.getEmail());
+		User exisUser = userServiceImpl.findByEmail(user.getEmail());
 		
-		if(bindingUser.hasErrors() || bindingClient.hasErrors() || existsUser != null) {
-			redirAttrs.addFlashAttribute("message", "Ya existe una cuenta con este correo");
-			return "redirect:/cliente/crear-cliente";
+		if(bindingUser.hasErrors() || bindingClient.hasErrors()) {
+			return "cliente/crearCliente";
 		}else {
 			String codigo = codigo();
 			String asunto = "Ventas en linea";
@@ -73,6 +72,12 @@ public class ClienteController {
 				redirAttrs.addFlashAttribute("message", "Las contraseñas no coinciden");
 				return "redirect:/cliente/crear-cliente";
 			}
+			
+			if(exisUser != null) {
+				redirAttrs.addFlashAttribute("message", "Ya existe una cuenta con este correo");
+				return "redirect:/cliente/crear-cliente";
+			}
+			
 			user.setCodigoVerificacion(codigo);
 			//user.setRole(3);
 			user.setVerifyed(0);
