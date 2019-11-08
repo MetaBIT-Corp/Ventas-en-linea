@@ -47,7 +47,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/producto/agregar-producto",
 				"/producto/agregar-producto/{cantidad}/{id}",
 				"/producto/remover-producto/{id}",
-				"/api/productos-agregados"
+				"/api/productos-agregados",
+				"/api/user-email/{email}"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

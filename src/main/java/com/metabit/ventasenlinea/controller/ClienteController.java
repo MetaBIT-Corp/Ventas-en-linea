@@ -1,11 +1,14 @@
 package com.metabit.ventasenlinea.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.User;
+import com.metabit.ventasenlinea.entity.UserRole;
 import com.metabit.ventasenlinea.service.impl.ClienteServiceImpl;
+import com.metabit.ventasenlinea.service.impl.UserRoleServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
 
 @Controller
@@ -32,8 +37,12 @@ public class ClienteController {
 	@Qualifier("userServiceImpl")
 	private UserServiceImpl userServiceImpl;
 	
+	@Autowired
+	@Qualifier("userRoleServiceImpl")
+	private UserRoleServiceImpl userRoleServiceImpl;
+	
 	@GetMapping("/crear-cliente")
-	public ModelAndView create() {
+	public ModelAndView createCliente() {
 		ModelAndView mav = new ModelAndView("cliente/crearCliente");
 		
 		mav.addObject("user", new User());
@@ -43,34 +52,45 @@ public class ClienteController {
 	}
 	
 	@PostMapping("/crear-cliente")
-	public String store(@ModelAttribute("cliente") Cliente cliente, @ModelAttribute("user") User user, RedirectAttributes redirAttrs) {
-		String codigo = codigo();
-		String asunto = "Ventas en linea";
-		String contenido = "Estimado/a "+cliente.getNombreCliente()+
-							":\n\nHemos recibido una solicitud para crear una cuenta en nuestro sistema "+
-							"a través su dirección de correo electrónico."+
-							"\n\n Su código de verificación es:" + codigo;
+	public String storeCliente(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingClient ,@Valid @ModelAttribute("user") User user, BindingResult bindingUser, RedirectAttributes redirAttrs) {
 		
-		if(!user.getPassword().equals(user.getPasswordConfirm()) || user.getPassword() == "") {
-			redirAttrs.addFlashAttribute("message", "Las contraseñas no coinciden");
+		User existsUser = userServiceImpl.findByEmail(user.getEmail());
+		if(existsUser!=null)
+			System.out.print("------------------------------------"+existsUser.getEmail());
+		
+		if(bindingUser.hasErrors() || bindingClient.hasErrors() || existsUser != null) {
+			redirAttrs.addFlashAttribute("message", "Ya existe una cuenta con este correo");
 			return "redirect:/cliente/crear-cliente";
+		}else {
+			String codigo = codigo();
+			String asunto = "Ventas en linea";
+			String contenido = "Estimado/a "+cliente.getNombreCliente()+
+								":\n\nHemos recibido una solicitud para crear una cuenta en nuestro sistema "+
+								"a través su dirección de correo electrónico."+
+								"\n\n Su código de verificación es: " + codigo;
+			
+			if(!user.getPassword().equals(user.getPasswordConfirm()) || user.getPassword() == "") {
+				redirAttrs.addFlashAttribute("message", "Las contraseñas no coinciden");
+				return "redirect:/cliente/crear-cliente";
+			}
+			user.setCodigoVerificacion(codigo);
+			//user.setRole(3);
+			user.setVerifyed(0);
+			//user.setPassword();
+			BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+			user.setPassword(pe.encode(user.getPassword())); 
+			
+			cliente.setUser(user);
+			
+			userServiceImpl.createUser(user);
+			clienteServiceImpl.createCliente(cliente);
+			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
+			
+			sendEmail(user.getEmail(), asunto, contenido);
+			redirAttrs.addFlashAttribute("success", "succeess");
+			
+			return "redirect:/cliente/verificar-codigo/"+user.getIdUser();
 		}
-		user.setCodigoVerificacion(codigo);
-		user.setRole(3);
-		user.setVerifyed(0);
-		//user.setPassword();
-		BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
-		user.setPassword(pe.encode(user.getPassword())); 
-		
-		cliente.setUser(user);
-		
-		userServiceImpl.createUser(user);
-		clienteServiceImpl.createCliente(cliente);
-		
-		sendEmail(user.getEmail(), asunto, contenido);
-		redirAttrs.addFlashAttribute("success", "succeess");
-		
-		return "redirect:/cliente/verificar-codigo/"+user.getIdUser();
 	}
 	
 	@GetMapping("/verificar-codigo/{id}")

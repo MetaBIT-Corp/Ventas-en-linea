@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+
+//import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
 @Table(name = "users")
@@ -21,12 +24,15 @@ public class User {
 	@Column(name = "id_user", unique = true, nullable = false)
 	private int idUser;
 
+	@NotEmpty(message = "Ingrese su correo")
 	@Column(name = "email", unique = true, nullable = false)
 	private String email;
 
+	@NotEmpty(message = "Ingrese una contraseña")
 	@Column(name = "password", nullable = false)
 	private String password;
 
+	@NotEmpty(message = "Confirmar contraseña")
 	@Transient
 	private String passwordConfirm;
 
@@ -37,8 +43,8 @@ public class User {
 	@Column(name = "verifyed", nullable = false)
 	private int verifyed;
 
-	@Column(name = "role", nullable = false)
-	private int role;
+	/*@Column(name = "role", nullable = false)
+	private int role;*/
 	
 	//Indica los roles que tiene el usuario (no se crea en la base de datos)
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
@@ -56,7 +62,7 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 		this.codigoVerificacion = codigoVerificacion;
 		this.verifyed = verifyed;
-		this.role = role; //0: admin; 1: encargado bodega; 2: encargado ventas; 3: cliente
+		//this.role = role; //0: admin; 1: encargado bodega; 2: encargado ventas; 3: cliente
 	}
 	
 	//Constructor con role
@@ -69,7 +75,7 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 		this.codigoVerificacion = codigoVerificacion;
 		this.verifyed = verifyed;
-		this.role = role;
+		//this.role = role;
 		this.userRole = userRole;
 	}
 
@@ -120,14 +126,14 @@ public class User {
 	public void setVerifyed(int verifyed) {
 		this.verifyed = verifyed;
 	}
-
+/*
 	public int getRole() {
 		return role;
 	}
 
 	public void setRole(int role) {
 		this.role = role;
-	}
+	}*/
 
 	public Set<UserRole> getUserRole() {
 		return userRole;

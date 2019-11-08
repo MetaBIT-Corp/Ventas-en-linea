@@ -19,16 +19,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
+import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.service.ProductoService;
+import com.metabit.ventasenlinea.service.UserService;
+import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/api")
 public class DataRestController {
 	ArrayList<ProductoCarrito> productosCarrito = new ArrayList<ProductoCarrito>();
-
+	
 	@Autowired
-	@Qualifier("productoServiceImpl")
-	private ProductoService productService;
+	@Qualifier("userServiceImpl")
+	private UserServiceImpl userServiceImpl;
 	
 	@GetMapping("/productos-agregados")
 	public List<ProductoCarrito> getCarrito(HttpServletRequest request){
@@ -37,4 +40,14 @@ public class DataRestController {
 		
 		return productosCarritos;
 	}
+	
+	/*@GetMapping("/user-email/{email}")
+	public String getUserEmail(@PathVariable("email") String email){
+		System.out.println("--------------------------------------"+email);
+		User user = new User();
+		user = userServiceImpl.findByEmail(email);
+		
+		System.out.println("--------------------------------------"+user.getEmail());
+		return user.getEmail();
+	}*/
 }

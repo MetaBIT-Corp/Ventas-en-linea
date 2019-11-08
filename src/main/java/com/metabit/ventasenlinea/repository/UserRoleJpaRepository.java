@@ -5,9 +5,9 @@ import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.metabit.ventasenlinea.entity.Kardex;
+import com.metabit.ventasenlinea.entity.UserRole;
 
-@Repository("kardexJpaRepository")
-public interface KardexJpaRepository extends JpaRepository<Kardex, Serializable>{
+@Repository("userRoleJpaRepository")
+public interface UserRoleJpaRepository extends JpaRepository<UserRole, Serializable>{
 
 }

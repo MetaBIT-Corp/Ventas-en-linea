@@ -9,5 +9,6 @@ public interface UserService {
 
 	public abstract void createUser(User user);
 	public abstract User findById(int id_user);
+	public abstract User findByEmail(String email);
 	public abstract List<Cliente> findAllClientes();
 }
