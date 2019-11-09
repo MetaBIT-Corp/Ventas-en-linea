@@ -49,11 +49,12 @@
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="password" th:field="*{user.password}" class="form-control form-control-user" id="inputPassword"  data-pass placeholder="Contraseña">
-                    <p th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}" class="alert alert-danger"></p>
                   </div>
                   <div class="col-sm-6">
                     <input type="password" th:field="*{user.passwordConfirm}" class="form-control form-control-user" id="repeatPassword" data-pass placeholder="Confirmar contraseña">
-                    <p th:if="${#fields.hasErrors('user.passwordConfirm')}" th:errors="*{user.passwordConfirm}" class="alert alert-danger"></p>
+                  </div>
+                  <div class = "col-sm-12">
+                    <p th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}" class="alert alert-danger"></p>
                   </div>
                 </div>
                 <div class="form-group">
