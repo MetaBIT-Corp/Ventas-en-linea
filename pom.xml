@@ -82,6 +82,12 @@
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 			<version>3.0.3.RELEASE</version>
 		</dependency>
+		<!--Agregadas por Diego Para Recuperacion de contraseña-->		
+        <dependency>
+		    <groupId>commons-beanutils</groupId>
+		    <artifactId>commons-beanutils</artifactId>
+		    <version>1.9.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

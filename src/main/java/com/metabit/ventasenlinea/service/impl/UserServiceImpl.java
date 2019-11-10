@@ -43,6 +43,13 @@ public class UserServiceImpl implements UserService{
 	public List<Cliente> findAllClientes() {
 		return clienteJpaRepository.findAll();
 	}
+	//Metodos Agregado por Diego
+	@Override
+	public void updatePassword(String password, int userId) {
+		// TODO Auto-generated method stub
+		userJpaRepository.updatePassword(password, userId);
+	}
+	
 	
 	
 }

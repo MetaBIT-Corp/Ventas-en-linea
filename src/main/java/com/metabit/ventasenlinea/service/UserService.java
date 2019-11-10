@@ -11,4 +11,7 @@ public interface UserService {
 	public abstract User findById(int id_user);
 	public abstract User findByEmail(String email);
 	public abstract List<Cliente> findAllClientes();
+	//Agregados por Diego
+	void updatePassword(String password, int userId);
+	
 }
