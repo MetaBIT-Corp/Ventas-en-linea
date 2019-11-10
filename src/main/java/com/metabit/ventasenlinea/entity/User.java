@@ -32,7 +32,7 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@NotEmpty(message = "Confirmar contraseña")
+	//@NotEmpty(message = "Confirmar contraseña")
 	@Transient
 	private String passwordConfirm;
 
