@@ -9,5 +9,7 @@ import com.metabit.ventasenlinea.entity.Kardex;
 
 @Repository("kardexJpaRepository")
 public interface KardexJpaRepository extends JpaRepository<Kardex, Serializable>{
+	
+	public Kardex findByIdKardex(int id_kardex);
 
 }

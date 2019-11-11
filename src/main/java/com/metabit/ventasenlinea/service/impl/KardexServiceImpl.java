@@ -21,4 +21,11 @@ public class KardexServiceImpl implements KardexService{
 	public List<Kardex> getAllKardex() {
 		return kardexRepository.findAll();
 	}
+
+	@Override
+	public Kardex getKardex(int id) {
+		return kardexRepository.findByIdKardex(id);
+	}
+	
+	
 }
