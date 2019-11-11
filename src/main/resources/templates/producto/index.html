@@ -93,7 +93,7 @@
           <input type="hidden" value="" id="id-producto" name="producto_id">
           <div class="form-group">
             <label for="cantidad-producto">Cantidad*</label>
-            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
+            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad" value="1">
           </div>
         </div>
         <div class="modal-footer">
@@ -105,16 +105,42 @@
   </div>
 </div>
 
+<!-- Modal para editar cantidad de producto en carrito-->
+<div class="modal fade" id="editarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eliminarModalCenterTitle">Editar cantidad de producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body" id="editar-producto">
+          <input type="hidden" value="" id="id_producto" name="producto_id">
+          <div class="form-group">
+            <label for="cantidad-producto">Cantidad*</label>
+            <input type="number" min="1" class="form-control" id="cantidad_producto" name="cantidad" value="">
+          </div>
+        </div>
+        <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="button" id="btnGuardar" class="btn btn-primary">Guardar</button>    
+        </div>
+    </div>
+  </div>
+</div>
+
 </body>
 
 <script>
 	$('[data-agregar]'). on('click', lanzarModal);
 	$('#carrito').on('click', cargarProductosAgregados);
 	$('#agregar').on('click', agregarProductoCarrito);
+	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
 
 	function lanzarModal(){
-		$('#id-producto').attr('value', $(this).val())
+		$('#id-producto').attr('value', $(this).val());
 		$('#agregarCarrito').modal('show');
 	}
 
@@ -136,9 +162,9 @@
 				'</div>'+
 				'<div class="col">'+
 				'<a href="/producto/remover-producto/'+data[i].producto.idArticulo+'" title="Remover" class="float-right btn btn-sm btn-danger"><i class="fas fa-minus-circle"></i></a>'+
+				'<button onclick="editarModal('+data[i].producto.idArticulo+','+data[i].cantidad+')" class="float-right btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></button>'+
 				'</div>'+
 				'</div>';
-
 				if(i<data.length-1){
 					html_productos += '<hr>';
 				}
@@ -147,7 +173,22 @@
 			$('#productos_agregados').html(html_productos);
 		})
 	}
+	
+	function editarModal(id,cantidad){
+		$("#cantidad_producto").val(cantidad);
+		$("#id_producto").val(id);
+		$('#editarCarrito').modal();
+	}
+	
+	function editarCantidadProductoCarrito(){
+		var cantidad = $('#cantidad_producto').val();
+		var id = $('#id_producto').val();
 
+		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
+			$('#editarCarrito').modal('hide');
+		});
+	}
+	
 	function actualizarCantidadAgregados(){
 
 		//AJAX
@@ -164,7 +205,7 @@
 	function agregarProductoCarrito(){
 		var cantidad = $('#cantidad-producto').val();
 		var id = $('#id-producto').val();
-
+		
 		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
 			
 			//$('#agregarForm')[0].reset();
@@ -172,7 +213,7 @@
 			actualizarCantidadAgregados();
 			 $('#cantidad-producto').val("");
 			 $('#id-producto').val("");
-		})
+		});
 	}
 
 	
