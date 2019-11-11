@@ -27,32 +27,39 @@
                 <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
               </div>
               <div th:if="${message}">
-		     	<div class="alert alert-danger">
-		     		<h4 th:text="${message}"></h4>
-		     	</div>
+		     	  <div class="alert alert-danger">
+		     		 <h4 th:text="${message}"></h4>
+		     	  </div>
       		  </div>
               <form action="#" th:action="@{/cliente/crear-cliente}" method="post" class="user">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="text" th:field="*{cliente.nombreCliente}" class="form-control form-control-user" id="exampleFirstName" placeholder="Nombre">
+                    <p th:if="${#fields.hasErrors('cliente.nombreCliente')}" th:errors="*{cliente.nombreCliente}" class="alert alert-danger"></p>
                   </div>
                   <div class="col-sm-6">
                     <input type="text" th:field="*{cliente.apellidoCliente}" class="form-control form-control-user" id="exampleLastName" placeholder="Apellido">
+                    <p th:if="${#fields.hasErrors('cliente.apellidoCliente')}" th:errors="*{cliente.apellidoCliente}" class="alert alert-danger"></p>
                   </div>
                 </div>
                 <div class="form-group">
                   <input type="email" th:field="*{user.email}" class="form-control form-control-user" id="exampleInputEmail" placeholder="Correo electrónico">
+                  <p th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}" class="alert alert-danger"></p>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" th:field="*{user.password}" class="form-control form-control-user" id="exampleInputPassword" placeholder="Contraseña">
+                    <input type="password" th:field="*{user.password}" class="form-control form-control-user" id="inputPassword"  data-pass placeholder="Contraseña">
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" th:field="*{user.passwordConfirm}" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Confirmar contraseña">
+                    <input type="password" th:field="*{user.passwordConfirm}" class="form-control form-control-user" id="repeatPassword" data-pass placeholder="Confirmar contraseña">
+                  </div>
+                  <div class = "col-sm-12">
+                    <p th:if="${#fields.hasErrors('user.password')}" th:errors="*{user.password}" class="alert alert-danger"></p>
                   </div>
                 </div>
                 <div class="form-group">
-                  <textarea type="text" th:field="*{cliente.direccion}" class="form-control form-control-user" id="exampleInputEmail" placeholder="Dirección"></textarea>
+                  <textarea type="text" th:field="*{cliente.direccion}" class="form-control form-control-user" id="inputDireccion" placeholder="Dirección"></textarea>
+                  <p th:if="${#fields.hasErrors('cliente.direccion')}" th:errors="*{cliente.direccion}" class="alert alert-danger"></p>
                 </div>
                 <input type="submit" value="Registrar cuenta" class="btn btn-primary btn-user btn-block"/>
               </form>
@@ -61,7 +68,7 @@
                 <a class="small" href="#">Olvidé mi contraseña?</a>
               </div>
               <div class="text-center">
-                <a class="small" href="#">ya tienes una cuenta? Login!</a>
+                <a class="small" th:href="@{/ventas-online/login}">ya tienes una cuenta? Login!</a>
               </div>
             </div>
           </div>
@@ -82,4 +89,43 @@
   <script th:src="@{/js/sb-admin-2.min.js}"></script>
 
 </body>
+
+<script>
+
+  $(document).ready(function(){
+      setTimeout(function() {
+         $(".alert").fadeOut();           
+      },3000);
+  })
+
+  $('#repeatPassword').on('blur', function(){
+    var pass1 = $('#inputPassword').val();
+    var pass2 = $('#repeatPassword').val();
+
+    if(pass1 != pass2){
+      $('#inputPassword').css("border-color", "red"); 
+      $('#repeatPassword').css("border-color", "red");
+      $('#repeatPassword').attr('title', 'Las constraseñas no coinciden');
+      $('#inputPassword').attr('title', 'Las constraseñas no coinciden');
+    }else{
+      $('#inputPassword').css("border-color", '#D1D3E2');
+      $('#repeatPassword').css("border-color", '#D1D3E2');
+      $('#inputPassword').removeAttr('title');
+      $('#repeatPassword').removeAttr('title');
+    }
+    
+  })
+
+  $('[data-pass]').on('keyup', function(){
+    var pass1 = $('#inputPassword').val();
+    var pass2 = $('#repeatPassword').val();
+
+    if(pass1 == pass2){
+      $('#inputPassword').css("border-color", '#D1D3E2');
+      $('#repeatPassword').css("border-color", '#D1D3E2');
+      $('#inputPassword').removeAttr('title');
+      $('#repeatPassword').removeAttr('title');
+    }
+  })
+</script>
 </html>

@@ -159,7 +159,6 @@ public class ProductoController {
 		Producto producto = productService.findById(id);
 		productoCarrito.setProducto(producto);
 		productoCarrito.setCantidad(cantidad);
-		
 		HttpSession session = request.getSession(true);
 		List<ProductoCarrito> productosSesion = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 		
@@ -177,7 +176,7 @@ public class ProductoController {
 		productosCarrito.add(productoCarrito);
 		session.setAttribute("productosCarrito", productosCarrito);
 		
-		return "redirect:/producto/index";
+		return "OK";
 	}
 	
 	@GetMapping("/remover-producto/{id}")
