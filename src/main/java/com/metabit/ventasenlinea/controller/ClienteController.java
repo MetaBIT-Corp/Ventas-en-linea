@@ -1,5 +1,7 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.util.Random;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Cliente;
+import com.metabit.ventasenlinea.entity.Cuenta;
 import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.entity.UserRole;
 import com.metabit.ventasenlinea.repository.UserJpaRepository;
 import com.metabit.ventasenlinea.service.impl.ClienteServiceImpl;
+import com.metabit.ventasenlinea.service.impl.CuentaServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserRoleServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
 import com.sun.mail.handlers.image_gif;
@@ -38,6 +42,10 @@ public class ClienteController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserServiceImpl userServiceImpl;
+	
+	@Autowired
+	@Qualifier("cuentaServiceImpl")
+	private CuentaServiceImpl cuentaServiceImpl;
 	
 	@Autowired
 	@Qualifier("userRoleServiceImpl")
@@ -61,7 +69,7 @@ public class ClienteController {
 		if(bindingUser.hasErrors() || bindingClient.hasErrors()) {
 			return "cliente/crearCliente";
 		}else {
-			String codigo = codigo();
+			String codigo = codigo(6);
 			String asunto = "Ventas en linea";
 			String contenido = "Estimado/a "+cliente.getNombreCliente()+
 								":\n\nHemos recibido una solicitud para crear una cuenta en nuestro sistema "+
@@ -86,9 +94,26 @@ public class ClienteController {
 			user.setPassword(pe.encode(user.getPassword())); 
 			
 			cliente.setUser(user);
-			
 			userServiceImpl.createUser(user);
 			clienteServiceImpl.createCliente(cliente);
+			
+			//Creación de cuenta bancaria
+			Cuenta cuenta = new Cuenta();
+			
+			int codigo_cuenta = Integer.parseInt(codigo(3));
+			cuenta.setCodigo(codigo_cuenta);
+			
+			cuenta.setNumeroTarjeta(codigo(16));
+			
+			Random r = new Random();
+		    double saldo = 1000 + (10000 - 1000) * r.nextDouble();
+		    saldo = round(saldo, 2);
+		    cuenta.setSaldo(saldo);
+			
+		    cuenta.setCliente(cliente);
+			
+		    cuentaServiceImpl.createCuenta(cuenta);
+			
 			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
 			
 			sendEmail(user.getEmail(), asunto, contenido);
@@ -124,13 +149,30 @@ public class ClienteController {
 		}
 	}
 	
-	public String codigo() {
+	public String codigo(int required) {
 		String codigo = "";
 		char[] numeros = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 		
-		for (int i = 0; i < 6; i++) {
-			codigo += numeros[(int)(Math.random() * (10))];
+		int j = 0;
+		int cant = 0;
+		
+		for (int i = 0; i < required; i++) {
+			
+			j++;
+			
+			if(required == 16 && j == 4 && cant < 3) {
+				codigo += numeros[(int)(Math.random() * (10))]+"-";
+				cant++;
+				j = 0;
+			}	
+			else
+				codigo += numeros[(int)(Math.random() * (10))];
+			
 		}
+		System.out.println("AQUIIIIIII: "+codigo);
+		//primero de 6
+		//luego de 3
+		//luego de 12 con formato de num de tarj
 		
 		return codigo;
 	}
@@ -150,5 +192,14 @@ public class ClienteController {
         email.setSubject(subject);
         email.setText(content);       
         mailSender.send(email);
+    }
+    
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }
