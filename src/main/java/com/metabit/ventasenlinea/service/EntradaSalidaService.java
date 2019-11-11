@@ -8,4 +8,6 @@ import com.metabit.ventasenlinea.entity.Kardex;
 public interface EntradaSalidaService {
 	
 	public List<EntradaSalida> getAllEntradaSalida(Kardex kardex_id);
+	
+	public void addEntradaSalida(EntradaSalida entradaSalida);
 }

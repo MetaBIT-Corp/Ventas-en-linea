@@ -23,4 +23,8 @@ public class EntradaSalidaServiceImpl implements EntradaSalidaService{
 		return entradaSalidaRespository.findByKardex(kardex_id);
 	}
 
+	@Override
+	public void addEntradaSalida(EntradaSalida entradaSalida) {
+		entradaSalidaRespository.save(entradaSalida);
+	}	
 }

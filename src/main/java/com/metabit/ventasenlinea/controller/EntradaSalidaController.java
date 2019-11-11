@@ -19,6 +19,7 @@ import com.metabit.ventasenlinea.service.KardexService;
 public class EntradaSalidaController {
 	
 	private static final String LIST_ES="/kardex/listEntradaSalida";
+	private static final String REGISTER_ES="/kardex/indexEntradaSalida";
 	
 	@Autowired
 	@Qualifier("entradaSalidaServiceImpl")
@@ -36,5 +37,14 @@ public class EntradaSalidaController {
 		mav.addObject("listado", entradaSalidaService.getAllEntradaSalida(kardex));
 		return mav;
 	}
-
+	
+	public ModelAndView indexRegisterEntradaSalida() {
+		ModelAndView mav=new ModelAndView(REGISTER_ES);
+		return mav;
+	}
+	
+	public void addEntradaSalida() {
+		
+	}
+	
 }
