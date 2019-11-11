@@ -44,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/producto/index",
 				//KARDEX SOLO PARA CONSTRUCCION SE PUSO AQUI
 				"/kardex/**",
+				"/kardex-one/**",
 				"/producto/agregar-producto",
 				"/producto/agregar-producto/{cantidad}/{id}",
 				"/producto/remover-producto/{id}",

@@ -6,4 +6,6 @@ import com.metabit.ventasenlinea.entity.Kardex;
 
 public interface KardexService {
 	public List<Kardex> getAllKardex();
+	
+	public Kardex getKardex(int id);
 }
