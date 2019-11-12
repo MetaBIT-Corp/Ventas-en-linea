@@ -7,4 +7,6 @@ import com.metabit.ventasenlinea.entity.Departamento;
 public interface CategoriaService {
 
 	public abstract List<Categoria> getCategorias(Departamento departamento);
+	
+	public abstract Categoria getCategoria(int idCategoria);
 }

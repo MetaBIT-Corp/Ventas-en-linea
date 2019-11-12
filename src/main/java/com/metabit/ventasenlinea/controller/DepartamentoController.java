@@ -22,7 +22,6 @@ public class DepartamentoController {
 	
 	private static final String INDEX_VIEW = "departamento/index";
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/listar")
 	public ModelAndView index() {
 		ModelAndView mav = new ModelAndView(INDEX_VIEW);

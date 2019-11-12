@@ -22,4 +22,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return categoriaJpaRepository.findByDepartamento(departamento);
 	}
 
+	@Override
+	public Categoria getCategoria(int idCategoria) {
+		return null;
+	}
+
 }

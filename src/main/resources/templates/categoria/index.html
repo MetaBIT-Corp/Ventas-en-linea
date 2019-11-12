@@ -39,7 +39,19 @@
 				<div class="container-fluid">
 						<!-- ESPACIO DE TRABAJO  -->
 
-						<h1>Listado de Categorias</h1>
+						<!-- Page Heading -->
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">Listado de Categorías</h1>
+						<button href="#"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+							data-id-departamento="1">
+							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
+							Categoría
+						</button>
+					</div>
+					<!-- Page Heading -->
+					
 						<div class="card-body">
 							<div class="table-responsive">
 								<table class="table table-striped" id="dataTable" width="100%"
@@ -56,7 +68,7 @@
 											<td><span th:text="${categoria.nombre}"></span></td>
 											<td><span th:text="${categoria.descripcion}"></span></td>
 											<td>
-												<button class="btn-sm btn-secondary" title="Listado de Sub-categorias"><i class="fas fa-list"></i></button>
+												<button class="btn-sm btn-secondary" title="Listado de Sub-categorias"><a th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i class="fas fa-list"></i></a></button>
 												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
 												<button class="btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
 											</td>
@@ -78,6 +90,56 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
+	
+	<!-- MODALES  -->
+	<!-- Modal para crear subcategoría -->
+	<div class="modal fade" id="crearCategoria" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="crearModalCenterTitle">Crear
+						Categoría</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="crear-categoria-body">
+					<form class="user">
+						<div class="form-group">
+							<input type="text" class="form-control form-control-user"
+							    placeholder="Nombre de categoria">
+						</div>
+						<div class="form-group">
+							<textarea type="text" class="form-control form-control-user"
+								 placeholder="Descripcion"></textarea>
+						</div>
+						<div class="form-group">					
+							<input type="hidden" class="form-control form-control-user"
+								 placeholder="Habilitado" value="1">
+						</div>
+						<div class="form-group">					
+							<input type="hidden" class="form-control form-control-user"
+								 placeholder="id_departamento" value="" id="id_departamento">
+						</div>
+						<a href="#" class="btn btn-primary btn-user btn-block">
+							Guardar </a>
+						<a href="#" class="btn btn-secondary btn-user btn-block" data-dismiss="modal"
+						aria-label="Close">
+							 Cancelar
+						</a> 
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal para crear subcategoría -->
+
+	<!-- MODALES  -->
 
 	<!-- Bootstrap core JavaScript-->
 	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
@@ -95,6 +157,17 @@
 
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+	
+	<!-- Scripts -->
+	<script>
+		$('[data-id-departamento]').on('click', crearCategoria);
+
+		function crearCategoria() {
+			$('#id_departamento').attr('value', $(this).data('id-departamento'));
+			$('#crearCategoria').modal('show');
+		}
+	</script>
+	<!-- Scripts-->
 
 </body>
 </html>

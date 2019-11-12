@@ -38,42 +38,50 @@
 				<div th:insert="fragments/topbar::topbar"></div>
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-						<!-- ESPACIO DE TRABAJO  -->
+					<!-- ESPACIO DE TRABAJO  -->
 
-						<h1>Listado de Subcategorías</h1>
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-striped" id="dataTable" width="100%"
-							cellspacing="0">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Acciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<!--  
-										<tr th:each="departamento: ${departamentos}">
-											<td><span th:text="${departamento.nombre}"></span></td>
-											<td><span th:text="${departamento.descripcion}"></span></td>
+					<!-- Page Heading -->
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h3 mb-0 text-gray-800">Listado de Subcategorías</h1>
+						<button href="#"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+							data-id-categoria="1">
+							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
+							Subcategoría
+						</button>
+					</div>
+					<!-- Page Heading -->
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-striped" id="dataTable" width="100%"
+								cellspacing="0">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Descripción</th>
+										<th>Estado</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+										<tr th:each="subcategoria : ${subcategorias}">
+											<td th:text="${subcategoria.nombreSubcategoria}"><span>Subcategoria</span></td>
+											<td th:text="${subcategoria.descripcionSubcategoria}"><span></span></td>
+											<td th:text="${subcategoria.habilitado}"><span>Habilitado</span></td>
 											<td>
-												<button class="btn-sm btn-secondary" title="Listado de Categorias"><a th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i class="fas fa-list"></i></a></button>
+												<button class="btn-sm btn-secondary" title="Listado de productos"><a href="#"><i class="fas fa-list"></i></a></button>
 												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
 												<button class="btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
 											</td>
 										</tr>
-										-->
-									</tbody>
-								</table>
-							</div>
+										
+								</tbody>
+							</table>
 						</div>
-						<!-- FIN DE ESPACIO DE TRABAJO -->
+					</div>
+					<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
 		</div>
@@ -83,6 +91,56 @@
 	<a class="scroll-to-top rounded" href="#page-top"> <i
 		class="fas fa-angle-up"></i>
 	</a>
+
+	<!-- MODALES  -->
+	<!-- Modal para crear subcategoría -->
+	<div class="modal fade" id="crearSubcategoria" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="crearModalCenterTitle">Crear
+						Subcategoría</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="crear-subcategoria-body">
+					<form class="user">
+						<div class="form-group">
+							<input type="text" class="form-control form-control-user"
+							    placeholder="Nombre de subcategoria">
+						</div>
+						<div class="form-group">
+							<textarea type="text" class="form-control form-control-user"
+								 placeholder="Descripcion"></textarea>
+						</div>
+						<div class="form-group">					
+							<input type="hidden" class="form-control form-control-user"
+								 placeholder="Habilitado" value="1">
+						</div>
+						<div class="form-group">					
+							<input type="hidden" class="form-control form-control-user"
+								 placeholder="id_categoria" value="" id="id_categoria">
+						</div>
+						<a href="#" class="btn btn-primary btn-user btn-block">
+							Guardar </a>
+						<a href="#" class="btn btn-secondary btn-user btn-block" data-dismiss="modal"
+						aria-label="Close">
+							 Cancelar
+						</a> 
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal para crear subcategoría -->
+
+	<!-- MODALES  -->
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
@@ -104,5 +162,15 @@
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
 
+	<!-- Scripts -->
+	<script>
+		$('[data-id-categoria]').on('click', crearSubcategoria);
+
+		function crearSubcategoria() {
+			$('#id_categoria').attr('value', $(this).data('id-categoria'));
+			$('#crearSubcategoria').modal('show');
+		}
+	</script>
+	<!-- Scripts-->
 </body>
 </html>

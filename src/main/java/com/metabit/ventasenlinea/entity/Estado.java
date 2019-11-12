@@ -9,23 +9,23 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "estados")
 public class Estado {
-	
+
 	@Id
 	@GeneratedValue
-	@Column(name = "id_estado", nullable = false)
+	@Column(name = "idEstado", nullable = false)
 	private int id_estado;
-	
+
 	@Column(name = "titulo_estado", nullable = false)
-	private String titulo_estado;
+	private String tituloEstado;
 
 	public Estado() {
 		super();
 	}
 
-	public Estado(int id_estado, String titulo_estado) {
+	public Estado(int id_estado, String tituloEstado) {
 		super();
 		this.id_estado = id_estado;
-		this.titulo_estado = titulo_estado;
+		this.tituloEstado = tituloEstado;
 	}
 
 	public int getId_estado() {
@@ -36,13 +36,12 @@ public class Estado {
 		this.id_estado = id_estado;
 	}
 
-	public String getTitulo_estado() {
-		return titulo_estado;
+	public String getTituloEstado() {
+		return tituloEstado;
 	}
 
-	public void setTitulo_estado(String titulo_estado) {
-		this.titulo_estado = titulo_estado;
+	public void setTituloEstado(String tituloEstado) {
+		this.tituloEstado = tituloEstado;
 	}
 
-	
 }

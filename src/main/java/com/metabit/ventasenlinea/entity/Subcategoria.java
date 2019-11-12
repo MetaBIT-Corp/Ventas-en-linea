@@ -14,13 +14,13 @@ public class Subcategoria {
 	@Id
 	@GeneratedValue
 	@Column(name = "id_subcategoria")
-	private int id_subcategoria;
+	private int idSubcategoria;
 
 	@Column(name = "nombre_subcategoria")
-	private String nombre_subcategoria;
+	private String nombreSubcategoria;
 
 	@Column(name = "descripcion_subcategoria")
-	private String descripcion_subcategoria;
+	private String descripcionSubcategoria;
 
 	@Column(name = "habilitado")
 	private boolean habilitado;
@@ -33,12 +33,12 @@ public class Subcategoria {
 		super();
 	}
 
-	public Subcategoria(int id_subcategoria, String nombre_subcategoria, String descripcion_subcategoria,
+	public Subcategoria(int idSubcategoria, String nombreSubcategoria, String descripcionSubcategoria,
 			boolean habilitado, Categoria categoria) {
 		super();
-		this.id_subcategoria = id_subcategoria;
-		this.nombre_subcategoria = nombre_subcategoria;
-		this.descripcion_subcategoria = descripcion_subcategoria;
+		this.idSubcategoria = idSubcategoria;
+		this.nombreSubcategoria = nombreSubcategoria;
+		this.descripcionSubcategoria = descripcionSubcategoria;
 		this.habilitado = habilitado;
 		this.categoria = categoria;
 	}
@@ -51,28 +51,28 @@ public class Subcategoria {
 		this.habilitado = habilitado;
 	}
 
-	public int getId_subcategoria() {
-		return id_subcategoria;
+	public int getIdSubcategoria() {
+		return idSubcategoria;
 	}
 
-	public void setId_subcategoria(int id_subcategoria) {
-		this.id_subcategoria = id_subcategoria;
+	public void setIdSubcategoria(int idSubcategoria) {
+		this.idSubcategoria = idSubcategoria;
 	}
 
-	public String getNombre_subcategoria() {
-		return nombre_subcategoria;
+	public String getNombreSubcategoria() {
+		return nombreSubcategoria;
 	}
 
-	public void setNombre_subcategoria(String nombre_subcategoria) {
-		this.nombre_subcategoria = nombre_subcategoria;
+	public void setNombreSubcategoria(String nombreSubcategoria) {
+		this.nombreSubcategoria = nombreSubcategoria;
 	}
 
-	public String getDescripcion_subcategoria() {
-		return descripcion_subcategoria;
+	public String getDescripcionSubcategoria() {
+		return descripcionSubcategoria;
 	}
 
-	public void setDescripcion_subcategoria(String descripcion_subcategoria) {
-		this.descripcion_subcategoria = descripcion_subcategoria;
+	public void setDescripcionSubcategoria(String descripcionSubcategoria) {
+		this.descripcionSubcategoria = descripcionSubcategoria;
 	}
 
 	public Categoria getCategoria() {
