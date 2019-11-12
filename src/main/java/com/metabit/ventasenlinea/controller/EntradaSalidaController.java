@@ -64,36 +64,51 @@ public class EntradaSalidaController {
 		es.setKardex(kardex);
 		es.setFecha(fecha);
 
-		double denominador = kardex.getUnidadesDisponibles() + es.getCantidad();
+		// Este seria para entrada se utiliza por defecto si no se cambia en el
+		// siguiente if
+		// Formula denominador UDisp + cantidad E/S
+		int denominador = kardex.getUnidadesDisponibles() + es.getCantidad();
 
-		// Se actualiza el valor de unidades disponibles de kardex
+		// Si es SALIDA
 		if (es.getIsEntradaSalida()) {
-
 			// Se verifica que no se saque mas de lo que hay en stock
-			if (kardex.getUnidadesDisponibles()-es.getCantidad()  < 0) {
-				kardex.setUnidadesDisponibles(es.getCantidad() - kardex.getUnidadesDisponibles());
+			if (kardex.getUnidadesDisponibles() - es.getCantidad() < 0) {
 				attrs.addFlashAttribute("message", "No se puede sacar mas de lo que hay en existencia.");
 				return ruta;
 			}
+			es.setPrecio(kardex.getCostoUnitario());
 			denominador = kardex.getUnidadesDisponibles() - es.getCantidad();
-		}
-		
-		// Se valida que no sobrepase el stock maximo
-		if ((kardex.getUnidadesDisponibles() + es.getCantidad()) > kardex.getStockMaximo()) {
-			attrs.addFlashAttribute("message", "Se sobrepasa el stock maximo");
-			return ruta;
-		}
-		
-		kardex.setUnidadesDisponibles(es.getCantidad() + kardex.getUnidadesDisponibles());
+		} else {
+			// Se valida que no sobrepase el stock maximo en ENTRADA
+			if ((kardex.getUnidadesDisponibles() + es.getCantidad()) > kardex.getStockMaximo()) {
+				attrs.addFlashAttribute("message", "Se sobrepasa el stock maximo");
+				return ruta;
+			}
 
-		// Calcular costo promedio (no recuerdo si es asi faltaria revisar)
+		}
+
+		// Valores para calcular costo promedio
+		double num1 = kardex.getUnidadesDisponibles() * kardex.getCostoUnitario();
+		double num2 = es.getCantidad() * es.getPrecio();
+
+		// Formula numerador (UDisp*CostoActual) +/- (catidadE/S*costoCompra)/
+		double numerador = num1 + num2;
+
 		if (kardex.getCostoUnitario() == 0) {
 			kardex.setCostoUnitario(es.getPrecio());
 		} else {
-			double numerador = (kardex.getUnidadesDisponibles() * kardex.getCostoUnitario())
-					* (es.getCantidad() * es.getPrecio());
-			kardex.setCostoUnitario(numerador / denominador);
+			// Si es SALIDA
+			if (es.getIsEntradaSalida()) {
+				numerador = num1 - num2;
+			}
+			// COSTO PROMEDIO
+			if (denominador == 0)
+				kardex.setCostoUnitario(0);
+			else
+				kardex.setCostoUnitario(numerador / denominador);
 		}
+		
+		kardex.setUnidadesDisponibles(denominador);
 
 		// Se guardan ambos modelos
 		kardexService.addKardex(kardex);

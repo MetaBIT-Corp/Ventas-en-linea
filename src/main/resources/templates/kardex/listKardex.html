@@ -27,28 +27,25 @@
 	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script
 	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript"></script>
-
 <!-- Logout Modal-->
-	<div th:insert="fragments/modallogout::modallogout"></div>
+<div th:insert="fragments/modallogout::modallogout"></div>
 
-	<!-- Bootstrap core JavaScript-->
-	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
-	<!-- Core plugin JavaScript-->
-	<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
 
-	<!-- Custom scripts for all pages-->
-	<script th:src="@{/js/sb-admin-2.min.js}"></script>
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
 
-	<!-- Page level plugins -->
-	<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
-	<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 
-	<!-- Page level custom scripts -->
-	<script th:src="@{/js/demo/datatables-demo.js}"></script>
-
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
 </head>
 <body>
 	<div id="wrapper">
@@ -85,11 +82,13 @@
 									<tbody>
 										<tr th:each="kardex:${listado}">
 											<td th:text="${kardex.producto.titulo}"></td>
-											<td th:text="${kardex.costoUnitario}"></td>
+											<td th:text="'$ '+${#numbers.formatDecimal(kardex.costoUnitario,1,2,'POINT')}"></td>
 											<td th:text="${kardex.unidadesDisponibles}"></td>
 											<td th:text="${kardex.stockMinimo}"></td>
 											<td th:text="${kardex.stockMaximo}"></td>
-											<td><a th:href=@{/kardex-one/{kardex}/entrada-salida(kardex=${kardex.idKardex})} class="btn btn-info text-white">Ver Kardex</a></td>
+											<td><a
+												th:href=@{/kardex-one/{kardex}/entrada-salida(kardex=${kardex.idKardex})}
+												class="btn btn-info text-white">Ver Kardex</a></td>
 										</tr>
 									</tbody>
 									<tfoot>
