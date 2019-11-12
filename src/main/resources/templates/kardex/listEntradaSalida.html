@@ -115,7 +115,7 @@
 												<span th:unless="${es.isEntradaSalida}"
 												class='badge badge-success'>ENTRADA</span></td>
 											<td th:text="${es.cantidad}"></td>
-											<td th:text="${es.precio}"></td>
+											<td th:text="'$ '+${#numbers.formatDecimal(es.precio,1,2,'POINT')}"></td>
 										</tr>
 									</tbody>
 									<tfoot>
