@@ -13,42 +13,41 @@ public class ArticuloPedido {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "id_articulo_pedido" , nullable = false)
-	private int id_articulo_pedido;
-	
-	@Column(name = "cantidad" , nullable = false)
+	@Column(name = "id_articulo_pedido", nullable = false)
+	private int idArticuloPedido;
+
+	@Column(name = "cantidad", nullable = false)
 	private int cantidad;
-	
-	@Column(name= "precio_unitario", nullable = false)
-	private float precio_unitario;
-	
-	//foraneas
-	 @ManyToOne
-	 private Pedido pedido;
-	 
-	 @ManyToOne 
-	 private Producto producto;
-	 
+
+	@Column(name = "precio_unitario", nullable = false)
+	private float precioUnitario;
+
+	// foraneas
+	@ManyToOne
+	private Pedido pedido;
+
+	@ManyToOne
+	private Producto producto;
+
 	public ArticuloPedido() {
 		super();
 	}
 
-	public ArticuloPedido(int id_articulo_pedido, int cantidad, float precio_unitario, Pedido pedido,
-			Producto producto) {
+	public ArticuloPedido(int idArticuloPedido, int cantidad, float precioUnitario, Pedido pedido, Producto producto) {
 		super();
-		this.id_articulo_pedido = id_articulo_pedido;
+		this.idArticuloPedido = idArticuloPedido;
 		this.cantidad = cantidad;
-		this.precio_unitario = precio_unitario;
+		this.precioUnitario = precioUnitario;
 		this.pedido = pedido;
 		this.producto = producto;
 	}
 
-	public int getId_articulo_pedido() {
-		return id_articulo_pedido;
+	public int getIdArticuloPedido() {
+		return idArticuloPedido;
 	}
 
-	public void setId_articulo_pedido(int id_articulo_pedido) {
-		this.id_articulo_pedido = id_articulo_pedido;
+	public void setIdArticuloPedido(int idArticuloPedido) {
+		this.idArticuloPedido = idArticuloPedido;
 	}
 
 	public int getCantidad() {
@@ -59,12 +58,12 @@ public class ArticuloPedido {
 		this.cantidad = cantidad;
 	}
 
-	public float getPrecio_unitario() {
-		return precio_unitario;
+	public float getPrecioUnitario() {
+		return precioUnitario;
 	}
 
-	public void setPrecio_unitario(float precio_unitario) {
-		this.precio_unitario = precio_unitario;
+	public void setPrecioUnitario(float precioUnitario) {
+		this.precioUnitario = precioUnitario;
 	}
 
 	public Pedido getPedido() {
@@ -82,5 +81,5 @@ public class ArticuloPedido {
 	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
-	 	 
+
 }

@@ -32,6 +32,7 @@ public class CategoriaController {
 		Departamento departamento = departamentoService.getDepartamento(idDepartamento);
 		ModelAndView mav = new ModelAndView(INDEX_VIEW);
 		mav.addObject("categorias", categoriaService.getCategorias(departamento));
+		mav.addObject("departamento", departamento);
 		//user
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		mav.addObject("user", user.getUsername());

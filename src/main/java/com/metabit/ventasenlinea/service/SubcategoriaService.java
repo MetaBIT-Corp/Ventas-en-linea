@@ -1,5 +1,13 @@
 package com.metabit.ventasenlinea.service;
 
-public interface SubcategoriaService {
+import java.util.List;
 
+import com.metabit.ventasenlinea.entity.Categoria;
+import com.metabit.ventasenlinea.entity.Subcategoria;
+
+public interface SubcategoriaService {
+	
+	public abstract List<Subcategoria> listAllSubcategorias();
+	
+	public abstract List<Subcategoria> listAllSubcategoriasByCategoria(Categoria categoria);
 }
