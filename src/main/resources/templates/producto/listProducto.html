@@ -74,10 +74,8 @@
 		                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 		                  <thead>
 		                    <tr>
-		                      <th>Imagen</th>
 		                      <th>Nombre</th>
 		                      <th>Marca</th>
-		                      <th>Descripción</th>
 		                      <th>Margen de ganacia</th>
 		                      <th>Descuento</th>
 		                      <th>Opciones</th>
@@ -85,10 +83,8 @@
 		                  </thead>
 		                  <tfoot>
 		                    <tr>
-		                      <th>Imagen</th>
 		                      <th>Nombre</th>
 		                      <th>Marca</th>
-		                      <th>Descripción</th>
 		                      <th>Margen de ganacia</th>
 		                      <th>Descuento</th>
 		                      <th>Opciones</th>
@@ -96,16 +92,26 @@
 		                  </tfoot>
 		                  <tbody>
 		                    <tr th:each="producto:${productos}">
-		                      <td><img th:src=${producto.imagen} width="110" height="100" class="img-responsive"></td>
 		                      <td th:text="${producto.titulo}"></td>
 		                      <td th:text="${producto.marca}"></td>
-		                      <td th:text="${producto.descripcionArticulo}"></td>
 		                      <td th:text="${producto.margenGanancia}"></td>
 		                      <td th:text="${producto.porcentajeDescuento}"></td>
 		                      <td>
-		                      	<a th:href="@{/producto/actualizar/{id}(id=${producto.idArticulo})}" title="Editar" class="btn btn-sm btn-primary">
+		                      	<a th:if="${producto.habilitado} == 1" th:href="@{/producto/ver-detalle/{id}(id=${producto.idArticulo})}" title="Ver detalle" class="btn btn-sm btn-info">
+		                      		<i class="fas fa-info-circle"></i>
+		                      	</a>
+		                      	<a th:if="${producto.habilitado} == 1" th:href="@{/producto/actualizar/{id}(id=${producto.idArticulo})}" title="Editar" class="btn btn-sm btn-primary">
 		                      		<i class="fas fa-pencil-alt"></i>
 		                      	</a>
+		                      	<button th:if="${producto.habilitado} == 1" title="Asignar descuento" class="btn btn-sm btn-dark" th:onclick="|asignar_desc('${producto.idArticulo}','${producto.porcentajeDescuento}')|">
+		                      		<i class="fas fa-donate"></i>
+		                      	</button>
+		                      	<button th:if="${producto.habilitado} == 1" title="Deshabilitar producto" class="btn btn-sm btn-danger" th:onclick="|hab_deshab('${producto.idArticulo}',0)|">
+		                      		<i class="fas fa-minus-circle"></i>
+		                      	</button>
+		                      	<button th:if="${producto.habilitado} == 0" title="Habilitar producto" class="btn btn-sm btn-primary" th:onclick="|hab_deshab('${producto.idArticulo}',1)|">
+		                      		<i class="fas fa-plus-circle"></i>
+		                      	</button>
 		                      </td>
 		                    </tr>
 		                  </tbody>
@@ -128,7 +134,58 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
+	
+	<!-- Modal para asignar descuento a producto -->
+<div class="modal fade" id="asignar_desc_mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Asignar descuento a producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" th:action="@{/producto/asignar-descuento}">
+        <div class="modal-body">
+          <input type="hidden" value="" id="producto_id" name="producto_id">
+          <div class="form-group">
+            <label for="cantidad-producto">Nuevo descuento</label>
+            <input type="number" step="5.00" min="0" class="form-control" id="descuento" name="descuento" value="">
+          </div>
+        </div>
+        <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="submit" id="btnGuardar" class="btn btn-primary">Guardar</button>    
+        </div>
+       </form>
+    </div>
+  </div>
+</div>
 
+	<!-- Modal para habilitar/deshabilitar descuento a producto -->
+<div class="modal fade" id="habilitar-producto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Cambio de estado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+        	<p id="p-message"></p>	
+        </div>
+        <div class="modal-footer">
+        <form th:action="@{/producto/hab-deshab}" method="post">
+        	<input type="hidden" value="" id="producto_id_hab" name="producto_id_hab">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="submit" id="btnAccion" class="btn"></button>    
+        </form>
+        </div>
+    </div>
+  </div>
+</div>
+	
 </body>
 
 <script>
@@ -136,7 +193,30 @@
 	  	setTimeout(function() {
 	       $(".alert").fadeOut();           
 	  	},3000);
-	})
+	});
+	
+	function asignar_desc(producto_id, descuento_actual){
+		$("#producto_id").val(producto_id);
+		$("#descuento").val(descuento_actual);
+		$("#asignar_desc_mod").modal();
+		$("#descuento").focus();
+	}
+	
+	function hab_deshab(producto_id, habilitado){
+		if(habilitado == 0){
+			$("#btnAccion").text("Deshabilitar");
+			$("#btnAccion").addClass("btn-danger");
+			$("#p-message").text("¿Está seguro que desea deshabilitar el producto?");
+		}else{
+			$("#btnAccion").text("Habilitar");
+			$("#btnAccion").addClass("btn-primary");
+			$("#p-message").text("¿Está seguro que desea habilitar el producto?");
+		}
+		
+		$("#producto_id_hab").val(producto_id);
+		$("#habilitar-producto").modal();
+	}
+	
 </script>
 
 </html>

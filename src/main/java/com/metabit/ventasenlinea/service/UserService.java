@@ -13,5 +13,6 @@ public interface UserService {
 	public abstract List<Cliente> findAllClientes();
 	//Agregados por Diego
 	void updatePassword(String password, int userId);
+	public User updateUser(User user);
 	
 }

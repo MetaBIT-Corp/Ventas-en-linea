@@ -55,30 +55,30 @@
 								    <h5 class="card-title">Nuevo Producto</h5>
 								  </div>
 								  <div class="card-body">
-									<form method="post" th:action="@{/producto/nuevo}" enctype="multipart/form-data"  th:object="${producto}">
+									<form method="post" th:action="@{/producto/nuevo}" enctype="multipart/form-data"  th:object="${producto}" class="user">
 									<div class="form-group">
 										<label for="">Nombre del producto*</label>
-									  	<input type="text" th:field="*{titulo}" class="form-control">
+									  	<input type="text" th:field="*{titulo}" class="form-control form-control-user">
 									  	<p th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Marca del producto*</label>
-									  	<input type="text" th:field="*{marca}" class="form-control">
+									  	<input type="text" th:field="*{marca}" class="form-control form-control-user">
 									  	<p th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Margen de ganancia*</label>
-									  	<input type="number" th:field="*{margenGanancia}" min="0" class="form-control">
+									  	<input type="number" th:field="*{margenGanancia}" min="0" class="form-control form-control-user">
 									  	<p th:if="${#fields.hasErrors('margenGanancia')}" th:errors="*{margenGanancia}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Porcentaje de descuento</label>
-									  <input type="number" th:field="*{porcentajeDescuento}" min="0" class="form-control">
+									  <input type="number" th:field="*{porcentajeDescuento}" min="0" class="form-control form-control-user">
 									  <p th:if="${#fields.hasErrors('porcentajeDescuento')}" th:errors="*{porcentajeDescuento}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Descripción del producto*</label>
-									  	<textarea th:field="*{descripcionArticulo}" class="form-control"></textarea>
+									  	<textarea th:field="*{descripcionArticulo}" class="form-control form-control-user"></textarea>
 									  	<p th:if="${#fields.hasErrors('descripcionArticulo')}" th:errors="*{descripcionArticulo}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">

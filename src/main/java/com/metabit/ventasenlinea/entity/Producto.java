@@ -9,43 +9,47 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Table(name="productos")
+@Table(name = "productos")
 public class Producto {
-	
-	//Falta el campo para la llave foranea de subgategoria
-	
+
+	// Falta el campo para la llave foranea de subgategoria
+
 	@Id
 	@GeneratedValue
-	@Column(name="id_articulo")
+	@Column(name = "id_articulo")
 	private int idArticulo;
-	
-	@Column(name="imagen")
+
+	@Column(name = "imagen")
 	private String imagen;
-	
+
 	@NotEmpty(message = "Ingrese la marca del producto")
-	@Column(name="marca",length=50)
+	@Column(name = "marca", length = 50)
 	private String marca;
-	
+
 	@NotEmpty(message = "Ingrese el título del producto")
-	@Column(name="titulo", length=50)
+	@Column(name = "titulo", length = 50)
 	private String titulo;
-	
-	@Min(value=0, message = "El margen de ganancia no puede ser negativo")
-	@Column(name="margen_ganancia")
+
+	@Min(value = 0, message = "El margen de ganancia no puede ser negativo")
+	@Column(name = "margen_ganancia")
 	private double margenGanancia;
-	
-	@Min(value=0, message = "El descuento no puede ser negativo")
-	@Column(name="porcentaje_descuento")
+
+	@Min(value = 0, message = "El descuento no puede ser negativo")
+	@Column(name = "porcentaje_descuento")
 	private double porcentajeDescuento;
-	
+
 	@NotEmpty(message = "Ingrese la descripción del producto")
-	@Column(name="descripcion_articulo")
+	@Column(name = "descripcion_articulo")
 	private String descripcionArticulo;
 
-	public Producto() {}
+	@Column(name = "habilitado")
+	private int habilitado;
+
+	public Producto() {
+	}
 
 	public Producto(int idArticulo, String imagen, String marca, String titulo, double margenGanancia,
-			double porcentajeDescuento, String descripcionArticulo) {
+			double porcentajeDescuento, String descripcionArticulo, int habilitado) {
 		this.idArticulo = idArticulo;
 		this.imagen = imagen;
 		this.marca = marca;
@@ -53,6 +57,7 @@ public class Producto {
 		this.margenGanancia = margenGanancia;
 		this.porcentajeDescuento = porcentajeDescuento;
 		this.descripcionArticulo = descripcionArticulo;
+		this.habilitado = habilitado;
 	}
 
 	public int getIdArticulo() {
@@ -62,7 +67,6 @@ public class Producto {
 	public void setIdArticulo(int idArticulo) {
 		this.idArticulo = idArticulo;
 	}
-	
 
 	public String getImagen() {
 		return imagen;
@@ -79,8 +83,7 @@ public class Producto {
 	public void setMarca(String marca) {
 		this.marca = marca;
 	}
-	
-	
+
 	public String getTitulo() {
 		return titulo;
 	}
@@ -112,4 +115,13 @@ public class Producto {
 	public void setDescripcionArticulo(String descripcionArticulo) {
 		this.descripcionArticulo = descripcionArticulo;
 	}
+
+	public int getHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(int habilitado) {
+		this.habilitado = habilitado;
+	}
+
 }

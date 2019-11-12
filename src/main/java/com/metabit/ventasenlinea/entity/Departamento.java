@@ -20,6 +20,18 @@ public class Departamento {
 
 	@Column(name = "descripcion_departamento", nullable = false)
 	private String descripcion;
+	
+	@Column(name = "habilitado")
+	
+	private boolean habilitado;
+
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
 
 	public int getId() {
 		return id;
@@ -45,11 +57,12 @@ public class Departamento {
 		this.descripcion = descripcion;
 	}
 
-	public Departamento(int id, String nombre, String descripcion) {
+	public Departamento(int id, String nombre, String descripcion, boolean habilitado) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+		this.habilitado = habilitado;
 	}
 
 	public Departamento() {
