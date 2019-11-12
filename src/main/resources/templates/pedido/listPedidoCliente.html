@@ -82,12 +82,12 @@
 										<tr th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
 											<td th:text="${pedidos[i].fechaPedido}"></td>
 											<td th:text="${pedidos[i].direccionDestino}"></td>
-											<td th:text="${pedidos[i].pais.nombre_pais}"></td>
+											<td th:text="${pedidos[i].pais.nombrePais}"></td>
 											<td th:text="'$ '+${montos[i]}"></td>
 											<td class="text-center">
-											<span th:if="${pedidos[i].estado.titulo_estado== 'Entregado'}" class='badge badge-success'>ENTREGADO</span>
-											<span th:if="${pedidos[i].estado.titulo_estado== 'En Camino'}" class='badge badge-primary'>EN CAMINO</span>
-											<span th:if="${pedidos[i].estado.titulo_estado!= 'En Camino' and pedidos[i].estado.titulo_estado!= 'Entregado'}"
+											<span th:if="${pedidos[i].estado.tituloEstado== 'Entregado'}" class='badge badge-success'>ENTREGADO</span>
+											<span th:if="${pedidos[i].estado.tituloEstado== 'En Camino'}" class='badge badge-primary'>EN CAMINO</span>
+											<span th:if="${pedidos[i].estado.tituloEstado!= 'En Camino' and pedidos[i].estado.tituloEstado!= 'Entregado'}"
 											 class='badge badge-warning'>EN PROCESO</span>
 											</td>
 											<td><a href="#"	class="btn btn-info text-white">Ver Detalle Pedido</a></td>

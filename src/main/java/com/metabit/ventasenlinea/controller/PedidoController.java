@@ -79,7 +79,7 @@ public class PedidoController {
 		for (Pedido p : pedidos) {
 			double m = 0;
 			for (ArticuloPedido ap : p.getListaArticulo()) {
-				m += ap.getPrecio_unitario()*ap.getCantidad();
+				m += ap.getPrecioUnitario()*ap.getCantidad();
 			}
 			LOG.info("VALOOOOOOOOOOR "+m);
 			monto.add(m);

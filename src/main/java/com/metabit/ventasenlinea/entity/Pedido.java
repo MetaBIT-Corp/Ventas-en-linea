@@ -108,6 +108,4 @@ public class Pedido {
 	public void setListaArticulo(List<ArticuloPedido> listaArticulo) {
 		this.listaArticulo = listaArticulo;
 	}
-	
-	
 }
