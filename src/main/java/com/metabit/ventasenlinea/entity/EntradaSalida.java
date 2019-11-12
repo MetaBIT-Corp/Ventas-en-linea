@@ -8,6 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Negative;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name="entrada_salida")
@@ -28,9 +33,13 @@ public class EntradaSalida {
 	private boolean isEntradaSalida;
 	
 	@Column(name="cantidad")
+	@Positive(message="La cantidad debe ser positiva.")
+	@Min(value=1,message="Cantidad es un campo requerido mayor a 0.")
 	private int cantidad;
 	
 	@Column(name="precio")
+	@Positive(message="La cantidad debe ser positiva.")
+	@Min(value=1,message="Precio es un campo requerido mayor a 0.")
 	private double precio;
 	
 	

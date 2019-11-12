@@ -1,92 +1,44 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="UTF-8"/>
-	<title>Crear cuenta</title>
-	
-	<!-- Custom fonts for this template-->
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+<div class="p-5" th:fragment="ES">
 
-  <!-- Custom styles for this template-->
-  <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet"/>
-  
-</head>
+	<div class="text-center col-12 mb-6 mb-sm-0">
+		<h1 class="h4 text-gray-900 mb-4" th:text="${kardex.producto.titulo}"></h1>
+	</div>
+	<form th:action="@{/kardex-one/{kar}/addES(kar=${kardex.idKardex})}"
+		method="POST" class="user" th:object="${es}" id="register">
+		<div class="form-group row">
+			<div class="col-12 mb-6 mb-sm-0">
+				<input type="number" class="form-control form-control-user"
+					id="exampleFirstName" placeholder="Cantidad" th:field="*{cantidad}"
+					required>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-12 mb-6 mb-sm-0">
+				<input type="number" step="any"
+					class="form-control form-control-user" id="exampleFirstName"
+					placeholder="Precio" th:field="*{precio}" required>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-12 mb-6 mb-sm-0">
+				<select class="form-control" th:field="*{isEntradaSalida}"
+					form="register">
+					<option th:value="false" th:text="Entrada"></option>
+					<option th:value="true" th:text="Salida"></option>
+				</select>
+			</div>
+		</div>
+		<hr>
+		<div class="form-group row text-right">
+			<div class="col-12 mb-6 mb-sm-0">
+				<input type="submit" class="btn btn-info" id="exampleFirstName"
+					value="Registrar">
+				<button data-dismiss="modal" class="btn btn-danger">Salir</button>
+			</div>
 
-<body class="bg-gradient-primary">
+		</div>
+	</form>
 
-  <div class="container">
+</div>
 
-    <div class="card o-hidden border-0 shadow-lg my-5">
-      <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-          <div class="col-lg-7">
-            <div class="p-5">
-              <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
-              </div>
-              <div>
-		     	  <div class="alert alert-danger">
-		     		 <h4></h4>
-		     	  </div>
-      		  </div>
-              <form action="#"  method="post" class="user">
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="text"  class="form-control form-control-user" id="exampleFirstName" placeholder="Nombre">
-                    <p  class="alert alert-danger"></p>
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Apellido">
-                    <p class="alert alert-danger"></p>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <input type="email"  class="form-control form-control-user" id="exampleInputEmail" placeholder="Correo electrónico">
-                  <p  class="alert alert-danger"></p>
-                </div>
-                <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user" id="inputPassword"  data-pass placeholder="Contraseña">
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" id="repeatPassword" data-pass placeholder="Confirmar contraseña">
-                  </div>
-                  <div class = "col-sm-12">
-                    <p  class="alert alert-danger"></p>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <textarea type="text"  class="form-control form-control-user" id="inputDireccion" placeholder="Dirección"></textarea>
-                  <p class="alert alert-danger"></p>
-                </div>
-                <input type="submit" value="Registrar cuenta" class="btn btn-primary btn-user btn-block"/>
-              </form>
-              <hr>
-              <div class="text-center">
-                <a class="small" href="#">Olvidé mi contraseña?</a>
-              </div>
-              <div class="text-center">
-                <a class="small">ya tienes una cuenta? Login!</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  </div>
-
-	<!-- Bootstrap core JavaScript-->
-  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
-  <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script th:src="@{/js/sb-admin-2.min.js}"></script>
-
-</body>
-</html>

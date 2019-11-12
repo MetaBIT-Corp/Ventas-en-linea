@@ -20,7 +20,7 @@ public class EntradaSalidaServiceImpl implements EntradaSalidaService{
 	
 	@Override
 	public List<EntradaSalida> getAllEntradaSalida(Kardex kardex_id) {
-		return entradaSalidaRespository.findByKardex(kardex_id);
+		return entradaSalidaRespository.findByKardexOrderByFechaDesc(kardex_id);
 	}
 
 	@Override

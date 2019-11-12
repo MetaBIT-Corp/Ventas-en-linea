@@ -12,5 +12,5 @@ import com.metabit.ventasenlinea.entity.Kardex;
 @Repository("entradaSalidaJpaRespository")
 public interface EntradaSalidaJpaRepository extends JpaRepository<EntradaSalida, Serializable>{
 	
-	public List<EntradaSalida> findByKardex(Kardex kardex_id);
+	public List<EntradaSalida> findByKardexOrderByFechaDesc(Kardex kardex_id);
 }

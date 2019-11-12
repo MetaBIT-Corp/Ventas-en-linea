@@ -8,4 +8,6 @@ public interface KardexService {
 	public List<Kardex> getAllKardex();
 	
 	public Kardex getKardex(int id);
+	
+	public void addKardex(Kardex kardex);
 }
