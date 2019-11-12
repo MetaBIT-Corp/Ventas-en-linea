@@ -45,7 +45,7 @@
 						<h1 class="h3 mb-0 text-gray-800">Listado de Categorías</h1>
 						<button href="#"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-							data-id-departamento="1">
+							data-id-departamento th:value="${departamento.id}">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Categoría
 						</button>
@@ -161,9 +161,8 @@
 	<!-- Scripts -->
 	<script>
 		$('[data-id-departamento]').on('click', crearCategoria);
-
 		function crearCategoria() {
-			$('#id_departamento').attr('value', $(this).data('id-departamento'));
+			$('#id_departamento').attr('value', $(this).val());
 			$('#crearCategoria').modal('show');
 		}
 	</script>

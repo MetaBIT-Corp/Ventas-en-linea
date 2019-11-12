@@ -46,7 +46,7 @@
 						<h1 class="h3 mb-0 text-gray-800">Listado de Subcategorías</h1>
 						<button href="#"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-							data-id-categoria="1">
+							data-id-categoria th:value="${categoria.id}">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Subcategoría
 						</button>
@@ -69,7 +69,8 @@
 										<tr th:each="subcategoria : ${subcategorias}">
 											<td th:text="${subcategoria.nombreSubcategoria}"><span>Subcategoria</span></td>
 											<td th:text="${subcategoria.descripcionSubcategoria}"><span></span></td>
-											<td th:text="${subcategoria.habilitado}"><span>Habilitado</span></td>
+											<td th:if="${subcategoria.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
+											<td th:unless="${subcategoria.habilitado}" th:text="Deshabilitado"><span>Deshabilitado</span></td>
 											<td>
 												<button class="btn-sm btn-secondary" title="Listado de productos"><a href="#"><i class="fas fa-list"></i></a></button>
 												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
@@ -167,7 +168,7 @@
 		$('[data-id-categoria]').on('click', crearSubcategoria);
 
 		function crearSubcategoria() {
-			$('#id_categoria').attr('value', $(this).data('id-categoria'));
+			$('#id_categoria').attr('value', $(this).val());
 			$('#crearSubcategoria').modal('show');
 		}
 	</script>

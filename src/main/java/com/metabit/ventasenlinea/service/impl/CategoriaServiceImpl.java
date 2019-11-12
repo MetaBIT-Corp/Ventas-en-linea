@@ -24,7 +24,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	@Override
 	public Categoria getCategoria(int idCategoria) {
-		return null;
+		return categoriaJpaRepository.findById(idCategoria).get();
 	}
 
 }
