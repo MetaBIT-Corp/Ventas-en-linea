@@ -52,7 +52,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/api/user-email/{email}",
 				//Recuperacion de contraseña
 				"/forgot-password**",
-				"/reset-password**"
+				"/reset-password**",
+				"/subcategoria/**"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

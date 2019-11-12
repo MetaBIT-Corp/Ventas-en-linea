@@ -23,6 +23,9 @@ public class Categoria {
 	@Column(name = "descripcion_categoria", nullable = false)
 	private String descripcion;
 
+	@Column(name = "habilitado")
+	private boolean habilitado;
+
 	@ManyToOne
 	@JoinColumn(name = "id_departamento", nullable = false)
 	private Departamento departamento;
@@ -51,6 +54,14 @@ public class Categoria {
 		this.descripcion = descripcion;
 	}
 
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
 	public Departamento getDepartamento() {
 		return departamento;
 	}
@@ -59,11 +70,12 @@ public class Categoria {
 		this.departamento = departamento;
 	}
 
-	public Categoria(int id, String nombre, String descripcion, Departamento departamento) {
+	public Categoria(int id, String nombre, String descripcion, boolean habilitado, Departamento departamento) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+		this.habilitado = habilitado;
 		this.departamento = departamento;
 	}
 

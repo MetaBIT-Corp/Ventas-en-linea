@@ -10,19 +10,22 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "subcategorias")
 public class Subcategoria {
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "id_subcategoria")
 	private int id_subcategoria;
-	
+
 	@Column(name = "nombre_subcategoria")
 	private String nombre_subcategoria;
-	
+
 	@Column(name = "descripcion_subcategoria")
 	private String descripcion_subcategoria;
-	
-	//foranea
+
+	@Column(name = "habilitado")
+	private boolean habilitado;
+
+	// foranea
 	@ManyToOne
 	private Categoria categoria;
 
@@ -31,12 +34,21 @@ public class Subcategoria {
 	}
 
 	public Subcategoria(int id_subcategoria, String nombre_subcategoria, String descripcion_subcategoria,
-			Categoria categoria) {
+			boolean habilitado, Categoria categoria) {
 		super();
 		this.id_subcategoria = id_subcategoria;
 		this.nombre_subcategoria = nombre_subcategoria;
 		this.descripcion_subcategoria = descripcion_subcategoria;
+		this.habilitado = habilitado;
 		this.categoria = categoria;
+	}
+
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
 	}
 
 	public int getId_subcategoria() {
@@ -70,8 +82,5 @@ public class Subcategoria {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
-	
-	
-	
+
 }
