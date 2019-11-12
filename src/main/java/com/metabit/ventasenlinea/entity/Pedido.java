@@ -1,12 +1,15 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,20 +19,26 @@ public class Pedido {
 	@Id
 	@GeneratedValue
 	@Column(name = "id_pedido", nullable = false)
-	private int id_pedido;
+	private int idPedido;
 	
 	@Column(name = "direccion_destino")
-	private String direccion_destino;
+	private String direccionDestino;
 	
 	@Column(name = "fecha_pedido")
-	private Date fecha_pedido;
+	private Date fechaPedido;
 	
 	//llaves foraneas
 	@ManyToOne
 	private Pais pais;
 	
 	@ManyToOne
-	private Estado estado;;
+	private Estado estado;
+	
+	@ManyToOne
+	private Cliente cliente;
+	
+	@OneToMany(mappedBy="pedido" )
+	private List<ArticuloPedido> listaArticulo=new ArrayList<ArticuloPedido>();
 	
 	public Pedido() {
 		super();
@@ -37,35 +46,35 @@ public class Pedido {
 
 	public Pedido(int id_pedido, String direccion_destino, Date fecha_pedido, Pais pais, Estado estado) {
 		super();
-		this.id_pedido = id_pedido;
-		this.direccion_destino = direccion_destino;
-		this.fecha_pedido = fecha_pedido;
+		this.idPedido = id_pedido;
+		this.direccionDestino = direccion_destino;
+		this.fechaPedido = fecha_pedido;
 		this.pais = pais;
 		this.estado = estado;
 	}
 
-	public int getId_pedido() {
-		return id_pedido;
+	public int getIdPedido() {
+		return idPedido;
 	}
 
-	public void setId_pedido(int id_pedido) {
-		this.id_pedido = id_pedido;
+	public void setIdPedido(int idPedido) {
+		this.idPedido = idPedido;
 	}
 
-	public String getDireccion_destino() {
-		return direccion_destino;
+	public String getDireccionDestino() {
+		return direccionDestino;
 	}
 
-	public void setDireccion_destino(String direccion_destino) {
-		this.direccion_destino = direccion_destino;
+	public void setDireccionDestino(String direccionDestino) {
+		this.direccionDestino = direccionDestino;
 	}
 
-	public Date getFecha_pedido() {
-		return fecha_pedido;
+	public Date getFechaPedido() {
+		return fechaPedido;
 	}
 
-	public void setFecha_pedido(Date fecha_pedido) {
-		this.fecha_pedido = fecha_pedido;
+	public void setFechaPedido(Date fechaPedido) {
+		this.fechaPedido = fechaPedido;
 	}
 
 	public Pais getPais() {
@@ -83,4 +92,22 @@ public class Pedido {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public List<ArticuloPedido> getListaArticulo() {
+		return listaArticulo;
+	}
+
+	public void setListaArticulo(List<ArticuloPedido> listaArticulo) {
+		this.listaArticulo = listaArticulo;
+	}
+	
+	
 }

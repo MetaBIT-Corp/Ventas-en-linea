@@ -42,9 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/cliente/verificar-codigo/{id}",
 				"/cliente/verificar-codigo",
 				"/producto/index",
-				//KARDEX SOLO PARA CONSTRUCCION SE PUSO AQUI
+				//INICIO RICARDO PRUEBAS
 				"/kardex/**",
 				"/kardex-one/**",
+				//"/pedido/**",
+				//FIN RICARDO PRUEBAS
 				"/producto/agregar-producto",
 				"/producto/asignar-descuento",
 				"/producto/hab-deshab",
