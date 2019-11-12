@@ -49,6 +49,12 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		userJpaRepository.updatePassword(password, userId);
 	}
+
+	@Override
+	public User updateUser(User user) {
+		// TODO Auto-generated method stub
+		return userJpaRepository.save(user);
+	}
 	
 	
 	

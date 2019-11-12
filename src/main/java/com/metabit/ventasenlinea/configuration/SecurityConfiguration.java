@@ -46,8 +46,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/kardex/**",
 				"/kardex-one/**",
 				"/producto/agregar-producto",
+				"/producto/asignar-descuento",
+				"/producto/hab-deshab",
+				"/producto/ver-detalle/{id}",
 				"/producto/agregar-producto/{cantidad}/{id}",
 				"/producto/remover-producto/{id}",
+				"/usuario/deshabilitar",
 				"/api/productos-agregados",
 				"/api/user-email/{email}",
 				//Recuperacion de contraseña

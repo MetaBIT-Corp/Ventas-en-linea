@@ -214,6 +214,7 @@ public class ProductoController {
 			try {
 				path = uploadImage(image);
 				producto.setImagen(path);
+				producto.setHabilitado(1);
 				productService.addProduct(producto);
 				
 			} catch (IOException e) {
@@ -278,6 +279,41 @@ public class ProductoController {
 	public ModelAndView listProducto() {
 		ModelAndView mav = new ModelAndView("/producto/listProducto");
 		mav.addObject("productos", productService.getProductos());
+		
+		return mav;
+	}
+	
+	@PostMapping("/asignar-descuento")
+	public String asignarDescuento(HttpServletRequest request) {
+		int producto_id = Integer.parseInt(request.getParameter("producto_id"));
+		double descuento = Double.parseDouble(request.getParameter("descuento"));
+		Producto producto = productService.findById(producto_id);
+		producto.setPorcentajeDescuento(descuento);
+		productService.updateProducto(producto);
+		
+		return "redirect:/producto/listar";
+	}
+	
+	@PostMapping("/hab-deshab")
+	public String habDeshabProducto(HttpServletRequest request) {
+		int producto_id = Integer.parseInt(request.getParameter("producto_id_hab"));
+		Producto producto = productService.findById(producto_id);
+		
+		if(producto.getHabilitado() == 1)
+			producto.setHabilitado(0);
+		else
+			producto.setHabilitado(1);
+		
+		productService.updateProducto(producto);
+		
+		return "redirect:/producto/listar";
+	}
+	
+	@GetMapping("/ver-detalle/{id}")
+	public ModelAndView verDetalleProducto(@PathVariable("id") int id) {
+		ModelAndView mav = new ModelAndView("producto/verDetalleProducto");
+		Producto producto = productService.findById(id);
+		mav.addObject("producto", producto);
 		
 		return mav;
 	}
