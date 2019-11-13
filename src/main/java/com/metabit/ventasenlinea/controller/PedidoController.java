@@ -37,7 +37,10 @@ public class PedidoController {
 	public static final String PEDIDOS_EMPLEADOS = "pedido/listPedidoEmployees";
 	public static final String RESUMENCOMPRA = "pedido/resumenCompra";
 	public static final String COMPROBANTE = "pedido/comprobanteCompra";
-
+	public static final String METODO_PAGO = "pedido/metodoDePago";
+	public static final String PAYPAL = "pedido/metodoDePagoPaypal";
+	public static final String TARJETA = "pedido/metodoDePagoTarjeta";
+	
 	private static final Log LOG = LogFactory.getLog(PedidoController.class);
 
 	@Autowired
@@ -212,5 +215,23 @@ public class PedidoController {
 		pedidoService.updatePedido(pedido);
 		
 		return "redirect:/pedido/list";
+	}
+	
+	//PAGO DE ARTICULOS
+	@GetMapping("/metodo-de-pago")
+	public String metodoDePago() {
+		return METODO_PAGO;
+	}
+	
+	@GetMapping("/metodo-de-pago/paypal")
+	public ModelAndView metodoDePagoPaypal() {
+		ModelAndView mav = new ModelAndView(PAYPAL);
+		return mav;
+	}
+	
+	@GetMapping("/metodo-de-pago/tarjeta")
+	public ModelAndView metodoDePagoTarjeta() {
+		ModelAndView mav = new ModelAndView(TARJETA);
+		return mav;
 	}
 }
