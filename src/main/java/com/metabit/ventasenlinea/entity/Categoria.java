@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "categorias")
@@ -17,9 +19,13 @@ public class Categoria {
 	@Column(name = "id_categoria", nullable = false)
 	private int id;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "nombre_categoria", nullable = false)
 	private String nombre;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "descripcion_categoria", nullable = false)
 	private String descripcion;
 

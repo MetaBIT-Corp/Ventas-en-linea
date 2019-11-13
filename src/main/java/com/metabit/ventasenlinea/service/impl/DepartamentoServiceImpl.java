@@ -28,4 +28,9 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 		return departamentoJpaRepository.findById(id).get();
 	}
 
+	@Override
+	public Departamento createDepartamento(Departamento departamento) {
+		return departamentoJpaRepository.save(departamento);
+	}
+
 }

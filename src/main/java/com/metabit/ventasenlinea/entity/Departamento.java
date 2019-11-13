@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "departamentos")
@@ -15,14 +17,18 @@ public class Departamento {
 	@Column(name = "id_departamento", nullable = false)
 	private int id;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "nombre_departamento", nullable = false)
 	private String nombre;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "descripcion_departamento", nullable = false)
 	private String descripcion;
-	
+
 	@Column(name = "habilitado")
-	
+
 	private boolean habilitado;
 
 	public boolean isHabilitado() {
@@ -67,6 +73,12 @@ public class Departamento {
 
 	public Departamento() {
 		super();
+	}
+
+	@Override
+	public String toString() {
+		return "Departamento [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", habilitado="
+				+ habilitado + "]";
 	}
 
 }

@@ -43,14 +43,15 @@
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">Listado de Departamentos</h1>
-						<button href="#"
+						<a href="#" th:href="@{/departamento/crear-departamento}"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-							data-crear-departamento>
+							>
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Departamento
-						</button>
+						</a>
 					</div>
 					<!-- Page Heading -->
+						
 					
 						<div class="card-body">
 							<div class="table-responsive">
@@ -77,6 +78,7 @@
 								</table>
 							</div>
 						</div>
+						
 						<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
@@ -92,7 +94,7 @@
 	<div th:insert="fragments/modallogout::modallogout"></div>
 	
 	<!-- MODALES  -->
-	<!-- Modal para crear departamento -->
+	<!-- Modal para crear departamento 
 	<div class="modal fade" id="crearDepartamento" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
@@ -107,21 +109,20 @@
 					</button>
 				</div>
 				<div class="modal-body" id="crear-departamento-body">
-					<form class="user">
+					<form class="user" action="#" th:action="@{/departamento/create-departamento}" th:object="${departamento}" method="POST">
 						<div class="form-group">
 							<input type="text" class="form-control form-control-user"
-								 placeholder="Nombre de Departamento">
+								 placeholder="Nombre de Departamento" th:field="*{nombre}" required>
 						</div>
 						<div class="form-group">
 							<textarea type="text" class="form-control form-control-user"
-								 placeholder="Descripcion"></textarea>
+								 placeholder="Descripcion" th:field="*{descripcion}" required></textarea>
 						</div>
 						<div class="form-group">					
 							<input type="hidden" class="form-control form-control-user"
-								 placeholder="Habilitado" value="1">
+								 th:value="1" placeholder="Habilitado" th:field="*{habilitado}">
 						</div>
-						<a href="#" class="btn btn-primary btn-user btn-block">
-							Guardar </a>
+						<input type="submit" value="Guardar" class="btn btn-primary btn-user btn-block"/>
 						<a href="#" class="btn btn-secondary btn-user btn-block" data-dismiss="modal"
 						aria-label="Close">
 							 Cancelar
@@ -133,7 +134,10 @@
 			</div>
 		</div>
 	</div>
+	-->
 	<!-- Modal para crear subcategoría -->
+	
+	
 
 	<!-- MODALES  -->
 
@@ -154,7 +158,7 @@
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
 	
-	<!-- Scripts -->
+	<!-- Scripts
 	<script>
 		$('[data-crear-departamento]').on('click', crearDepartamento);
 		
@@ -162,6 +166,7 @@
 			$('#crearDepartamento').modal('show');
 		}
 	</script>
+	 -->
 	<!-- Scripts-->
 
 </body>

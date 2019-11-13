@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "subcategorias")
@@ -16,9 +18,13 @@ public class Subcategoria {
 	@Column(name = "id_subcategoria")
 	private int idSubcategoria;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "nombre_subcategoria")
 	private String nombreSubcategoria;
 
+	@NotNull
+	@Size(min = 2, max = 255)
 	@Column(name = "descripcion_subcategoria")
 	private String descripcionSubcategoria;
 

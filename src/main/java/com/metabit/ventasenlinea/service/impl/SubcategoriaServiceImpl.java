@@ -29,4 +29,9 @@ public class SubcategoriaServiceImpl implements SubcategoriaService{
 		return subcategoriaJpaRepository.findAllByCategoria(categoria);
 	}
 
+	@Override
+	public Subcategoria createSubcategoria(Subcategoria subcategoria) {
+		return subcategoriaJpaRepository.save(subcategoria);
+	}
+
 }

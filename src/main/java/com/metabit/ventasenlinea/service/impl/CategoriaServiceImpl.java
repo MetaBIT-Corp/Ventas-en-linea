@@ -27,4 +27,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return categoriaJpaRepository.findById(idCategoria).get();
 	}
 
+	@Override
+	public Categoria createCategoria(Categoria categoria) {
+		return categoriaJpaRepository.save(categoria);
+	}
+
 }

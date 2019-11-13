@@ -44,12 +44,11 @@
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">Listado de Subcategorías</h1>
-						<button href="#"
-							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-							data-id-categoria th:value="${categoria.id}">
+						<a href="#" th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/crear-subcategoria'}"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Subcategoría
-						</button>
+						</a>
 					</div>
 					<!-- Page Heading -->
 
@@ -94,7 +93,7 @@
 	</a>
 
 	<!-- MODALES  -->
-	<!-- Modal para crear subcategoría -->
+	<!-- Modal para crear subcategoría
 	<div class="modal fade" id="crearSubcategoria" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
@@ -139,6 +138,7 @@
 			</div>
 		</div>
 	</div>
+	 -->
 	<!-- Modal para crear subcategoría -->
 
 	<!-- MODALES  -->
@@ -163,7 +163,7 @@
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
 
-	<!-- Scripts -->
+	<!-- Scripts 
 	<script>
 		$('[data-id-categoria]').on('click', crearSubcategoria);
 
@@ -172,6 +172,7 @@
 			$('#crearSubcategoria').modal('show');
 		}
 	</script>
+	-->
 	<!-- Scripts-->
 </body>
 </html>
