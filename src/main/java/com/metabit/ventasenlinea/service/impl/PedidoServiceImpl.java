@@ -45,6 +45,10 @@ public class PedidoServiceImpl implements PedidoService{
 		// TODO Auto-generated method stub
 		return pedidoJpaRepository.save(pedido);
 	}
+		
+	public Pedido getPedido(int id_pedido) {
+		return pedidoJpaRepository.findByIdPedido(id_pedido);
+	}
 	
 	
 

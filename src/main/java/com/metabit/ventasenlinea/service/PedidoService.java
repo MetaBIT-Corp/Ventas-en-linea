@@ -17,4 +17,6 @@ public interface PedidoService {
 	public Pedido findById(int pedido_id);
 	
 	public Pedido updatePedido(Pedido pedido);
+
+	public Pedido getPedido(int id_pedido);
 }

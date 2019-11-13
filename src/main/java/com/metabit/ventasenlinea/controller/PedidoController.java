@@ -35,6 +35,9 @@ public class PedidoController {
 
 	public static final String PEDIDOS_CLIENTES = "pedido/listPedidoCliente";
 	public static final String PEDIDOS_EMPLEADOS = "pedido/listPedidoEmployees";
+	public static final String RESUMENCOMPRA = "pedido/resumenCompra";
+	public static final String COMPROBANTE = "pedido/comprobanteCompra";
+
 	private static final Log LOG = LogFactory.getLog(PedidoController.class);
 
 	@Autowired
@@ -52,9 +55,9 @@ public class PedidoController {
 	@Autowired
 	@Qualifier("estadoServiceImpl")
 	private EstadoService estadoService;
-	
-	//No me funciona el PreAthorize
-	//@PreAuthorize("hasRole('ROLE_ADMIN') and hasRole('ROLE_VENTAS')")
+
+	// No me funciona el PreAthorize
+	// @PreAuthorize("hasRole('ROLE_ADMIN') and hasRole('ROLE_VENTAS')")
 	@GetMapping("/list-pedido")
 	public ModelAndView viewListPedido() {
 
@@ -75,17 +78,17 @@ public class PedidoController {
 	@GetMapping({ "/list", "/list/{estado}" })
 	public ModelAndView viewListPedidoEmployees(@PathVariable(required = false) Integer estado) {
 		ModelAndView mav = new ModelAndView(PEDIDOS_EMPLEADOS);
-		
+
 		// Recuperar el usuario logueado
 		com.metabit.ventasenlinea.entity.User user = getUser();
 
 		// Se obtiene el role
 		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String role = userDetails.getAuthorities().toArray()[0].toString();
-		
-		//Para recuperar todos
-		if(estado==null) {
-			estado=0;
+
+		// Para recuperar todos
+		if (estado == null) {
+			estado = 0;
 		}
 		List<Pedido> pedidos = null;
 		switch (estado) {
@@ -102,20 +105,45 @@ public class PedidoController {
 			pedidos = pedidoService.getAllPedidosEmploye(estadoService.getEstado(estado));
 			break;
 		case 0:
-			//Todos sin importar estado
-			pedidos=pedidoService.getAll();
+			// Todos sin importar estado
+			pedidos = pedidoService.getAll();
 		}
-		
+
 		// Enviamos los pedidos a la vista y los montos totales de cada pedido
 		mav.addObject("pedidos", pedidos);
 		mav.addObject("montos", calcularMontos(pedidos));
 		mav.addObject("role", role);
 		return mav;
 	}
+
+	@GetMapping("/{pedido}/resumen-compra")
+	public ModelAndView viewResumenCompra(@PathVariable("pedido") int id_pedido) {
+		ModelAndView mav = new ModelAndView(RESUMENCOMPRA);
+		return resumen(mav,id_pedido);
+	}
 	
-	
-	
-	
+	@GetMapping("/{pedido}/comprobante-compra")
+	public ModelAndView viewComprobanteCompra(@PathVariable("pedido") int id_pedido) {
+		ModelAndView mav = new ModelAndView(COMPROBANTE);
+		return resumen(mav,id_pedido);
+	}
+
+	/**
+	 * Funcion que obtiene el resumen de un pedido que es utilzado tanto en el resumen de compra como en la
+	 * generacion de comprobante.
+	 * @author ricardo
+	 * @param mav ModelAndView para agregar los parametros necesarios que se retornara
+	 * @param id_pedido ID del pedido
+	 * @return ModelAndView que se retornara
+	 */
+	public ModelAndView resumen(ModelAndView mav, int id_pedido) {
+		// Se obtuvo en lista con el fin de usar el metodo calcularMontos
+		List<Pedido> pedido = new ArrayList<Pedido>();
+		pedido.add(pedidoService.getPedido(id_pedido));
+		mav.addObject("pedido", pedidoService.getPedido(id_pedido));
+		mav.addObject("monto", calcularMontos(pedido));
+		return mav;
+	}
 
 	/**
 	 * Obtiene el usuario logueado actualmente en el sistema
@@ -133,6 +161,7 @@ public class PedidoController {
 		}
 		return user;
 	}
+
 	/**
 	 * Metodo que verifica si el usuario esta logueado
 	 * 
@@ -141,6 +170,7 @@ public class PedidoController {
 	public boolean isUserLoggedIn() {
 		return SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails;
 	}
+
 	/**
 	 * Metodo que calcula el monto total de un pedido
 	 * 
