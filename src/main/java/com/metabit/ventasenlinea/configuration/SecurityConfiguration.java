@@ -54,6 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/producto/agregar-producto/{cantidad}/{id}",
 				"/producto/remover-producto/{id}",
 				"/usuario/deshabilitar",
+				"/pedido/cambio-estado",
 				"/api/productos-agregados",
 				"/api/user-email/{email}",
 				//Recuperacion de contraseña

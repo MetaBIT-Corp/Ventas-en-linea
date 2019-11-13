@@ -40,7 +40,7 @@ public class EntradaSalidaController {
 	private KardexService kardexService;
 
 	@GetMapping("/{kardex}/entrada-salida")
-	public ModelAndView indexKardex(@PathVariable("kardex") int kardex_id) {
+	public ModelAndView viewEntradaSalida(@PathVariable("kardex") int kardex_id) {
 		ModelAndView mav = new ModelAndView(LIST_ES);
 		Kardex kardex = kardexService.getKardex(kardex_id);
 		mav.addObject("kardex", kardex);

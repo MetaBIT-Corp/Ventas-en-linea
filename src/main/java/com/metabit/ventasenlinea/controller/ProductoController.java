@@ -14,6 +14,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -195,6 +196,7 @@ public class ProductoController {
 		return "redirect:/producto/index";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@GetMapping("/nuevo")
 	public ModelAndView createProducto() {
 		ModelAndView mav = new ModelAndView("producto/createProducto");
@@ -204,6 +206,7 @@ public class ProductoController {
 		return mav;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@PostMapping("/nuevo")
 	public String storeProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
 		String path;
@@ -225,6 +228,7 @@ public class ProductoController {
 		}
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@GetMapping("/actualizar/{id}")
 	public ModelAndView editProducto(@PathVariable("id") int id) {
 		ModelAndView mav = new ModelAndView("producto/updateProducto");
@@ -234,6 +238,7 @@ public class ProductoController {
 		return mav;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@PostMapping("/actualizar")
 	public String updateProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
 		String path;
@@ -275,6 +280,7 @@ public class ProductoController {
 		return "/img_products/"+file.getOriginalFilename();
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@GetMapping("/listar")
 	public ModelAndView listProducto() {
 		ModelAndView mav = new ModelAndView("/producto/listProducto");

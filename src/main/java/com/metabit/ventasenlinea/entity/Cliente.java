@@ -22,7 +22,7 @@ public class Cliente {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "id_ciente", nullable = false)
+	@Column(name = "id_cliente", nullable = false)
 	private int idCliente;
 
 	@NotEmpty(message = "Ingrese su nombre")
