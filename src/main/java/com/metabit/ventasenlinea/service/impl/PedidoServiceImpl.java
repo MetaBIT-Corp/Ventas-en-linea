@@ -28,6 +28,11 @@ public class PedidoServiceImpl implements PedidoService{
 	public List<Pedido> getAllPedidosEmploye(Estado id_estado) {
 		return pedidoJpaRepository.findByEstado(id_estado);
 	}
+
+	@Override
+	public List<Pedido> getAll() {
+		return pedidoJpaRepository.findAll();
+	}
 	
 	
 

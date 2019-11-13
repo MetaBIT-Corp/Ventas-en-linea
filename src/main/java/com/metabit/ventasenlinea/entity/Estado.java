@@ -13,7 +13,7 @@ public class Estado {
 	@Id
 	@GeneratedValue
 	@Column(name = "idEstado", nullable = false)
-	private int id_estado;
+	private int idEstado;
 
 	@Column(name = "titulo_estado", nullable = false)
 	private String tituloEstado;
@@ -24,16 +24,16 @@ public class Estado {
 
 	public Estado(int id_estado, String tituloEstado) {
 		super();
-		this.id_estado = id_estado;
+		this.idEstado = id_estado;
 		this.tituloEstado = tituloEstado;
 	}
 
 	public int getId_estado() {
-		return id_estado;
+		return idEstado;
 	}
 
 	public void setId_estado(int id_estado) {
-		this.id_estado = id_estado;
+		this.idEstado = id_estado;
 	}
 
 	public String getTituloEstado() {

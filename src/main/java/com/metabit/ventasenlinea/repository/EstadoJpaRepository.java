@@ -9,5 +9,6 @@ import com.metabit.ventasenlinea.entity.Estado;
 
 @Repository("estadoJpaRepository")
 public interface EstadoJpaRepository extends JpaRepository<Estado, Serializable>{
-
+	
+	public Estado findByIdEstado(int id);
 }

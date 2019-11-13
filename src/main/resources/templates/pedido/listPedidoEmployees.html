@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>MetaBit Store Online | Historial Pedido</title>
+<title>MetaBit Store Online | Listado Pedidos</title>
 
 <!-- Custom fonts for this template-->
 <link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
@@ -61,8 +61,14 @@
 					<!-- ESPACIO DE TRABAJO  -->
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
-						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Historial de pedidos</h6>
+						<div class="card-header py-3 row mr-2 ml-2">
+							<h6 class="m-0 font-weight-bold text-primary col-7">Pedidos</h6>
+							<div class="btn-group col-4" role="group" aria-label="Basic example">
+								<button onclick="window.location.href='/pedido/list/1'" type="button" class="btn btn-secondary text-white">Enviados</button>
+								<button onclick="window.location.href='/pedido/list/3'" type="button" class="btn btn-secondary text-white">Autorizados</button>
+								<button onclick="window.location.href='/pedido/list/2'" type="button" class="btn btn-secondary text-white">Pendientes</button>
+								<button onclick="window.location.href='/pedido/list'" type="button" class="btn btn-secondary text-white">Todos</button>
+							</div>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
@@ -79,18 +85,36 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
+										<tr
+											th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
 											<td th:text="${pedidos[i].fechaPedido}"></td>
 											<td th:text="${pedidos[i].direccionDestino}"></td>
 											<td th:text="${pedidos[i].pais.nombrePais}"></td>
 											<td th:text="'$ '+${montos[i]}"></td>
-											<td class="text-center">
-											<span th:if="${pedidos[i].estado.tituloEstado== 'Entregado'}" class='badge badge-success'>ENTREGADO</span>
-											<span th:if="${pedidos[i].estado.tituloEstado== 'En Camino'}" class='badge badge-primary'>EN CAMINO</span>
-											<span th:if="${pedidos[i].estado.tituloEstado!= 'En Camino' and pedidos[i].estado.tituloEstado!= 'Entregado'}"
-											 class='badge badge-warning'>EN PROCESO</span>
+											<td class="text-center"><span
+												th:if="${pedidos[i].estado.tituloEstado== 'Enviado'}"
+												class='badge badge-success'>ENVIADO</span> <span
+												th:if="${pedidos[i].estado.tituloEstado== 'Autorizado'}"
+												class='badge badge-primary'>AUTORIZADO</span> <span
+												th:if="${pedidos[i].estado.tituloEstado =='Pendiente'}"
+												class='badge badge-danger'>PENDIENTE</span></td>
+											<td th:if="${role =='ROLE_ADMIN'}">
+												<!-- SE PUSO ADMIN SOLO POR PRUEBA LOS UNICOS CON ACCESO SON  ENC BODEGA Y ENC VENTAS -->
+												<!-- SIMULANDO ENCARGADO BODEGA --> <a
+												th:if="${pedidos[i].estado.tituloEstado =='Pendiente'}"
+												href="#" class="btn btn-primary text-white">Autorizar</a>
+												<button
+													th:unless="${role =='ROLE_ADMIN' and pedidos[i].estado.tituloEstado =='Pendiente'}"
+													href="#" class="btn btn-primary text-white" disabled>Autorizar</button>
 											</td>
-											<td><a href="#"	class="btn btn-info text-white">Ver Detalle Pedido</a></td>
+											<td th:unless="${role =='ROLE_ADMIN'}">
+												<!-- SIMULANDO ENCARGADO VENTAS --> <a
+												th:if="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+												href="#" class="btn btn-success text-white">Enviar</a>
+												<button
+													th:unless="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+													href="#" class="btn btn-success text-white" disabled>Enviar</button>
+											</td>
 										</tr>
 									</tbody>
 									<tfoot>

@@ -11,4 +11,6 @@ public interface PedidoService {
 	public List<Pedido> getAllPedidosCliente(Cliente id_cliente);
 	
 	public List<Pedido> getAllPedidosEmploye(Estado id_estado);
+	
+	public List<Pedido> getAll();
 }

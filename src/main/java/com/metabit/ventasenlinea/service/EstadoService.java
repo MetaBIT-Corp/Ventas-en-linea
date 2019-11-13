@@ -1,5 +1,8 @@
 package com.metabit.ventasenlinea.service;
 
-public interface EstadoService {
+import com.metabit.ventasenlinea.entity.Estado;
 
+
+public interface EstadoService {
+	public Estado getEstado(int id_estado);
 }
