@@ -1,5 +1,7 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +51,18 @@ public class CategoriaController {
 		return mav;
 	}
 
-	@GetMapping("/crear-categoria")
-	public ModelAndView crearCategoria(@PathVariable("id_departamento") int idDepartamento) {
+	@RequestMapping(path = {"/form-categoria", "/form-categoria/{id}"})
+	public ModelAndView crearCategoria(@PathVariable("id_departamento") int idDepartamento,@PathVariable("id") Optional<Integer> id) {
 		ModelAndView mav = new ModelAndView(CREAR_CATEGORIA_VIEW);
-		// departamento empty para crear departamentos
-		mav.addObject("categoria", new Categoria());
+		if(id.isPresent()) {
+			//actualizamos
+			Integer num = Integer.valueOf(id.get());
+			Categoria categoria = categoriaService.getCategoria(num);
+			mav.addObject("categoria", categoria);
+		}else {
+			// departamento empty para crear departamentos
+			mav.addObject("categoria", new Categoria());
+		}
 		mav.addObject("id_departamento", idDepartamento);
 		// user
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -71,7 +80,9 @@ public class CategoriaController {
 		} else {
 			Departamento departamento = departamentoService.getDepartamento(idDepartamento);
 			categoria.setDepartamento(departamento);
-			categoria.setHabilitado(true);
+			if(categoria.getId() == 0) {
+				categoria.setHabilitado(true);
+			}
 			categoriaService.createCategoria(categoria);
 			return "redirect:/departamento/"+idDepartamento+"/categoria/listar";
 		}

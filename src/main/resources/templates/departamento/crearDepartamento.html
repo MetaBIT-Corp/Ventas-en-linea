@@ -71,22 +71,26 @@
 													<form class="user" action="#"
 														th:action="@{/departamento/crear-departamento-post}"
 														th:object="${departamento}" method="POST">
+														<input type="hidden"
+																class="form-control form-control-user"
+															    th:field="*{id}">
 														<div class="form-group">
 															<input type="text" class="form-control form-control-user"
 																placeholder="Nombre de Departamento"
-																th:field="*{nombre}">
+																th:field="*{nombre}"
+																th:value="${nombre}">
 															<p class="mt-2 ml-3" style="color: red; font-size: 15px;" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}">Name has errors</p>
 														</div>
 														<div class="form-group">
 															<textarea type="text"
 																class="form-control form-control-user"
-																placeholder="Descripcion" th:field="*{descripcion}"
+																placeholder="Descripcion" th:field="*{descripcion}" th:value="${descripcion}">
 																></textarea>
 															<p  class="mt-2 ml-3" style="color: red; font-size: 15px;" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}">Name has errors</p>
 														</div>
 														<div class="form-group">
 															<input type="hidden"
-																class="form-control form-control-user" th:value="1"
+																class="form-control form-control-user" th:value="${habilitado}"
 																placeholder="Habilitado" th:field="*{habilitado}">
 														</div>
 														<input type="submit" value="Guardar"

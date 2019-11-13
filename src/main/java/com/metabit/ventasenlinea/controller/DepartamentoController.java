@@ -1,5 +1,7 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -48,11 +50,19 @@ public class DepartamentoController {
 		return mav;
 	}
 
-	@GetMapping("/crear-departamento")
-	public ModelAndView crearDepartamento() {
+	@RequestMapping(path = {"/form-departamento", "/form-departamento/{id}"})
+	public ModelAndView crearDepartamento(@PathVariable("id") Optional<Integer> id) {
 		ModelAndView mav = new ModelAndView(CREAR_DEPARTAMENTO_VIEW);
-		// departamento empty para crear departamentos
-		mav.addObject("departamento", new Departamento());
+		if(id.isPresent()) {
+			//actualizamos 
+			Integer num = Integer.valueOf(id.get());
+			Departamento departamento = departamentoService.getDepartamento(num);
+			mav.addObject("departamento", departamento);
+		}else {
+			// departamento empty para crear departamentos
+			mav.addObject("departamento", new Departamento());
+		}
+		
 		// user
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		mav.addObject("user", user.getUsername());
@@ -67,7 +77,9 @@ public class DepartamentoController {
 		if (bindingResult.hasErrors()) {
 			return "/departamento/crearDepartamento";
 		} else {
-			departamento.setHabilitado(true);
+			if(departamento.getId() == 0) {
+				departamento.setHabilitado(true);
+			}
 			departamentoService.createDepartamento(departamento);
 			return "redirect:/departamento/listar";
 		}

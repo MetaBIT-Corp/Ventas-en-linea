@@ -47,8 +47,8 @@
 						<h1 class="h4 mb-0 text-gray-800">
 							Categoría: <span th:text="${categoria.nombre}"></span>
 						</h1>
-						<a href="#"
-							th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/crear-subcategoria'}"
+						<a href="#" 
+							th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria'}"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Subcategoría
@@ -78,10 +78,13 @@
 										<td>
 											<button class="btn-sm btn-secondary"
 												title="Listado de productos">
-												<a href="#"><i class="fas fa-list"></i></a>
+												<a style="text-decoration: none; color: white;" href="#"><i class="fas fa-list"></i></a>
 											</button>
 											<button class="btn-sm btn-primary" title="Editar">
-												<i class="fas fa-pencil-alt"></i>
+												<a style="text-decoration: none; color: white;"
+													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria/'+${subcategoria.idSubcategoria}+''}">
+													<i class="fas fa-pencil-alt"></i>
+												</a>
 											</button>
 											<button th:if="${subcategoria.habilitado}"
 												class="btn-sm btn-danger" title="Deshabilitar"

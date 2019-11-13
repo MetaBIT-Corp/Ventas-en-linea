@@ -71,22 +71,26 @@
 													<form class="user" action="#"
 														th:action="@{'/departamento/categoria/'+${id_categoria}+'/subcategoria/crear-subcategoria-post'}"
 														th:object="${subcategoria}" method="POST">
+														<input type="hidden"
+																class="form-control form-control-user" 
+																th:field="*{idSubcategoria}">
 														<div class="form-group">
 															<input type="text" class="form-control form-control-user"
 																placeholder="Nombre de Subcategoria"
-																th:field="*{nombreSubcategoria}">
+																th:field="*{nombreSubcategoria}"
+																th:value="${nombreSubcategoria}">
 															<p class="mt-2 ml-3" style="color: red; font-size: 15px;" th:if="${#fields.hasErrors('nombreSubcategoria')}" th:errors="*{nombreSubcategoria}">Name has errors</p>
 														</div>
 														<div class="form-group">
 															<textarea type="text"
 																class="form-control form-control-user"
-																placeholder="Descripcion" th:field="*{descripcionSubcategoria}"
+																placeholder="Descripcion" th:field="*{descripcionSubcategoria}" th:value="${descripcionSubcategoria}"
 																></textarea>
-															<p  class="mt-2 ml-3" style="color: red; font-size: 15px;" th:if="${#fields.hasErrors('descripcionSubcategoria')}" th:errors="*{descripcionSubcategoria}">Name has errors</p>
+															<p class="mt-2 ml-3" style="color: red; font-size: 15px;" th:if="${#fields.hasErrors('descripcionSubcategoria')}" th:errors="*{descripcionSubcategoria}">Name has errors</p>
 														</div>
 														<div class="form-group">
 															<input type="hidden"
-																class="form-control form-control-user" th:value="1"
+																class="form-control form-control-user" th:value="${habilitado}"
 																placeholder="Habilitado" th:field="*{habilitado}">
 														</div>
 														
