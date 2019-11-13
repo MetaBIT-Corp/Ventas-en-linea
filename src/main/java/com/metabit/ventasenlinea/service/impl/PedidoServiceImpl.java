@@ -33,6 +33,18 @@ public class PedidoServiceImpl implements PedidoService{
 	public List<Pedido> getAll() {
 		return pedidoJpaRepository.findAll();
 	}
+
+	@Override
+	public Pedido findById(int pedido_id) {
+		// TODO Auto-generated method stub
+		return pedidoJpaRepository.getOne(pedido_id);
+	}
+
+	@Override
+	public Pedido updatePedido(Pedido pedido) {
+		// TODO Auto-generated method stub
+		return pedidoJpaRepository.save(pedido);
+	}
 	
 	
 

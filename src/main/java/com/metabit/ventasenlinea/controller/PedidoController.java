@@ -3,6 +3,8 @@ package com.metabit.ventasenlinea.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.metabit.ventasenlinea.entity.ArticuloPedido;
 import com.metabit.ventasenlinea.entity.Cliente;
+import com.metabit.ventasenlinea.entity.Estado;
 import com.metabit.ventasenlinea.entity.Pedido;
 import com.metabit.ventasenlinea.service.ClienteService;
 import com.metabit.ventasenlinea.service.EstadoService;
@@ -156,5 +160,27 @@ public class PedidoController {
 		}
 
 		return monto;
+	}
+	
+	@PostMapping("/cambio-estado")
+	public String cambiarEstadoPedido(HttpServletRequest request) {
+		
+		int pedido_id = Integer.parseInt(request.getParameter("pedido_id_cambio"));
+		Pedido pedido = pedidoService.findById(pedido_id);
+		int estado_actual = pedido.getEstado().getId_estado();
+		//1--Enviado
+		//2--Pendiente
+		//3--Autorizado
+		Estado estado_nuevo;
+		
+		if(estado_actual == 2) {
+			estado_nuevo = estadoService.getEstado(3);
+		}else {
+			estado_nuevo = estadoService.getEstado(1);
+		}
+		pedido.setEstado(estado_nuevo);
+		pedidoService.updatePedido(pedido);
+		
+		return "redirect:/pedido/list";
 	}
 }
