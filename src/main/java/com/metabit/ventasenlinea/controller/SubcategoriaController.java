@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.metabit.ventasenlinea.entity.Categoria;
@@ -26,22 +27,21 @@ import com.metabit.ventasenlinea.service.SubcategoriaService;
 @Controller
 @RequestMapping("/departamento/categoria/{id_categoria}/subcategoria")
 public class SubcategoriaController {
-	//importamos servicios
+	// importamos servicios
 	@Autowired
 	@Qualifier("subcategoriaServiceImpl")
-	private SubcategoriaService subcategoriaService; 
-	
+	private SubcategoriaService subcategoriaService;
+
 	@Autowired
 	@Qualifier("categoriaServiceImpl")
 	private CategoriaService categoriaService;
-	
-	
-	//Listado de subcategorias
-	private static final String INDEX_VIEW = "subcategoria/index";	
+
+	// Listado de subcategorias
+	private static final String INDEX_VIEW = "subcategoria/index";
 	private static final String CREATE_SUB_VIEW = "subcategoria/crearSubcategoria";
-	
+
 	@GetMapping("/listar")
-	public ModelAndView index(@PathVariable("id_categoria") int idCategoria){
+	public ModelAndView index(@PathVariable("id_categoria") int idCategoria) {
 		Categoria categoria = categoriaService.getCategoria(idCategoria);
 		List<Subcategoria> subcategorias = subcategoriaService.listAllSubcategoriasByCategoria(categoria);
 		ModelAndView mav = new ModelAndView(INDEX_VIEW);
@@ -49,7 +49,8 @@ public class SubcategoriaController {
 		mav.addObject("categoria", categoria);
 		return mav;
 	}
-	
+
+	// método para desplegar el formulario de crear formulario
 	@GetMapping("/crear-subcategoria")
 	public ModelAndView crearSubcategoria(@PathVariable("id_categoria") int idCategoria) {
 		ModelAndView mav = new ModelAndView(CREATE_SUB_VIEW);
@@ -72,10 +73,32 @@ public class SubcategoriaController {
 		} else {
 			Categoria categoria = categoriaService.getCategoria(idCategoria);
 			subcategoria.setCategoria(categoria);
+			subcategoria.setHabilitado(true);
 			subcategoriaService.createSubcategoria(subcategoria);
-			return "redirect:/departamento/categoria/"+idCategoria+"/subcategoria/listar";
+			return "redirect:/departamento/categoria/" + idCategoria + "/subcategoria/listar";
 		}
 
+	}
+
+	// método para recibir el post de deshabilitar subcategoria post
+	@PostMapping("/deshabilitar-subcategoria-post")
+	public String deshabilitarSubcategoriaPost(@RequestParam("id_subcategoria") int idSubcategoria,
+			@PathVariable("id_categoria") int idCategoria) {
+		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria);
+		subcategoria.setHabilitado(false);
+		subcategoriaService.updateSubcategoria(subcategoria);
+		return "redirect:/departamento/categoria/" + idCategoria +"/subcategoria/listar";
+
+	}
+
+	// método para recibir el post de habilitar subcategoria post
+	@PostMapping("/habilitar-subcategoria-post")
+	public String habilitarSubcategoriaPost(@RequestParam("id_subcategoria") int idSubcategoria,
+			@PathVariable("id_categoria") int idCategoria) {
+		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria);
+		subcategoria.setHabilitado(true);
+		subcategoriaService.updateSubcategoria(subcategoria);
+		return "redirect:/departamento/categoria/" + idCategoria +"/subcategoria/listar";
 	}
 
 }

@@ -43,8 +43,12 @@
 					<!-- Page Heading -->
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">Listado de Subcategorías</h1>
-						<a href="#" th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/crear-subcategoria'}"
+						<h1 class="h4 mb-0 text-gray-800">Listado de Subcategorías</h1>
+						<h1 class="h4 mb-0 text-gray-800">
+							Categoría: <span th:text="${categoria.nombre}"></span>
+						</h1>
+						<a href="#"
+							th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/crear-subcategoria'}"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Subcategoría
@@ -65,18 +69,33 @@
 									</tr>
 								</thead>
 								<tbody>
-										<tr th:each="subcategoria : ${subcategorias}">
-											<td th:text="${subcategoria.nombreSubcategoria}"><span>Subcategoria</span></td>
-											<td th:text="${subcategoria.descripcionSubcategoria}"><span></span></td>
-											<td th:if="${subcategoria.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
-											<td th:unless="${subcategoria.habilitado}" th:text="Deshabilitado"><span>Deshabilitado</span></td>
-											<td>
-												<button class="btn-sm btn-secondary" title="Listado de productos"><a href="#"><i class="fas fa-list"></i></a></button>
-												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-												<button class="btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-											</td>
-										</tr>
-										
+									<tr th:each="subcategoria : ${subcategorias}">
+										<td th:text="${subcategoria.nombreSubcategoria}"><span>Subcategoria</span></td>
+										<td th:text="${subcategoria.descripcionSubcategoria}"><span></span></td>
+										<td th:if="${subcategoria.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
+										<td th:unless="${subcategoria.habilitado}"
+											th:text="Deshabilitado"><span>Deshabilitado</span></td>
+										<td>
+											<button class="btn-sm btn-secondary"
+												title="Listado de productos">
+												<a href="#"><i class="fas fa-list"></i></a>
+											</button>
+											<button class="btn-sm btn-primary" title="Editar">
+												<i class="fas fa-pencil-alt"></i>
+											</button>
+											<button th:if="${subcategoria.habilitado}"
+												class="btn-sm btn-danger" title="Deshabilitar"
+												data-deshabilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
+												<i class="fas fa-minus "></i>
+											</button>
+											<button th:unless="${subcategoria.habilitado}"
+												class="btn-sm btn-option" title="Habilitar"
+												data-habilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
+												<i class="fas fa-check"></i>
+											</button>
+										</td>
+									</tr>
+
 								</tbody>
 							</table>
 						</div>
@@ -93,44 +112,36 @@
 	</a>
 
 	<!-- MODALES  -->
-	<!-- Modal para crear subcategoría
-	<div class="modal fade" id="crearSubcategoria" tabindex="-1"
+
+	<!-- Modal para habilitar subcategoria -->
+	<div class="modal fade" id="habilitarSubcategoria" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="crearModalCenterTitle">Crear
-						Subcategoría</h5>
+					<h5 class="modal-title" id="habilitarModalCenterTitle">Habilitar
+						subcategoria</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body" id="crear-subcategoria-body">
-					<form class="user">
+				<div class="modal-body" id="habilitar-subcategoria-body">
+					<form class="user" action="#"
+						th:action="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/habilitar-subcategoria-post'}"
+						method="POST">
+						<h5>¿Desea habilitar esta subcategoria?</h5>
+						<p>Al habilitar se mostrarán los productos que pertenecen a
+							esta subcategoria.</p>
 						<div class="form-group">
-							<input type="text" class="form-control form-control-user"
-							    placeholder="Nombre de subcategoria">
-						</div>
-						<div class="form-group">
-							<textarea type="text" class="form-control form-control-user"
-								 placeholder="Descripcion"></textarea>
-						</div>
-						<div class="form-group">					
 							<input type="hidden" class="form-control form-control-user"
-								 placeholder="Habilitado" value="1">
+								id="id_subcategoria_habilitar" name="id_subcategoria">
 						</div>
-						<div class="form-group">					
-							<input type="hidden" class="form-control form-control-user"
-								 placeholder="id_categoria" value="" id="id_categoria">
-						</div>
-						<a href="#" class="btn btn-primary btn-user btn-block">
-							Guardar </a>
-						<a href="#" class="btn btn-secondary btn-user btn-block" data-dismiss="modal"
-						aria-label="Close">
-							 Cancelar
-						</a> 
+						<input type="submit" value="Habilitar"
+							class="btn btn-primary btn-user float-right" /> <a href="#"
+							class="btn btn-secondary btn-user float-right mr-2"
+							data-dismiss="modal" aria-label="Close"> Cancelar </a>
 					</form>
 
 				</div>
@@ -138,8 +149,49 @@
 			</div>
 		</div>
 	</div>
-	 -->
-	<!-- Modal para crear subcategoría -->
+
+	<!-- Modal para habilitar subcategoria -->
+
+	<!-- Modal para deshabilitar subcategoria -->
+	<div class="modal fade" id="deshabilitarSubcategoria" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar
+						subcategoria</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="deshabilitar-subcategoria-body">
+					<form class="user" action="#"
+						th:action="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/deshabilitar-subcategoria-post'}"
+						method="POST">
+						<h5>¿Desea deshabilitar esta subcategoria?</h5>
+						<p>No se mostrarán los productos que pertenecen a estea
+							subcategoria.</p>
+						<div class="form-group">
+							<input type="hidden" class="form-control form-control-user"
+								id="id_subcategoria" name="id_subcategoria">
+						</div>
+						<input type="submit" value="Deshabilitar"
+							class="btn btn-danger btn-user float-right" /> <a href="#"
+							class="btn btn-secondary btn-user float-right mr-2"
+							data-dismiss="modal" aria-label="Close"> Cancelar </a>
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para dehabilitar subcategoria -->
+
+
 
 	<!-- MODALES  -->
 
@@ -163,16 +215,23 @@
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
 
-	<!-- Scripts 
+	<!-- Scripts-->
 	<script>
-		$('[data-id-categoria]').on('click', crearSubcategoria);
+		$('[data-deshabilitar-subcategoria]').on('click',
+				deshabilitarSubcategoria);
+		$('[data-habilitar-subcategoria]').on('click', habilitarSubcategoria);
 
-		function crearSubcategoria() {
-			$('#id_categoria').attr('value', $(this).val());
-			$('#crearSubcategoria').modal('show');
+		function deshabilitarSubcategoria() {
+			$('#id_subcategoria').attr('value', $(this).val());
+			$('#deshabilitarSubcategoria').modal('show');
+		}
+
+		function habilitarSubcategoria() {
+			$('#id_subcategoria_habilitar').attr('value', $(this).val());
+			$('#habilitarSubcategoria').modal('show');
 		}
 	</script>
-	-->
+
 	<!-- Scripts-->
 </body>
 </html>

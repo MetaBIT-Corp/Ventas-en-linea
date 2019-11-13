@@ -34,4 +34,14 @@ public class SubcategoriaServiceImpl implements SubcategoriaService{
 		return subcategoriaJpaRepository.save(subcategoria);
 	}
 
+	@Override
+	public Subcategoria updateSubcategoria(Subcategoria subcategoria) {
+		return subcategoriaJpaRepository.save(subcategoria);
+	}
+
+	@Override
+	public Subcategoria getSubcategoria(int id) {
+		return subcategoriaJpaRepository.findById(id).get();
+	}
+
 }

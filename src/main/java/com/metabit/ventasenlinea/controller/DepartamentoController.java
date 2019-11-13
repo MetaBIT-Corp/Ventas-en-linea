@@ -13,9 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.service.DepartamentoService;
@@ -68,6 +71,30 @@ public class DepartamentoController {
 			departamentoService.createDepartamento(departamento);
 			return "redirect:/departamento/listar";
 		}
-		
+
+	}
+
+	// método para recibir el post de deshabilitar departamento post
+	@PostMapping("/deshabilitar-departamento-post")
+	public String deshabilitarDepartamentoPost(@RequestParam("id_departamento") int id_departamento) {
+		LOGGER.info("mensaje: " + id_departamento);
+		Departamento departamento = departamentoService.getDepartamento(id_departamento);
+		LOGGER.info("departamento: " + departamento);
+		departamento.setHabilitado(false);
+		departamentoService.updateDepartamento(departamento);
+		return "redirect:/departamento/listar";
+
+	}
+
+	// método para recibir el post de habilitar departamento post
+	@PostMapping("/habilitar-departamento-post")
+	public String habilitarDepartamentoPost(@RequestParam("id_departamento") int id_departamento) {
+		LOGGER.info("mensaje: " + id_departamento);
+		Departamento departamento = departamentoService.getDepartamento(id_departamento);
+		LOGGER.info("departamento: " + departamento);
+		departamento.setHabilitado(true);
+		departamentoService.updateDepartamento(departamento);
+		return "redirect:/departamento/listar";
+
 	}
 }

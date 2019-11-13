@@ -11,4 +11,6 @@ public interface CategoriaService {
 	public abstract Categoria getCategoria(int idCategoria);
 	
 	public abstract Categoria createCategoria(Categoria categoria);
+	
+	public abstract Categoria updateCategoria(Categoria categoria);
 }

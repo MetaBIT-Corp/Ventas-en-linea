@@ -12,4 +12,8 @@ public interface SubcategoriaService {
 	public abstract List<Subcategoria> listAllSubcategoriasByCategoria(Categoria categoria);
 	
 	public abstract Subcategoria createSubcategoria (Subcategoria subcategoria);
+	
+	public abstract Subcategoria updateSubcategoria (Subcategoria subcategoria);
+	
+	public abstract Subcategoria getSubcategoria(int id);
 }

@@ -32,4 +32,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 		return categoriaJpaRepository.save(categoria);
 	}
 
+	@Override
+	public Categoria updateCategoria(Categoria categoria) {
+		return categoriaJpaRepository.save(categoria);
+	}
+
 }

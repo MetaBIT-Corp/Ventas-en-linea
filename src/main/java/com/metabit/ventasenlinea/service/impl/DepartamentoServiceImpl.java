@@ -33,4 +33,9 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 		return departamentoJpaRepository.save(departamento);
 	}
 
+	@Override
+	public Departamento updateDepartamento(Departamento departamento) {
+		return departamentoJpaRepository.save(departamento);
+	}
+
 }

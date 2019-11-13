@@ -37,47 +37,68 @@
 				<div th:insert="fragments/topbar::topbar"></div>
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-						<!-- ESPACIO DE TRABAJO  -->
+					<!-- ESPACIO DE TRABAJO  -->
 
-						<!-- Page Heading -->
+					<!-- Page Heading -->
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">Listado de Categorías</h1>
-						<a href="#" th:href="@{'/departamento/'+${departamento.id}+'/categoria/crear-categoria'}"
-							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-							>
+						<h1 class="h4 mb-0 text-gray-800">Listado de Categorías</h1>
+						<h1 class="h4 mb-0 text-gray-800" >Departamento: <span th:text="${departamento.nombre}"></span></h1>
+						<a href="#"
+							th:href="@{'/departamento/'+${departamento.id}+'/categoria/crear-categoria'}"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
 							Categoría
 						</a>
 					</div>
 					<!-- Page Heading -->
-					
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-striped" id="dataTable" width="100%"
-							cellspacing="0">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Acciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="categoria: ${categorias}">
-											<td><span th:text="${categoria.nombre}"></span></td>
-											<td><span th:text="${categoria.descripcion}"></span></td>
-											<td>
-												<button class="btn-sm btn-secondary" title="Listado de Sub-categorias"><a th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i class="fas fa-list"></i></a></button>
-												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-												<button class="btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-striped" id="dataTable" width="100%"
+								cellspacing="0">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Descripción</th>
+										<th>Estado</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="categoria: ${categorias}">
+										<td><span th:text="${categoria.nombre}"></span></td>
+										<td><span th:text="${categoria.descripcion}"></span></td>
+										<td th:if="${categoria.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
+										<td th:unless="${categoria.habilitado}"
+											th:text="Deshabilitado"><span>Deshabilitado</span></td>
+										<td>
+											<button class="btn-sm btn-secondary"
+												title="Listado de Sub-categorias">
+												<a
+													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i
+													class="fas fa-list"></i></a>
+											</button>
+											<button class="btn-sm btn-primary" title="Editar">
+												<i class="fas fa-pencil-alt"></i>
+											</button>
+											<button th:if="${categoria.habilitado}"
+												class="btn-sm btn-danger" title="Deshabilitar"
+												data-deshabilitar-categoria th:value="${categoria.id}">
+												<i class="fas fa-minus "></i>
+											</button>
+											<button th:unless="${categoria.habilitado}"
+												class="btn-sm btn-option" title="Habilitar"
+												data-habilitar-categoria th:value="${categoria.id}">
+												<i class="fas fa-check"></i>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
-						<!-- FIN DE ESPACIO DE TRABAJO -->
+					</div>
+					<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
 		</div>
@@ -90,46 +111,39 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
-	
+
 	<!-- MODALES  -->
-	<!-- Modal para crear subcategoría 
-	<div class="modal fade" id="crearCategoria" tabindex="-1"
+	
+	<!-- Modal para habilitar categoria -->
+	<div class="modal fade" id="habilitarCategoria" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalCenterTitle"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="crearModalCenterTitle">Crear
-						Categoría</h5>
+					<h5 class="modal-title" id="habilitarModalCenterTitle">Habilitar
+						categoria</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body" id="crear-categoria-body">
-					<form class="user">
+				<div class="modal-body" id="habilitar-categoria-body">
+					<form class="user" action="#"
+						th:action="@{'/departamento/'+${departamento.id}+'/categoria/habilitar-categoria-post'}"
+						method="POST">
+						<h5>¿Desea habilitar esta categoria?</h5>
+						<p>Al habilitar se mostrarán los productos que pertenecen a esta
+							categoria.</p>
 						<div class="form-group">
-							<input type="text" class="form-control form-control-user"
-							    placeholder="Nombre de categoria">
-						</div>
-						<div class="form-group">
-							<textarea type="text" class="form-control form-control-user"
-								 placeholder="Descripcion"></textarea>
-						</div>
-						<div class="form-group">					
 							<input type="hidden" class="form-control form-control-user"
-								 placeholder="Habilitado" value="1">
+								id="id_categoria_habilitar" name="id_categoria">
 						</div>
-						<div class="form-group">					
-							<input type="hidden" class="form-control form-control-user"
-								 placeholder="id_departamento" value="" id="id_departamento">
-						</div>
-						<a href="#" class="btn btn-primary btn-user btn-block">
-							Guardar </a>
-						<a href="#" class="btn btn-secondary btn-user btn-block" data-dismiss="modal"
-						aria-label="Close">
-							 Cancelar
-						</a> 
+						<input type="submit" value="Habilitar"
+							class="btn btn-primary btn-user float-right" /> 
+						<a href="#"
+							class="btn btn-secondary btn-user float-right mr-2" data-dismiss="modal"
+							aria-label="Close"> Cancelar </a>
 					</form>
 
 				</div>
@@ -137,8 +151,49 @@
 			</div>
 		</div>
 	</div>
-	-->
-	<!-- Modal para crear subcategoría -->
+
+	<!-- Modal para habilitar categoria -->
+	
+	<!-- Modal para deshabilitar categoria -->
+	<div class="modal fade" id="deshabilitarCategoria" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar
+						categoria</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="deshabilitar-categoria-body">
+					<form class="user" action="#"
+						th:action="@{'/departamento/'+${departamento.id}+'/categoria/deshabilitar-categoria-post'}"
+						method="POST">
+						<h5>¿Desea deshabilitar esta categoria?</h5>
+						<p>No se mostrarán los productos que pertenecen a estea
+							categoria.</p>
+						<div class="form-group">
+							<input type="hidden" class="form-control form-control-user"
+								id="id_categoria" name="id_categoria">
+						</div>
+						<input type="submit" value="Deshabilitar"
+							class="btn btn-danger btn-user float-right" /> <a href="#"
+							class="btn btn-secondary btn-user float-right mr-2" data-dismiss="modal"
+							aria-label="Close"> Cancelar </a>
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para dehabilitar categoria -->
+
+
 
 	<!-- MODALES  -->
 
@@ -158,17 +213,26 @@
 
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
-	
-	<!-- Scripts 
+
+	<!-- Scripts-->
 	<script>
-		$('[data-id-departamento]').on('click', crearCategoria);
-		function crearCategoria() {
-			$('#id_departamento').attr('value', $(this).val());
-			$('#crearCategoria').modal('show');
+		$('[data-deshabilitar-categoria]').on('click',
+				deshabilitarCategoria);
+		$('[data-habilitar-categoria]').on('click',
+				habilitarCategoria);
+
+		function deshabilitarCategoria() {
+			$('#id_categoria').attr('value', $(this).val());
+			$('#deshabilitarCategoria').modal('show');
+		}
+		
+		function habilitarCategoria() {
+			$('#id_categoria_habilitar').attr('value', $(this).val());
+			$('#habilitarCategoria').modal('show');
 		}
 	</script>
+
 	<!-- Scripts-->
-	-->
 
 </body>
 </html>

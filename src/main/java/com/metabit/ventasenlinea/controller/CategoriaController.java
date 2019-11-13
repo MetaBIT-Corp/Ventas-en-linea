@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.metabit.ventasenlinea.entity.Categoria;
@@ -70,9 +71,32 @@ public class CategoriaController {
 		} else {
 			Departamento departamento = departamentoService.getDepartamento(idDepartamento);
 			categoria.setDepartamento(departamento);
+			categoria.setHabilitado(true);
 			categoriaService.createCategoria(categoria);
 			return "redirect:/departamento/"+idDepartamento+"/categoria/listar";
 		}
+
+	}
+	
+	// método para recibir el post de deshabilitar categoria post
+	@PostMapping("/deshabilitar-categoria-post")
+	public String deshabilitarCategoriaPost(@RequestParam("id_categoria") int idCategoria,
+			@PathVariable("id_departamento") int idDepartamento) {
+		Categoria categoria = categoriaService.getCategoria(idCategoria);
+		categoria.setHabilitado(false);
+		categoriaService.updateCategoria(categoria);
+		return "redirect:/departamento/" + idDepartamento + "/categoria/listar";
+
+	}
+
+	// método para recibir el post de habilitar departamento post
+	@PostMapping("/habilitar-categoria-post")
+	public String habilitarCategoriaPost(@RequestParam("id_categoria") int idCategoria,
+			@PathVariable("id_departamento") int idDepartamento) {
+		Categoria categoria = categoriaService.getCategoria(idCategoria);
+		categoria.setHabilitado(true);
+		categoriaService.updateCategoria(categoria);
+		return "redirect:/departamento/" + idDepartamento + "/categoria/listar";
 
 	}
 }
