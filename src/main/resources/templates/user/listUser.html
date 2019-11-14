@@ -49,67 +49,89 @@
 					<!-- ESPACIO DE TRABAJO  -->
 
 					<!--Products DataTale-->
-		          <div class="card shadow mb-4">
-		            <div class="card-header py-3">
-		              <div class="row">
-		              	<div class="col">
-		              		<h4 class="m-0 font-weight-bold text-primary float-left">Usuarios</h4>
-		              	</div>
-		              	<div class="col">
-		              		<a class="btn btn-sm mb-3 float-right" href="#" title="Registrar empleado">
-			                	<i class="fas fa-plus-circle"></i>
-			                	<b>Registrar empleado</b>
-			           		</a>
-		              	</div>
-		              </div>
-		            </div>
-		            <div class="card-body">
-		              <div class="table-responsive">
-		                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-		                  <thead>
-		                    <tr>
-		                      <th>Nombre</th>
-		                      <th>Apellidos</th>
-		                      <th>Email</th>
-		                      <th>Dirección</th>
-		                      <th>Rol</th>
-		                      <th>Opciones</th>
-		                    </tr>
-		                  </thead>
-		                  <tfoot>
-		                    <tr>
-		                      <th>Nombre</th>
-		                      <th>Apellidos</th>
-		                      <th>Email</th>
-		                      <th>Dirección</th>
-		                      <th>Rol</th>
-		                      <th>Opciones</th>
-		                    </tr>
-		                  </tfoot>
-		                  <tbody>
-		                    <tr th:each="uc:${usersClient}">
-		                      <td th:text="${uc.nombreCliente}"></td>
-		                      <td th:text="${uc.apellidoCliente}"></td>
-		                      <td th:text="${uc.user.email}"></td>
-		                      <td th:text="${uc.direccion}"></td>
-		                      <!-- <div th:switch="${uc.user.role}">
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<div class="row">
+								<div class="col">
+									<h4 class="m-0 font-weight-bold text-primary float-left">Usuarios</h4>
+								</div>
+								<div class="col">
+									<a class="btn btn-sm mb-3 float-right"										
+										title="Registrar empleado">
+										<button type="button" class="btn btn-primary"
+											data-toggle="modal" data-target="#exampleModalCenter">
+											Nuevo Empleado</button>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%"
+									cellspacing="0">
+									<thead>
+										<tr>
+											<th>Nombre</th>
+											<th>Apellidos</th>
+											<th>Email</th>
+											<th>Dirección</th>
+											<th>Rol</th>
+											<th>Opciones</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Nombre</th>
+											<th>Apellidos</th>
+											<th>Email</th>
+											<th>Dirección</th>
+											<th>Rol</th>
+											<th>Opciones</th>
+										</tr>
+									</tfoot>
+									<tbody>
+										<tr th:each="uc:${usersClient}">
+											<td th:text="${uc.nombreCliente}"></td>
+											<td th:text="${uc.apellidoCliente}"></td>
+											<td th:text="${uc.user.email}"></td>
+											<td th:text="${uc.direccion}"></td>
+											<!-- <div th:switch="${uc.user.role}">
 		                      	<td th:case="${0}">Administrador</td>
 		                      	<td th:case="${1}">Encargado de bodega</td>
 		                      	<td th:case="${2}">Encargado de ventas</td>
 		                      	<td th:case="${3}">Cliente</td>
 		                      </div> -->
-		                      <td></td>
-		                      <td>
-		                      	<button title="Deshabilitar cuenta de usuario" class="btn btn-sm btn-danger" th:onclick="|deshab_usuario('${uc.user.idUser}')|">
-		                      		<i class="fas fa-minus-circle"></i>  
-		                      	</button>
-		                      </td>
-		                    </tr>
-		                  </tbody>
-		                </table>
-		              </div>
-		            </div>
-		          </div>
+											<td >Admin</td>
+											<td>
+												<button title="Deshabilitar cuenta de usuario"
+													class="btn btn-sm btn-danger"
+													th:onclick="|deshab_usuario('${uc.user.idUser}')|">
+													<i class="fas fa-minus-circle"></i>
+												</button>
+											</td>
+										</tr>
+										<tr th:each="ue:${empleados}">
+											<td th:text="${ue.nombreEmpleado}"></td>
+											<td th:text="${ue.apellidoEmpleado}"></td>
+											<td th:text="${ue.user.email}"></td>
+											<td th:text="${ue.direccion}"></td>											
+											<div th:switch="${ue.cargo.id}">
+						                      	<td th:case="${1}">Encargado de Ventas</td>
+						                      	<td th:case="${2}">Encargado de Bodega</td>						                      	
+						                    </div> 
+											<td>
+												<button title="Deshabilitar cuenta de usuario"
+													class="btn btn-sm btn-danger"
+													th:onclick="|deshab_usuario('${ue.user.idUser}')|">
+													<i class="fas fa-minus-circle"></i>
+												</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
 
 				</div>
@@ -125,40 +147,71 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
-	
+
 	<!-- Modal para deshabilitar usuario -->
-<div class="modal fade" id="deshabilitar-usuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="deshabilitar-usuario" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<i class="fas fa-exclamation-triangle"></i> Cambio de estado
+					</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>¿Está seguro que desea deshabilitar la cuenta de este
+						usuario?</p>
+				</div>
+				<div class="modal-footer">
+					<form th:action="@{/usuario/deshabilitar}" method="post">
+						<input type="hidden" value="" id="usuario_id_deshab"
+							name="usuario_id_deshab">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Cancelar</button>
+						<button type="submit" class="btn btn-danger">Deshabilitar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Cambio de estado</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">¿Que tipo de empleado creara?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-        <div class="modal-body">
-        	<p>¿Está seguro que desea deshabilitar la cuenta de este usuario?</p>	
-        </div>
-        <div class="modal-footer">
-        <form th:action="@{/usuario/deshabilitar}" method="post">
-        	<input type="hidden" value="" id="usuario_id_deshab" name="usuario_id_deshab">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-	        <button type="submit" class="btn btn-danger">Deshabilitar</button>    
-        </form>
-        </div>
+      <div class="modal-body text-center">
+     	<a th:href="@{/empleado/crear-empleado-venta}">
+         <button type="button" class="btn btn-warning ">Para Ventas</button>
+         </a>
+         <a th:href="@{/empleado/crear-empleado-bodega}">
+          <button type="button" class="btn btn-warning">Para Bodega</button>
+          </a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        
+      </div>
     </div>
   </div>
 </div>
-	
-
 </body>
 
 <script>
-
-function deshab_usuario(user_id){
-	$("#usuario_id_deshab").val(user_id);
-	$("#deshabilitar-usuario").modal();
-}
+	function deshab_usuario(user_id) {
+		$("#usuario_id_deshab").val(user_id);
+		$("#deshabilitar-usuario").modal();
+	}
 </script>
 
 </html>

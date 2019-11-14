@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.User;
+import com.metabit.ventasenlinea.service.EmpleadoService;
 import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
 
 @Controller
@@ -22,12 +23,14 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserServiceImpl userServiceImpl;
-	
+	@Autowired
+	@Qualifier("empleadoServiceImpl")
+	private EmpleadoService empleadoService;
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/listar")
 	public ModelAndView listUsuarios() {
 		ModelAndView mav = new ModelAndView("/user/listUser");
-		
+		mav.addObject("empleados",empleadoService.getEmpleados());
 		mav.addObject("usersClient", userServiceImpl.findAllClientes());
 		return mav;
 	}

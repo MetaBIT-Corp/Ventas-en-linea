@@ -114,7 +114,7 @@ public class ClienteController {
 			
 		    cuentaServiceImpl.createCuenta(cuenta);
 			
-			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
+			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_ADMIN"));
 			
 			sendEmail(user.getEmail(), asunto, contenido);
 			redirAttrs.addFlashAttribute("success", "succeess");
@@ -187,7 +187,7 @@ public class ClienteController {
         SimpleMailMessage email = new SimpleMailMessage();
         //Aqui podes Modificarlo por defectp te lo dejo asi
         //NombreEmpresa <ejemplo@ejemplo.com>
-        email.setFrom("Empresa de Venta <ddjochoa.20@gmail.com>");
+        email.setFrom("Empresa de Venta <ventasonline19@gmail.com>");
         email.setTo(to);
         email.setSubject(subject);
         email.setText(content);       
