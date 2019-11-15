@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>MetaBit Store Online | Listado Pedidos</title>
+
+<!-- Custom fonts for this template-->
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}"
+	rel="stylesheet">
+<link
+	href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+
+<!-- Scripts para datatable de datatable.net -->
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<!-- Logout Modal-->
+<div th:insert="fragments/modallogout::modallogout"></div>
+
+<!-- Bootstrap core JavaScript-->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+<!-- Core plugin JavaScript-->
+<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+<!-- Custom scripts for all pages-->
+<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+<!-- Page level plugins -->
+<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+<!-- Page level custom scripts -->
+<script th:src="@{/js/demo/datatables-demo.js}"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<div th:insert="fragments/sidebar::sidebar"></div>
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<!-- Main Content -->
+			<div id="content">
+				<div th:insert="fragments/topbar::topbar"></div>
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+					<!-- ESPACIO DE TRABAJO  -->
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<div class="card-header py-3 row mr-2 ml-2">
+							<h6 class="m-0 font-weight-bold text-primary col-7">Pedidos</h6>
+							<div class="btn-group col-4" role="group" aria-label="Basic example">
+								<button onclick="window.location.href='/pedido/list/1'" type="button" class="btn btn-secondary text-white">Enviados</button>
+								<button onclick="window.location.href='/pedido/list/3'" type="button" class="btn btn-secondary text-white">Autorizados</button>
+								<button onclick="window.location.href='/pedido/list/2'" type="button" class="btn btn-secondary text-white">Pendientes</button>
+								<button onclick="window.location.href='/pedido/list'" type="button" class="btn btn-secondary text-white">Todos</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%"
+									cellspacing="0">
+									<thead>
+										<tr>
+											<th>Fecha de Pedido</th>
+											<th>Direccion destino</th>
+											<th>Pais</th>
+											<th>Monto total</th>
+											<th>Estado</th>
+											<th>Acciones</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
+											<td th:text="${pedidos[i].fechaPedido}"></td>
+											<td th:text="${pedidos[i].direccionDestino}"></td>
+											<td th:text="${pedidos[i].pais.nombrePais}"></td>
+											<td th:text="'$ '+${montos[i]}"></td>
+											<td class="text-center"><span
+												th:if="${pedidos[i].estado.tituloEstado== 'Enviado'}"
+												class='badge badge-success'>ENVIADO</span> <span
+												th:if="${pedidos[i].estado.tituloEstado== 'Autorizado'}"
+												class='badge badge-primary'>AUTORIZADO</span> <span
+												th:if="${pedidos[i].estado.tituloEstado =='Pendiente'}"
+												class='badge badge-danger'>PENDIENTE</span></td>
+											<td th:if="${role =='ROLE_ADMIN'}">
+												<!-- SE PUSO ADMIN SOLO POR PRUEBA LOS UNICOS CON ACCESO SON  ENC BODEGA Y ENC VENTAS -->
+												<!-- SIMULANDO ENCARGADO BODEGA --> <a
+												th:if="${pedidos[i].estado.tituloEstado == 'Pendiente'}"
+												href="#" th:onclick="|cambiarEstado('${pedidos[i].idPedido}','Pendiente');|" class="btn btn-primary text-white">Autorizar</a>
+												<button
+													th:unless="${role =='ROLE_ADMIN' and pedidos[i].estado.tituloEstado =='Pendiente'}"
+													href="#" class="btn btn-primary text-white" disabled>Autorizar</button>
+											</td>
+											<td th:unless="${role =='ROLE_ADMIN'}">
+												<!-- SIMULANDO ENCARGADO VENTAS --> <a
+												th:if="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+												href="#" th:onclick="|cambiarEstado('${pedidos[i].idPedido}','Autorizado')|" class="btn btn-success text-white">Enviar</a>
+												<button
+													th:unless="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+													href="#" class="btn btn-success text-white" disabled>Enviar</button>
+											</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<th>Fecha de Pedido</th>
+											<th>Direccion destino</th>
+											<th>Pais</th>
+											<th>Monto total</th>
+											<th>Estado</th>
+											<th>Acciones</th>
+										</tr>
+									</tfoot>
+
+								</table>
+							</div>
+						</div>
+					</div>
+					<!-- FIN DE ESPACIO DE TRABAJO -->
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	<!-- Modal para cambiar estado de pedido -->
+<div class="modal fade" id="modal_cambio_estado" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Cambio de estado de pedido</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body">
+        	<p id="p-message"></p>	
+        </div>
+        <div class="modal-footer">
+        <form th:action="@{/pedido/cambio-estado}" method="post">
+        	<input type="hidden" value="" id="pedido_id_cambio" name="pedido_id_cambio">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+	        <button type="submit" id="btn_accion" class="btn btn-primary"></button>    
+        </form>
+        </div>
+    </div>
+  </div>
+</div>
+	
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+</body>
+<script>
+function cambiarEstado(pedido_id, estado){
+	
+	$("#pedido_id_cambio").val(pedido_id);
+	
+	if(estado == "Pendiente"){
+		$("#p-message").text("¿Esta seguro que desea autorizar el pedido?");
+		$("#btn_accion").text("Autorizar");	
+	}else{
+		$("#p-message").text("¿Esta seguro que desea enviar el pedido?");
+		$("#btn_accion").text("Enviar");	
+	}
+	
+	$("#modal_cambio_estado").modal();
+	
+}
+</script>
+</html>

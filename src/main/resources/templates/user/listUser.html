@@ -125,6 +125,11 @@
 													th:onclick="|deshab_usuario('${ue.user.idUser}')|">
 													<i class="fas fa-minus-circle"></i>
 												</button>
+												<a th:href="@{/empleado/edit-empleado/__${ue.idEmpleado}__}">
+												<button  class="btn btn-sm btn-warning" title="Editar Cuenta de Empleado">
+												<i class="fas fa-pen-square"></i>
+												</button>
+												</a>
 											</td>
 										</tr>
 									</tbody>

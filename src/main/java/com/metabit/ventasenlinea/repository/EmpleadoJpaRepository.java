@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 import com.metabit.ventasenlinea.entity.Empleado;
 @Repository("empleadoJpaRepository")
 public interface EmpleadoJpaRepository extends JpaRepository<Empleado, Serializable>{
-
+	public abstract Empleado findByIdEmpleado(int id);
 }

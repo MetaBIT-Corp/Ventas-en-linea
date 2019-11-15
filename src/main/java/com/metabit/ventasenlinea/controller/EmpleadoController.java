@@ -10,11 +10,14 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -180,6 +183,41 @@ public class EmpleadoController {
 			
 			
 		}
+	@GetMapping("/edit-empleado2")
+	public String editEmpleado(@RequestParam(name="id",required=false,defaultValue="0")int id,Model model) {
+		Empleado empleado=new Empleado();
+		empleado=empleadoService.buscarPorID(id);
+		LOG.info("Este es el objeto de tipo empleado: "+empleado);
+		model.addAttribute("empleado", empleado);
+		return "empleado/edit-empleado";
+	}
+	@GetMapping("/edit-empleado/{id}")
+	public ModelAndView verficarCodigoGET(@PathVariable("id") int id) {
+		ModelAndView mav = new ModelAndView("empleado/edit-empleado");
+		Empleado empleado=new Empleado();
+		empleado=empleadoService.buscarPorID(id);
+		//LOG.info("Este es el objeto de tipo empleado: "+empleado.toString());
+		mav.addObject("empleado", empleado);		
+		return mav;
+	}
+	@PostMapping("/editempleado")
+	public String addEmpleado(@Valid @ModelAttribute("empleado") Empleado empleado,BindingResult bindingEmpleado,RedirectAttributes redirAttrs) {
+		if(bindingEmpleado.hasErrors()) {
+			LOG.info("Entra aqui a email existente");
+			return "empleado/edit-empleado";
+		}
+		else {
+			//empleadoService.crearEmpleado(empleado);
+			Empleado updateEmpleado=new Empleado();
+			updateEmpleado=empleadoService.buscarPorID(empleado.getIdEmpleado());		
+			updateEmpleado.setNombreEmpleado(empleado.getNombreEmpleado());
+			updateEmpleado.setApellidoEmpleado(empleado.getApellidoEmpleado());
+			updateEmpleado.setDireccion(empleado.getDireccion());
+			empleadoService.crearEmpleado(updateEmpleado);
+			return "redirect:/usuario/listar";
+		}
+		
+	}
 	//Inyeccion de la dependencia:
     @Autowired
     private JavaMailSender mailSender;

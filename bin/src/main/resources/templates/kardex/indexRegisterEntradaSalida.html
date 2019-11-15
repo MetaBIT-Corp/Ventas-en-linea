@@ -1,0 +1,64 @@
+<div class="p-5" th:fragment="ES">
+
+	<div class="text-center col-12 mb-6 mb-sm-0">
+		<h1 class="h4 text-gray-900 mb-4" th:text="${kardex.producto.titulo}"></h1>
+	</div>
+	<form th:action="@{/kardex-one/{kar}/addES(kar=${kardex.idKardex})}"
+		method="POST" class="user" th:object="${es}" id="register">
+		<div class="form-group row">
+			<div class="col-6 mb-6 mb-sm-0">
+				<label>Cantidad</label>
+			</div>
+			<div class="col-6 mb-6 mb-sm-0">
+				<input type="number" class="form-control form-control-user"
+					id="cantidad" placeholder="Cantidad" value='-1'
+					th:field="*{cantidad}" required>
+			</div>
+		</div>
+		<div class="form-group row" id="bloque-precio">
+			<div class="col-6 mb-6 mb-sm-0">
+				<label>Precio</label>
+			</div>
+			<div class="col-6 mb-6 mb-sm-0">
+				<input type="number" step="any"
+					class="form-control form-control-user" id="precio"
+					placeholder="Precio de Entrada/Salida" value=' '
+					th:field="*{precio}" required>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-6 mb-6 mb-sm-0">
+				<label>Tipo de movimiento</label>
+			</div>
+			<div class="col-6 mb-6 mb-sm-0">
+				<select class="form-control" th:field="*{isEntradaSalida}"
+					form="register" id="tipo-mov">
+					<option th:value="false" th:text="Entrada"></option>
+					<option th:value="true" th:text="Salida"></option>
+				</select>
+			</div>
+		</div>
+		<br>
+		<hr>
+		<div class="form-group row text-right">
+			<div class="col-12 mb-6 mb-sm-0">
+				<input type="submit" class="btn btn-info" id="exampleFirstName"
+					value="Registrar">
+				<button data-dismiss="modal" class="btn btn-danger">Salir</button>
+			</div>
+
+		</div>
+	</form>
+	<script>
+		$(document).ready(function() {
+			$("#tipo-mov").on('change', function() {
+				if ($(this).val() == "true") {
+					$("#precio").val(1);
+					$("#bloque-precio").attr("hidden", true);
+				}else{
+					$("#bloque-precio").removeAttr("hidden", true);
+				}
+			});
+		});
+	</script>
+</div>

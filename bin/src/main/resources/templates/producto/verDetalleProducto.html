@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description: ventas en linea" content="" />
+<meta name="author:metabit" content="" />
+
+<title>MetaBit Store Online</title>
+
+<!-- Custom fonts for this template-->
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}"
+	rel="stylesheet">
+</head>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<div th:insert="fragments/sidebar::sidebar"></div>
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<!-- Main Content -->
+			<div id="content">
+				<div th:insert="fragments/topbar::topbar"></div>
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+						<!-- ESPACIO DE TRABAJO  -->
+
+						<h1 style="text-align: center;" th:text="${producto.titulo}"></h1>
+
+						<div class="card offset-3 col-md-6">
+						  <img class="card-img-top" th:src=${producto.imagen} alt="Card image cap">
+						  <div class="card-body">
+						  
+						  <table class="table table-bordered table-hover">
+						  	<tr>
+						  		<td><b>Marca</b></td>
+						  		<td th:text="${producto.marca}"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td><b>Margen de ganancia</b></td>
+						  		<td th:text="${producto.margenGanancia}"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td><b>Descuento</b></td>
+						  		<td th:text="${producto.porcentajeDescuento} + '%'"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td colspan="2">
+						  			<p class="card-text"><b>Descripción</b></p>
+						  		</td>
+						  	</tr>
+						  	<tr>
+						  		<td colspan="2">
+						  			<p class="card-text" th:text="${producto.descripcionArticulo}"></p>
+						  		</td>
+						  	</tr>
+						  </table>
+						   <a th:href="@{/producto/listar}" class="btn btn-primary">Regresar</a>
+						  </div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div th:insert="fragments/modallogout::modallogout"></div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+	<!-- Page level plugins -->
+	<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+	<!-- Page level custom scripts -->
+	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+</body>
+</html>

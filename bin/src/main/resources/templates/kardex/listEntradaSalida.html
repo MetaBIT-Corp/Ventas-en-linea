@@ -64,11 +64,36 @@
 					<!-- ESPACIO DE TRABAJO  -->
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
+					<!-- MENSAJES  -->
+						<div th:if="${kardex.unidadesDisponibles < kardex.stockMinimo}">
+							<div class="alert alert-warning text-center ml-2 mr-2 mt-3">
+								<h5> Advertencia: Las unidades disponibles son menores al stock minimo.</h5>
+							</div>
+						</div>
+						<div th:if="${message}">
+							<div class="alert alert-danger text-center ml-2 mr-2">
+								<h5 th:text="${message}"></h5>
+							</div>
+						</div>
+						<div>
+							<ul th:if="${errors}" class="alert alert-danger ml-2 mr-2"
+								role="alert">
+								<li  class="ml-2" th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+							</ul>
+						</div>
+						<!-- FIN MENSAJES  -->
 						<div class="card-header py-3 row mr-1 ml-1">
-							<div class="col-9"> <h6 class="m-0 font-weight-bold text-primary" th:text="'Listado de Entrada Salida de '+ ${kardex.producto.titulo}"></h6></div>
-							<div class="col-3"> 
-							<a class="btn btn-info text-white ml-4">Actualizar Existencia</a></div>
-					
+							<div class="col-9">
+								<h6 class="m-0 font-weight-bold text-primary"
+									th:text="'Listado de Entrada Salida de '+ ${kardex.producto.titulo}"></h6>
+							</div>
+							<div class="col-3">
+								<a data-toggle="modal" data-target="#exampleModal"
+									class="btn btn-info text-white ml-4"
+									th:href=@{/kardex-one/{kardex}/register-entrada-salida(kardex=${kardex.idKardex})}>Actualizar
+									Existencia</a>
+							</div>
+
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
@@ -85,12 +110,12 @@
 									<tbody>
 										<tr th:each="es:${listado}">
 											<td th:text="${es.fecha}"></td>
-											<td class="text-center">
-												<span th:if="${es.isEntradaSalida}" class='badge badge-danger'>SALIDA</span>
-												<span th:unless="${es.isEntradaSalida}"class='badge badge-success'>ENTRADA</span>
-											</td>
+											<td class="text-center"><span
+												th:if="${es.isEntradaSalida}" class='badge badge-danger'>SALIDA</span>
+												<span th:unless="${es.isEntradaSalida}"
+												class='badge badge-success'>ENTRADA</span></td>
 											<td th:text="${es.cantidad}"></td>
-											<td th:text="${es.precio}"></td>
+											<td th:text="'$ '+${#numbers.formatDecimal(es.precio,1,2,'POINT')}"></td>
 										</tr>
 									</tbody>
 									<tfoot>
@@ -106,13 +131,32 @@
 							</div>
 						</div>
 					</div>
+					<div class="text-right"><a th:href="@{/kardex/list}">Regresar</a></div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
 		</div>
 
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Actualizar
+						Existencia</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body"
+					th:insert="kardex/indexRegisterEntradaSalida::ES"></div>
 
+			</div>
+		</div>
+	</div>
 	<!-- Scroll to Top Button-->
 	<a class="scroll-to-top rounded" href="#page-top"> <i
 		class="fas fa-angle-up"></i>
