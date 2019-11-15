@@ -34,7 +34,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
+import com.metabit.ventasenlinea.entity.Subcategoria;
 import com.metabit.ventasenlinea.service.ProductoService;
+import com.metabit.ventasenlinea.service.SubcategoriaService;
 
 @Controller
 @RequestMapping("/producto")
@@ -46,6 +48,10 @@ public class ProductoController {
 	@Autowired
 	@Qualifier("productoServiceImpl")
 	private ProductoService productService;
+	
+	@Autowired
+	@Qualifier("subcategoriaServiceImpl")
+	private SubcategoriaService subcategoriaService;
 
 	@GetMapping("/index")
 	public ModelAndView indexProducto(HttpServletRequest request) {
@@ -197,19 +203,26 @@ public class ProductoController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
-	@GetMapping("/nuevo")
-	public ModelAndView createProducto() {
+	@GetMapping("/nuevo/{id}")
+	public ModelAndView createProducto(@PathVariable("id") int idSubcategoria) {
 		ModelAndView mav = new ModelAndView("producto/createProducto");
 		
 		mav.addObject("producto", new Producto());
+		mav.addObject("idSubcateogria", idSubcategoria);
 		
 		return mav;
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@PostMapping("/nuevo")
-	public String storeProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
+	public String storeProducto(
+			@Valid @ModelAttribute("producto") Producto producto, 
+			BindingResult bindingResult, 
+			@RequestParam("image") MultipartFile image,
+			@RequestParam("idSubcategoria") int idSubcategoria,
+			RedirectAttributes redirAttrs) {
 		String path;
+		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria); 
 		
 		if(bindingResult.hasErrors()) {
 			return "producto/createProducto";
@@ -218,13 +231,14 @@ public class ProductoController {
 				path = uploadImage(image);
 				producto.setImagen(path);
 				producto.setHabilitado(1);
+				producto.setSubcategoria(subcategoria);
 				productService.addProduct(producto);
 				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			redirAttrs.addFlashAttribute("message", "Se ha registrado el producto con éxito");
-			return "redirect:/producto/listar";
+			return "redirect:/producto/listar/"+subcategoria.getIdSubcategoria();
 		}
 	}
 	
@@ -281,10 +295,12 @@ public class ProductoController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
-	@GetMapping("/listar")
-	public ModelAndView listProducto() {
+	@GetMapping("/listar/{id}")
+	public ModelAndView listProducto(@PathVariable("id") int idSubcategoria) {
+		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria);
+		
 		ModelAndView mav = new ModelAndView("/producto/listProducto");
-		mav.addObject("productos", productService.getProductos());
+		mav.addObject("subcategoria", subcategoria);
 		
 		return mav;
 	}
