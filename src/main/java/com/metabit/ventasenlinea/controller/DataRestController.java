@@ -35,9 +35,13 @@ public class DataRestController {
 	
 	@GetMapping("/productos-agregados")
 	public List<ProductoCarrito> getCarrito(HttpServletRequest request){
+		System.out.println("Aqui--------------------------------------1");
 		HttpSession session = request.getSession();
+		System.out.println("Aqui--------------------------------------2");
 		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
-		
+		System.out.println("Aqui--------------------------------------3");
+		//System.out.println("--------------------------------------"+productosCarritos.size());
+		System.out.println("Aqui--------------------------------------4");
 		return productosCarritos;
 	}
 	

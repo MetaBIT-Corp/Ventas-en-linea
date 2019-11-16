@@ -1,10 +1,12 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,6 +17,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.IndexColumn;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "subcategorias")
@@ -42,9 +46,9 @@ public class Subcategoria {
 	@ManyToOne
 	private Categoria categoria;
 
-	 @OneToMany(cascade= CascadeType.ALL)
-	 @JoinColumn(name="idSubcategoria")
-	 private List<Producto> productos;
+	@OneToMany(mappedBy = "subcategoria", fetch = FetchType.LAZY)
+	@JsonIgnore
+    private List<Producto> productos =  new ArrayList<>();;
 	 
 	public Subcategoria() {
 		super();
