@@ -46,11 +46,10 @@ public class Producto {
 
 	@Column(name = "habilitado")
 	private int habilitado;
-	
+
 	@ManyToOne
-	@JoinColumn(name="idSubcategoria")
+	@JoinColumn(name = "idSubcategoria")
 	private Subcategoria subcategoria;
-	
 
 	public Producto() {
 	}
@@ -139,6 +138,13 @@ public class Producto {
 	public void setSubcategoria(Subcategoria subcategoria) {
 		this.subcategoria = subcategoria;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Producto [idArticulo=" + idArticulo + ", imagen=" + imagen + ", marca=" + marca + ", titulo=" + titulo
+				+ ", margenGanancia=" + margenGanancia + ", porcentajeDescuento=" + porcentajeDescuento
+				+ ", descripcionArticulo=" + descripcionArticulo + ", habilitado=" + habilitado + ", subcategoria="
+				+ subcategoria + "]";
+	}
+
 }

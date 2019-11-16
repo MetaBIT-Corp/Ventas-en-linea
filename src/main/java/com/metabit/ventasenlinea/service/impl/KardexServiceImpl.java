@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.metabit.ventasenlinea.entity.Kardex;
+import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.repository.KardexJpaRepository;
 import com.metabit.ventasenlinea.service.KardexService;
 
@@ -31,6 +32,11 @@ public class KardexServiceImpl implements KardexService{
 	public void addKardex(Kardex kardex) {
 		kardexRepository.save(kardex);
 		
+	}
+
+	@Override
+	public Kardex getKardexByProducto(Producto producto) {
+		return kardexRepository.findByProducto(producto);
 	}
 	
 	

@@ -46,31 +46,109 @@
 
 							<div class="card o-hidden border-0 shadow-lg my-5">
 								<div class="card-body p-0">
+
+
+
+
+
 									<!-- Nested Row within Card Body -->
 									<div class="row">
-										<div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
+
+										<div class="col-lg-6 d-none d-lg-block">
+											<div class="p-5">
+												<div align="justify">
+													<h1 class="h4 text-gray-900 mb-2">Enviar a:</h1>
+													<p class="mb-4">
+														<i class="fas fa-lock fa-sm text-black-50 mr-3"></i>Tus
+														datos están seguros. No se van a compartir con otros
+														vendedores!
+													</p>
+												</div>
+
+												<form th:if="${paises!=null || pais== null || pedido == null}" action="#"
+													th:action="@{/pedido/metodo-de-pago/envio-post}"
+													method="POST">
+													<div class="form-group row">
+														<div class="col-sm-6 mb-3 mb-sm-0">
+															<select class="form-control form-control-user"
+																id="id_pais" name="id_pais">
+																<option th:each="pais: ${paises}"
+																	th:value="${pais.idPais}" th:text="${pais.nombrePais}"></option>
+															</select>
+														</div>
+													</div>
+													<div class="form-group">
+														<textarea type="text"
+															class="form-control form-control-user"
+															placeholder="Dirección" id="direccion_destino"
+															name="direccion_destino"> </textarea>
+													</div>
+													<button type="submit"
+														class="btn btn-primary btn-user btn-block">
+														Listo</button>
+													<hr>
+													<a href="#" th:href="@{/producto/index}"
+														class="btn btn-user btn-block"> Cancelar </a>
+												</form>
+												
+												<div th:if="${paises==null && pais!= null && pedido != null} " align="justify">
+													<i class="fas fa-box-open fa-sm text-black-50 mr-3"></i>	
+													<p class="mb-4" th:text="'Direccion de destino: '+ ${pedido.direccionDestino} +', Pais: '+ ${pais.nombrePais}" style="color: black;">
+													
+													</p>
+												</div>
+												
+												<hr>
+												<div class="text-center">
+													<a class="small" href="#" th:href="@{/producto/index}">
+														Volver a la tienda</a>
+												</div>
+
+											</div>
+										</div>
 										<div class="col-lg-6">
 											<div class="p-5">
 												<div class="text-center">
 													<h1 class="h4 text-gray-900 mb-2">Elíge tu método de
 														pago</h1>
-													<p class="mb-4">Nos alegramos que te haya interesado uno de nuestros productos. Por favor elige un método de pago!</p>
+													<p class="mb-4">Nos alegramos que te haya interesado
+														uno de nuestros productos. Por favor elige un método de
+														pago!</p>
 												</div>
 
-												<div class="list-group">
+												<div  th:if="${paises==null && pais!= null && pedido != null} " class="list-group">
 													<a th:href="@{/pedido/metodo-de-pago/tarjeta}"
-														class="list-group-item list-group-item-action">
-														<img class="mr-3" alt="" src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png" width="100">
-														Tarjeta de crédito o débito</a>
-													<a th:href="@{/pedido/metodo-de-pago/paypal}"
-														class="list-group-item list-group-item-action">
-														<img class="mr-3" alt="" src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png" width="100">
-														Paypal</a>
+														class="list-group-item list-group-item-action"> <img
+														class="mr-3" alt=""
+														src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png"
+														width="100"> Tarjeta de crédito o débito
+													</a> <a th:href="@{/pedido/metodo-de-pago/paypal}"
+														class="list-group-item list-group-item-action"> <img
+														class="mr-3" alt=""
+														src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png"
+														width="100"> Paypal
+													</a>
+												</div>
+												
+												<div th:if="${paises!=null || pais== null || pedido == null}" class="list-group">
+													<button th:href="@{/pedido/metodo-de-pago/tarjeta}"
+														class="list-group-item list-group-item-action"> <img
+														class="mr-3" alt=""
+														src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png"
+														width="100"
+														data-toggle="tooltip" data-placement="right" title="Elige el lugar de envío"
+														> Tarjeta de crédito o débito
+													</button> <button th:href="@{/pedido/metodo-de-pago/paypal}"
+														class="list-group-item list-group-item-action"> <img
+														class="mr-3" alt=""
+														src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png"
+														width="100"
+														data-toggle="tooltip" data-placement="right" title="Elige el lugar de envío" 
+														> Paypal
+													</button>
 												</div>
 												<hr>
-												<div class="text-center">
-													<a class="small" href="#" th:href="@{/producto/index}"> Volver a la tienda</a>
-												</div>
+
 
 											</div>
 										</div>
@@ -112,6 +190,12 @@
 
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+	
+	<script type="text/javascript">
+	$(function () {
+		  $('[data-toggle="tooltip"]').tooltip()
+		})
+	</script>
 
 </body>
 </html>

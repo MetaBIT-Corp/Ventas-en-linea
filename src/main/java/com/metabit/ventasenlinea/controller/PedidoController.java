@@ -1,10 +1,14 @@
 package com.metabit.ventasenlinea.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +23,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +37,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.metabit.ventasenlinea.entity.ArticuloPedido;
 import com.metabit.ventasenlinea.entity.Cliente;
+import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.entity.Estado;
+import com.metabit.ventasenlinea.entity.Kardex;
+import com.metabit.ventasenlinea.entity.Pais;
 import com.metabit.ventasenlinea.entity.Pedido;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
 import com.metabit.ventasenlinea.service.ClienteService;
 import com.metabit.ventasenlinea.service.EstadoService;
+import com.metabit.ventasenlinea.service.KardexService;
+import com.metabit.ventasenlinea.service.PaisService;
 import com.metabit.ventasenlinea.service.PedidoService;
 import com.metabit.ventasenlinea.service.UserService;
 
@@ -67,6 +79,14 @@ public class PedidoController {
 	@Autowired
 	@Qualifier("estadoServiceImpl")
 	private EstadoService estadoService;
+	
+	@Autowired
+	@Qualifier("kardexServiceImpl")
+	private KardexService kardexService;
+	
+	@Autowired
+	@Qualifier("paisServiceImpl")
+	private PaisService paisService;
 
 	//Se añade este Bean para poder comparar con la contraseña encriptada
 	@Bean
@@ -219,8 +239,9 @@ public class PedidoController {
 		Pedido pedido = pedidoService.findById(pedido_id);
 		int estado_actual = pedido.getEstado().getId_estado();
 		// 1--Enviado
-		// 2--Pendiente
+		// 2--Pendiente (Este estado es cuando el pedido ha sido pagado, pero ún no es autorizado y menos enviado)
 		// 3--Autorizado
+		// 4--Solicitado (Este estado es cuando el pedido aún no ha sido pagado)
 		Estado estado_nuevo;
 
 		if (estado_actual == 2) {
@@ -235,13 +256,88 @@ public class PedidoController {
 	}
 
 	// PAGO DE ARTICULOS
-	@GetMapping("/metodo-de-pago")
-	public String metodoDePago() {
+	/**
+	 * Metodo que despliega un formulario para indicar los parametros de envío (pais, direccion de destino) además muestra
+	 * las opciones de metodo de pago. si no se han indicado los parametros de envío estas aparecerán bloqueadas
+	 * 
+	 * @author Edwin Palacios
+	 * @param id:  id del pedido, si este ya fue creado
+	 * @return
+	 */
+	@RequestMapping(path = {"/metodo-de-pago", "/metodo-de-pago/{id}"})
+	public String metodoDePago(
+			@PathVariable("id") Optional<Integer> id, 
+			Model model) {
+		if(id.isPresent()) {
+			//activamos metodos de pago
+			Integer num = Integer.valueOf(id.get());
+			Pedido pedido = pedidoService.getPedido(num);
+			if(pedido!= null) {
+				Pais pais = paisService.getPaisById(pedido.getPais().getIdPais());
+				model.addAttribute("pedido", pedido);
+				model.addAttribute("pais", pais);
+			}else {
+				model.addAttribute("paises", paisService.getAllPais());
+			}
+			
+		}else {
+			model.addAttribute("paises", paisService.getAllPais());
+		}
 		return METODO_PAGO;
 	}
+	
+		/**
+		 *  método para recibir el post del formulario de parametros de envio
+		 * 
+		 * @author Edwin Palacios
+		 * @param id_pais
+		 * @param direccionDestino
+		 * @return
+		 */
+		@PostMapping("/metodo-de-pago/envio-post")
+		public String createDepartamentoPost(
+				@RequestParam("id_pais") int idPais,
+				@RequestParam("direccion_destino") String direccionDestino) {
+			if ( direccionDestino.isEmpty()) {
+				LOG.info("INFORMACION" + idPais + " " + direccionDestino);
+				return "redirect:/producto/index";
+			} else {
+				//obtenemos cliente
+				com.metabit.ventasenlinea.entity.User user = getUser();
+				Cliente cliente = clienteService.BuscarUsuario(user);
+				//obtenemos pais
+				Pais pais = paisService.getPaisById(idPais);
+				
+				//obtenemos estado
+				Estado estado = estadoService.getEstado(4);
+				
+				//creamos pedido
+				Pedido pedido = new Pedido();
+				pedido.setDireccionDestino(direccionDestino);
+				pedido.setFechaPedido(new Date());
+				pedido.setEstado(estado);
+				pedido.setCliente(cliente);
+				pedido.setPais(pais);
+				pedidoService.createPedido(pedido);
+				LOG.info("INFORMACION: " + pedido.getIdPedido());
+				return "redirect:/pedido/metodo-de-pago/"+pedido.getIdPedido();
+			}
+
+		}
 
 	@GetMapping("/metodo-de-pago/paypal")
-	public ModelAndView metodoDePagoPaypal() {
+	public ModelAndView metodoDePagoPaypal(HttpServletRequest request) {
+		float totalAPagar = 0.0f;
+		//Obtenemos productos de carrito de compra
+		HttpSession session = request.getSession();
+		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
+		float precio = 0.0f;
+		if(productosCarritos != null) {
+			for (ProductoCarrito pc : productosCarritos) {
+				LOG.info(pc.getProducto().toString());
+				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+			}
+		}
 		ModelAndView mav = new ModelAndView(PAYPAL);
 		return mav;
 	}
@@ -261,9 +357,10 @@ public class PedidoController {
 			//Obtenemos productos de carrito de compra
 			HttpSession session = request.getSession();
 			List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
+			
 			if(productosCarritos != null) {
 				for (ProductoCarrito pc : productosCarritos) {
-					LOG.info(pc.toString());
+					LOG.info(pc.getProducto().toString());
 				}
 			}
 			
@@ -293,5 +390,57 @@ public class PedidoController {
 	public ModelAndView metodoDePagoTarjeta() {
 		ModelAndView mav = new ModelAndView(TARJETA);
 		return mav;
+	}
+	
+	public void llenarBdPais() {
+		//vaciamos los paises
+		paisService.deleteAllPais();
+		
+		//creamos paises
+		ArrayList<String> nombresPais = new ArrayList<String>();
+		nombresPais.add("Antigua Y Barbuda");
+		nombresPais.add("Argentina");
+		nombresPais.add("Bahamas");
+		nombresPais.add("Barbados");
+		nombresPais.add("Belice");
+		nombresPais.add("Bolivia");
+		nombresPais.add("Brasil");
+		nombresPais.add("Cánada");
+		nombresPais.add("Chile");
+		nombresPais.add("Colombia");
+		nombresPais.add("Costa Rica");
+		nombresPais.add("Cuba");
+		nombresPais.add("Dominicana");
+		nombresPais.add("Ecuador");
+		nombresPais.add("El Salvador");
+		nombresPais.add("Estados Unidos");
+		nombresPais.add("Granada");
+		nombresPais.add("Guatemala");
+		nombresPais.add("Guyana");
+		nombresPais.add("Haití");
+		nombresPais.add("Honduras");
+		nombresPais.add("Jamaica");
+		nombresPais.add("México");
+		nombresPais.add("Nicaragua");
+		nombresPais.add("Pánama");
+		nombresPais.add("Paraguay");
+		nombresPais.add("Perú");
+		nombresPais.add("República Dominicana");
+		nombresPais.add("San Cristóbal y Nieves");
+		nombresPais.add("San Vicente y las Granadinas");
+		nombresPais.add("Santa Lucia");
+		nombresPais.add("Surinam");
+		nombresPais.add("Trinidad y Tobago");
+		nombresPais.add("Uruguay");
+		nombresPais.add("Venezuela");
+		
+		for(String pais : nombresPais) {
+			Pais paisNuevo = new Pais();
+			paisNuevo.setNombrePais(pais);
+			paisNuevo.setCostoEnvio((float)(Math.random()));
+			paisNuevo.setImpuesto((float)(Math.random()));
+			paisService.createPais(paisNuevo);
+		}
+		
 	}
 }
