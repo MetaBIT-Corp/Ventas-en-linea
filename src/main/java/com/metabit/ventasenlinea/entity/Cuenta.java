@@ -1,5 +1,7 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,9 @@ public class Cuenta {
 	@ManyToOne
 	@JoinColumn(name = "cliente_id", nullable = false)
 	private Cliente cliente;
+	
+	@Column(name="fecha_de_vencimiento")
+	private Date fechaDeVencimiento;
 
 	public int getId() {
 		return id;
@@ -70,13 +75,22 @@ public class Cuenta {
 		this.cliente = cliente;
 	}
 
-	public Cuenta(int id, String numeroTarjeta, int codigo, double saldo, Cliente cliente) {
+	public Date getFechaDeVencimiento() {
+		return fechaDeVencimiento;
+	}
+
+	public void setFechaDeVencimiento(Date fechaDeVencimiento) {
+		this.fechaDeVencimiento = fechaDeVencimiento;
+	}
+
+	public Cuenta(int id, String numeroTarjeta, int codigo, double saldo, Cliente cliente, Date fechaDeVencimiento) {
 		super();
 		this.id = id;
 		this.numeroTarjeta = numeroTarjeta;
 		this.codigo = codigo;
 		this.saldo = saldo;
 		this.cliente = cliente;
+		this.fechaDeVencimiento = fechaDeVencimiento;
 	}
 
 	public Cuenta() {

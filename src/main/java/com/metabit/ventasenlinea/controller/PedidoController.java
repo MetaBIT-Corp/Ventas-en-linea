@@ -4,26 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.metabit.ventasenlinea.entity.ArticuloPedido;
 import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.Estado;
 import com.metabit.ventasenlinea.entity.Pedido;
+import com.metabit.ventasenlinea.entity.ProductoCarrito;
 import com.metabit.ventasenlinea.service.ClienteService;
 import com.metabit.ventasenlinea.service.EstadoService;
 import com.metabit.ventasenlinea.service.PedidoService;
@@ -40,7 +49,7 @@ public class PedidoController {
 	public static final String METODO_PAGO = "pedido/metodoDePago";
 	public static final String PAYPAL = "pedido/metodoDePagoPaypal";
 	public static final String TARJETA = "pedido/metodoDePagoTarjeta";
-	
+
 	private static final Log LOG = LogFactory.getLog(PedidoController.class);
 
 	@Autowired
@@ -58,6 +67,12 @@ public class PedidoController {
 	@Autowired
 	@Qualifier("estadoServiceImpl")
 	private EstadoService estadoService;
+
+	//Se añade este Bean para poder comparar con la contraseña encriptada
+	@Bean
+	PasswordEncoder getEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	// No me funciona el PreAthorize
 	// @PreAuthorize("hasRole('ROLE_ADMIN') and hasRole('ROLE_VENTAS')")
@@ -122,20 +137,22 @@ public class PedidoController {
 	@GetMapping("/{pedido}/resumen-compra")
 	public ModelAndView viewResumenCompra(@PathVariable("pedido") int id_pedido) {
 		ModelAndView mav = new ModelAndView(RESUMENCOMPRA);
-		return resumen(mav,id_pedido);
+		return resumen(mav, id_pedido);
 	}
-	
+
 	@GetMapping("/{pedido}/comprobante-compra")
 	public ModelAndView viewComprobanteCompra(@PathVariable("pedido") int id_pedido) {
 		ModelAndView mav = new ModelAndView(COMPROBANTE);
-		return resumen(mav,id_pedido);
+		return resumen(mav, id_pedido);
 	}
 
 	/**
-	 * Funcion que obtiene el resumen de un pedido que es utilzado tanto en el resumen de compra como en la
-	 * generacion de comprobante.
+	 * Funcion que obtiene el resumen de un pedido que es utilzado tanto en el
+	 * resumen de compra como en la generacion de comprobante.
+	 * 
 	 * @author ricardo
-	 * @param mav ModelAndView para agregar los parametros necesarios que se retornara
+	 * @param mav       ModelAndView para agregar los parametros necesarios que se
+	 *                  retornara
 	 * @param id_pedido ID del pedido
 	 * @return ModelAndView que se retornara
 	 */
@@ -194,41 +211,84 @@ public class PedidoController {
 
 		return monto;
 	}
-	
+
 	@PostMapping("/cambio-estado")
 	public String cambiarEstadoPedido(HttpServletRequest request) {
-		
+
 		int pedido_id = Integer.parseInt(request.getParameter("pedido_id_cambio"));
 		Pedido pedido = pedidoService.findById(pedido_id);
 		int estado_actual = pedido.getEstado().getId_estado();
-		//1--Enviado
-		//2--Pendiente
-		//3--Autorizado
+		// 1--Enviado
+		// 2--Pendiente
+		// 3--Autorizado
 		Estado estado_nuevo;
-		
-		if(estado_actual == 2) {
+
+		if (estado_actual == 2) {
 			estado_nuevo = estadoService.getEstado(3);
-		}else {
+		} else {
 			estado_nuevo = estadoService.getEstado(1);
 		}
 		pedido.setEstado(estado_nuevo);
 		pedidoService.updatePedido(pedido);
-		
+
 		return "redirect:/pedido/list";
 	}
-	
-	//PAGO DE ARTICULOS
+
+	// PAGO DE ARTICULOS
 	@GetMapping("/metodo-de-pago")
 	public String metodoDePago() {
 		return METODO_PAGO;
 	}
-	
+
 	@GetMapping("/metodo-de-pago/paypal")
 	public ModelAndView metodoDePagoPaypal() {
 		ModelAndView mav = new ModelAndView(PAYPAL);
 		return mav;
 	}
-	
+
+	@PostMapping("/metodo-de-pago/paypal/post")
+	public String metodoDePagoPaypalPost(
+			@RequestParam("email") String email, 
+			@RequestParam("password") String password,
+			HttpServletRequest request,
+			RedirectAttributes redirectAttrs) {
+		
+		// obtenemos el usuario loggeado
+		com.metabit.ventasenlinea.entity.User user = getUser();
+		
+		//Si el email y la contraseña son válidos
+		if (user.getEmail().equals(email) && getEncoder().matches(password, user.getPassword())) {
+			//Obtenemos productos de carrito de compra
+			HttpSession session = request.getSession();
+			List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
+			if(productosCarritos != null) {
+				for (ProductoCarrito pc : productosCarritos) {
+					LOG.info(pc.toString());
+				}
+			}
+			
+			//Obtenemos cuenta
+			
+			//verificamos si posee lo necesario para pagar
+			
+			//disminuir a cuenta
+			
+			//crear pedido
+			
+			//crear articulos pedidos
+			
+			//borrar carrito
+			
+			return "redirect:/producto/index";
+		} else {
+		    redirectAttrs
+            	.addFlashAttribute("mensaje", "El email y/o la contraseña no son válidos, por favor verificar.")
+            	.addFlashAttribute("clase", "danger");
+			return "redirect:/pedido/metodo-de-pago/paypal";
+		}
+
+	}
+
 	@GetMapping("/metodo-de-pago/tarjeta")
 	public ModelAndView metodoDePagoTarjeta() {
 		ModelAndView mav = new ModelAndView(TARJETA);
