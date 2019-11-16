@@ -56,7 +56,7 @@ public class Producto {
 	}
 
 	public Producto(int idArticulo, String imagen, String marca, String titulo, double margenGanancia,
-			double porcentajeDescuento, String descripcionArticulo, int habilitado) {
+			double porcentajeDescuento, String descripcionArticulo, int habilitado, Subcategoria subcategoria) {
 		this.idArticulo = idArticulo;
 		this.imagen = imagen;
 		this.marca = marca;
@@ -65,6 +65,7 @@ public class Producto {
 		this.porcentajeDescuento = porcentajeDescuento;
 		this.descripcionArticulo = descripcionArticulo;
 		this.habilitado = habilitado;
+		this.subcategoria = subcategoria;
 	}
 
 	public int getIdArticulo() {
