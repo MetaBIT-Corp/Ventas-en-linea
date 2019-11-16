@@ -56,6 +56,7 @@
 								  </div>
 								  <div class="card-body">
 									<form method="post" th:action="@{/producto/nuevo}" enctype="multipart/form-data"  th:object="${producto}" class="user">
+									<input type="hidden" th:value="${idSubcateogria}" name="idSubcategoria"/>
 									<div class="form-group">
 										<label for="">Nombre del producto*</label>
 									  	<input type="text" th:field="*{titulo}" class="form-control form-control-user">

@@ -62,7 +62,7 @@
 		              		<h4 class="m-0 font-weight-bold text-primary float-left">Productos</h4>
 		              	</div>
 		              	<div class="col">
-		              		<a class="btn btn-sm mb-3 float-right" th:href="@{/producto/nuevo}" title="Registrar producto">
+		              		<a class="btn btn-sm mb-3 float-right" th:href="@{/producto/nuevo/{id}(id=${subcategoria.idSubcategoria})}" title="Registrar producto">
 			                	<i class="fas fa-plus-circle"></i>
 			                	<b>Registrar Producto</b>
 			           		</a>
@@ -91,7 +91,7 @@
 		                    </tr>
 		                  </tfoot>
 		                  <tbody>
-		                    <tr th:each="producto:${productos}">
+		                    <tr th:each="producto:${subcategoria.productos}">
 		                      <td th:text="${producto.titulo}"></td>
 		                      <td th:text="${producto.marca}"></td>
 		                      <td th:text="${producto.margenGanancia}"></td>

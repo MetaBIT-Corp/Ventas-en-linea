@@ -26,4 +26,10 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 		
 		return empleadoJpaRepository.findAll();
 	}
+
+	@Override
+	public Empleado buscarPorID(int id) {
+		
+		return empleadoJpaRepository.findByIdEmpleado(id);
+	}
 }

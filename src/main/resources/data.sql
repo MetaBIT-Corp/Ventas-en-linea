@@ -14,3 +14,6 @@ INSERT INTO clientes (id_cliente, apellido_cliente, direccion, nombre_cliente, u
 INSERT INTO user_roles(user_role_id, role, id_user) VALUES
 (1, "ROLE_VENTAS", 1)
 (2, "ROLE_ADMIN", 2)
+
+
+INSERT INTO `cargos`(`id`, `titulo_cargo`) VALUES (1,"Ventas"),(2,"Bodega");

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>MetaBit Store Online | Listado Kardex</title>
+<title>MetaBit Store Online | Historial Pedido</title>
 
 <!-- Custom fonts for this template-->
 <link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
@@ -62,8 +62,7 @@
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Listado de
-								Kardex</h6>
+							<h6 class="m-0 font-weight-bold text-primary">Historial de pedidos</h6>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
@@ -71,33 +70,36 @@
 									cellspacing="0">
 									<thead>
 										<tr>
-											<th>Nombre producto</th>
-											<th>Costo Unitario</th>
-											<th>Unidades disponibles</th>
-											<th>Stock Minimo</th>
-											<th>Stock Maximo</th>
+											<th>Fecha de Pedido</th>
+											<th>Direccion destino</th>
+											<th>Pais</th>
+											<th>Monto total</th>
+											<th>Estado</th>
 											<th>Acciones</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="kardex:${listado}">
-											<td th:text="${kardex.producto.titulo}"></td>
-											<td th:text="'$ '+${#numbers.formatDecimal(kardex.costoUnitario,1,2,'POINT')}"></td>
-											<td th:text="${kardex.unidadesDisponibles}"></td>
-											<td th:text="${kardex.stockMinimo}"></td>
-											<td th:text="${kardex.stockMaximo}"></td>
-											<td><a
-												th:href=@{/kardex-one/{kardex}/entrada-salida(kardex=${kardex.idKardex})}
-												class="btn btn-info text-white">Ver Kardex</a></td>
+										<tr th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
+											<td th:text="${pedidos[i].fechaPedido}"></td>
+											<td th:text="${pedidos[i].direccionDestino}"></td>
+											<td th:text="${pedidos[i].pais.nombrePais}"></td>
+											<td th:text="'$ '+${montos[i]}"></td>
+											<td class="text-center">
+											<span th:if="${pedidos[i].estado.tituloEstado== 'Entregado'}" class='badge badge-success'>ENTREGADO</span>
+											<span th:if="${pedidos[i].estado.tituloEstado== 'En Camino'}" class='badge badge-primary'>EN CAMINO</span>
+											<span th:if="${pedidos[i].estado.tituloEstado!= 'En Camino' and pedidos[i].estado.tituloEstado!= 'Entregado'}"
+											 class='badge badge-warning'>EN PROCESO</span>
+											</td>
+											<td><a href="#"	class="btn btn-info text-white">Ver Detalle Pedido</a></td>
 										</tr>
 									</tbody>
 									<tfoot>
 										<tr>
-											<th>Nombre producto</th>
-											<th>Costo Unitario</th>
-											<th>Unidades disponibles</th>
-											<th>Stock Minimo</th>
-											<th>Stock Maximo</th>
+											<th>Fecha de Pedido</th>
+											<th>Direccion destino</th>
+											<th>Pais</th>
+											<th>Monto total</th>
+											<th>Estado</th>
 											<th>Acciones</th>
 										</tr>
 									</tfoot>
@@ -118,43 +120,4 @@
 		class="fas fa-angle-up"></i>
 	</a>
 </body>
-
-<!-- 
-<script type="text/javascript">
-	$(document).ready( function () {
-    	$('#list-kardex').DataTable({
-    		"processing":true,
-            "serverSide": false,
-            "ajax": {
-                "url":"api-all",
-                "type":"GET",
-                "dataSrc": ""
-            },
-            "columns":[
-        		{data: 'producto.titulo'},
-        		{data: 'costoUnitario'},
-        		{data: 'unidadesDisponibles'},
-        		{data: 'stockMinimo'},
-        		{data: 'stockMaximo'},
-        		{defaultContent: "<a class='btn btn-success text-white'>Ver Kardex</a>"}
-            ],
-            "language": {
-                "info": "Mostrando Pagina _PAGE_ de _PAGES_",
-                "search": "Buscar:",
-                "paginate": {
-                    "next": "Siguiente",
-                    "previous": "Anterior",
-                },
-                "lengthMenu": 'Mostrar <select class="browser-default custom-select">' + '<option value="5">5</option>' + '<option value="10">10</option>' + '<option value="25">25</option>' + '<option value="50">50</option>' + '<option value="-1">TODOS</option>' + '</select> registros',
-                "loadingRecords": "Cargando...",
-                "processing": "Procesando...",
-                "emptyTable": "No hay datos",
-                "zeroRecords": "Lo sentimos, no hay coincidencias.",
-                "infoEmpty": "",
-                "infoFiltered": "",
-            }
-    	});
-	} );
-</script>
- -->
 </html>

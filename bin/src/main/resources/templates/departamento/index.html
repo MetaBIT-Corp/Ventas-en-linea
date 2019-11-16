@@ -37,35 +37,72 @@
 				<div th:insert="fragments/topbar::topbar"></div>
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-						<!-- ESPACIO DE TRABAJO  -->
+					<!-- ESPACIO DE TRABAJO  -->
 
-						<h1>Listado de Departamentos</h1>
-						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-striped" id="dataTable" width="100%"
-							cellspacing="0">
-									<thead>
-										<tr>
-											<th>Nombre</th>
-											<th>Descripción</th>
-											<th>Acciones</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="departamento: ${departamentos}">
-											<td><span th:text="${departamento.nombre}"></span></td>
-											<td><span th:text="${departamento.descripcion}"></span></td>
-											<td>
-												<button class="btn-sm btn-secondary" title="Listado de Categorias"><a th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i class="fas fa-list"></i></a></button>
-												<button class="btn-sm btn-primary" title="Editar"><i class="fas fa-pencil-alt"></i></button>
-												<button class="btn-sm btn-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+					<!-- Page Heading -->
+					<div
+						class="d-sm-flex align-items-center justify-content-between mb-4">
+						<h1 class="h4 mb-0 text-gray-800">Listado de Departamentos</h1>
+						<a href="#" th:href="@{/departamento/form-departamento}"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+							<i class="fas fa-plus-circle fa-sm text-white-50"> </i> Crear
+							Departamento
+						</a>
+					</div>
+					<!-- Page Heading -->
+
+
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-striped" id="dataTable" width="100%"
+								cellspacing="0">
+								<thead>
+									<tr>
+										<th>Nombre</th>
+										<th>Descripción</th>
+										<th>Estado</th>
+										<th>Acciones</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="departamento: ${departamentos}">
+										<td><span th:text="${departamento.nombre}"></span></td>
+										<td><span th:text="${departamento.descripcion}"></span></td>
+										<td th:if="${departamento.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
+										<td th:unless="${departamento.habilitado}"
+											th:text="Deshabilitado"><span>Deshabilitado</span></td>
+										<td>
+											<button class="btn-sm btn-secondary"
+												title="Listado de Categorias">
+
+												<a style="text-decoration: none; color: white;"
+													th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i
+													class="fas fa-list"></i></a>
+											</button>
+											<button class="btn-sm btn-primary" title="Editar">
+												<a style="text-decoration: none; color: white;"
+													th:href="@{'/departamento/form-departamento/'+${departamento.id}+''}">
+													<i class="fas fa-pencil-alt"></i>
+												</a>
+											</button>
+											<button th:if="${departamento.habilitado}"
+												class="btn-sm btn-danger" title="Deshabilitar"
+												data-deshabilitar-departamento th:value="${departamento.id}">
+												<i class="fas fa-trash-alt "></i>
+											</button>
+											<button th:unless="${departamento.habilitado}"
+												class="btn-sm btn-option" title="Habilitar"
+												data-habilitar-departamento th:value="${departamento.id}">
+												<i class="fas fa-check"></i>
+											</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
-						<!-- FIN DE ESPACIO DE TRABAJO -->
+					</div>
+
+					<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
 		</div>
@@ -78,6 +115,90 @@
 
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
+
+	<!-- MODALES  -->
+
+	<!-- Modal para habilitar departamento -->
+	<div class="modal fade" id="habilitarDepartamento" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="habilitarModalCenterTitle">Habilitar
+						departamento</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="habilitar-departamento-body">
+					<form class="user" action="#"
+						th:action="@{/departamento/habilitar-departamento-post}"
+						method="POST">
+						<h5>¿Desea habilitar este departamento?</h5>
+						<p>Al habilitar se mostrarán los productos que pertenecen a
+							este departamento.</p>
+						<div class="form-group">
+							<input type="hidden" class="form-control form-control-user"
+								id="id_departamento_habilitar" name="id_departamento">
+						</div>
+						<input type="submit" value="Habilitar"
+							class="btn btn-primary btn-user float-right" /> <a href="#"
+							class="btn btn-secondary btn-user float-right mr-2"
+							data-dismiss="modal" aria-label="Close"> Cancelar </a>
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para dehabilitar departamento -->
+
+	<!-- Modal para deshabilitar departamento -->
+	<div class="modal fade" id="deshabilitarDepartamento" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalCenterTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="deshabilitarModalCenterTitle">Deshabilitar
+						departamento</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="deshabilitar-departamento-body">
+					<form class="user" action="#"
+						th:action="@{/departamento/deshabilitar-departamento-post}"
+						method="POST">
+						<h5>¿Desea deshabilitar este departamento?</h5>
+						<p>No se mostrarán los productos que pertenecen a este
+							departamento.</p>
+						<div class="form-group">
+							<input type="hidden" class="form-control form-control-user"
+								id="id_departamento" name="id_departamento">
+						</div>
+						<input type="submit" value="Deshabilitar"
+							class="btn btn-danger btn-user float-right" /> <a href="#"
+							class="btn btn-secondary btn-user float-right mr-2"
+							data-dismiss="modal" aria-label="Close"> Cancelar </a>
+					</form>
+
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal para dehabilitar departamento -->
+
+
+
+	<!-- MODALES  -->
 
 	<!-- Bootstrap core JavaScript-->
 	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
@@ -95,6 +216,25 @@
 
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+	<!-- Scripts-->
+	<script>
+		$('[data-deshabilitar-departamento]').on('click',
+				deshabilitarDepartamento);
+		$('[data-habilitar-departamento]').on('click', habilitarDepartamento);
+
+		function deshabilitarDepartamento() {
+			$('#id_departamento').attr('value', $(this).val());
+			$('#deshabilitarDepartamento').modal('show');
+		}
+
+		function habilitarDepartamento() {
+			$('#id_departamento_habilitar').attr('value', $(this).val());
+			$('#habilitarDepartamento').modal('show');
+		}
+	</script>
+
+	<!-- Scripts-->
 
 </body>
 </html>

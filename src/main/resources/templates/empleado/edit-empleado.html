@@ -26,20 +26,22 @@
 					<div class="col-lg-7">
 						<div class="p-5">
 							<div class="text-center">
-								<h1 class="h4 text-gray-900 mb-4">Crear Empleado</h1>
+								<h1 class="h4 text-gray-900 mb-4">Editar Empleado </h1>
 							</div>
 							<div th:if="${message}">
 								<div class="alert alert-danger">
 									<h4 th:text="${message}"></h4>
 								</div>
 							</div>
-							<form action="#" th:action="@{/empleado/crear-empleado-bodega}"
+							<form action="#" th:action="@{/empleado/editempleado}"
 								method="post" class="user">
+								<input type="hidden" th:field="*{empleado.idEmpleado}" th:value="${empleado.idEmpleado}">
+								
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">
 										<input type="text" th:field="*{empleado.nombreEmpleado}"
 											class="form-control form-control-user" id="exampleFirstName"
-											placeholder="Nombre">
+											th:value="${empleado.nombreEmpleado}" placeholder="Nombre">
 										<p th:if="${#fields.hasErrors('empleado.nombreEmpleado')}"
 											th:errors="*{empleado.nombreEmpleado}"
 											class="alert alert-danger"></p>
@@ -47,29 +49,27 @@
 									<div class="col-sm-6">
 										<input type="text" th:field="*{empleado.apellidoEmpleado}"
 											class="form-control form-control-user" id="exampleLastName"
-											placeholder="Apellido">
+											th:value="${empleado.apellidoEmpleado}" placeholder="Apellido">
 										<p th:if="${#fields.hasErrors('empleado.apellidoEmpleado')}"
 											th:errors="*{empleado.apellidoEmpleado}"
 											class="alert alert-danger"></p>
 									</div>
 								</div>
 								<div class="form-group ">
-
-									<input type="email" th:field="*{user.email}"
+									<input readonly type="email" th:field="*{empleado.user.email}"
 										class="form-control form-control-user" id="exampleInputEmail"
-										placeholder="Correo electrónico">
-									<p th:if="${#fields.hasErrors('user.email')}"
-										th:errors="*{user.email}" class="alert alert-danger"></p>
-
+										th:value="${empleado.user.email}" placeholder="Correo electrónico">
+									<p th:if="${#fields.hasErrors('empleado.user.email')}"
+										th:errors="*{empleado.user.email}" class="alert alert-danger"></p>
 								</div>
 								<div class="form-group">
 									<textarea type="text" th:field="*{empleado.direccion}"
 										class="form-control form-control-user" id="inputDireccion"
-										placeholder="Dirección"></textarea>
+										th:value="${empleado.direccion}" placeholder="Dirección"></textarea>
 									<p th:if="${#fields.hasErrors('empleado.direccion')}"
 										th:errors="*{empleado.direccion}" class="alert alert-danger"></p>
 								</div>
-								<input type="submit" value="Registrar cuenta"
+								<input type="submit" value="Actualizar Cuenta"
 									class="btn btn-primary btn-user btn-block" />
 							</form>
 							<hr>

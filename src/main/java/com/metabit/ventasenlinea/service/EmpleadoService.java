@@ -8,5 +8,5 @@ public interface EmpleadoService {
 
 	public void crearEmpleado(Empleado empleado);
 	public List<Empleado> getEmpleados();
-	
+	public Empleado buscarPorID(int id);
 }

@@ -37,52 +37,41 @@
 				<div th:insert="fragments/topbar::topbar"></div>
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-					<!-- ESPACIO DE TRABAJO  -->
+						<!-- ESPACIO DE TRABAJO  -->
 
-					<!-- Outer Row -->
-					<div class="row justify-content-center">
+						<h1 style="text-align: center;" th:text="${producto.titulo}"></h1>
 
-						<div class="col-xl-10 col-lg-12 col-md-9">
-
-							<div class="card o-hidden border-0 shadow-lg my-5">
-								<div class="card-body p-0">
-									<!-- Nested Row within Card Body -->
-									<div class="row">
-										<div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
-										<div class="col-lg-6">
-											<div class="p-5">
-												<div class="text-center">
-													<h1 class="h4 text-gray-900 mb-2">Elíge tu método de
-														pago</h1>
-													<p class="mb-4">Nos alegramos que te haya interesado uno de nuestros productos. Por favor elige un método de pago!</p>
-												</div>
-
-												<div class="list-group">
-													<a th:href="@{/pedido/metodo-de-pago/tarjeta}"
-														class="list-group-item list-group-item-action">
-														<img class="mr-3" alt="" src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png" width="100">
-														Tarjeta de crédito o débito</a>
-													<a th:href="@{/pedido/metodo-de-pago/paypal}"
-														class="list-group-item list-group-item-action">
-														<img class="mr-3" alt="" src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png" width="100">
-														Paypal</a>
-												</div>
-												<hr>
-												<div class="text-center">
-													<a class="small" href="#" th:href="@{/producto/index}"> Volver a la tienda</a>
-												</div>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-
+						<div class="card offset-3 col-md-6">
+						  <img class="card-img-top" th:src=${producto.imagen} alt="Card image cap">
+						  <div class="card-body">
+						  
+						  <table class="table table-bordered table-hover">
+						  	<tr>
+						  		<td><b>Marca</b></td>
+						  		<td th:text="${producto.marca}"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td><b>Margen de ganancia</b></td>
+						  		<td th:text="${producto.margenGanancia}"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td><b>Descuento</b></td>
+						  		<td th:text="${producto.porcentajeDescuento} + '%'"></td>	
+						  	<tr>
+						  	<tr>
+						  		<td colspan="2">
+						  			<p class="card-text"><b>Descripción</b></p>
+						  		</td>
+						  	</tr>
+						  	<tr>
+						  		<td colspan="2">
+						  			<p class="card-text" th:text="${producto.descripcionArticulo}"></p>
+						  		</td>
+						  	</tr>
+						  </table>
+						   <a th:href="@{/producto/listar}" class="btn btn-primary">Regresar</a>
+						  </div>
 						</div>
-
-					</div>
-
-					<!-- FIN DE ESPACIO DE TRABAJO -->
 				</div>
 			</div>
 		</div>
