@@ -26,6 +26,7 @@ import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.service.DepartamentoService;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/departamento")
 public class DepartamentoController {
 

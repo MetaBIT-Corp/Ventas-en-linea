@@ -280,7 +280,9 @@ public class PedidoController {
 	 * @param id: id del pedido, si este ya fue creado
 	 * @return
 	 */
+	
 	@RequestMapping(path = { "/metodo-de-pago", "/metodo-de-pago/{id}" })
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	public String metodoDePago(@PathVariable("id") Optional<Integer> id, Model model) {
 		if (id.isPresent()) {
 			// activamos metodos de pago
@@ -297,6 +299,10 @@ public class PedidoController {
 		} else {
 			model.addAttribute("paises", paisService.getAllPais());
 		}
+		//user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("user", user.getUsername());
+		model.addAttribute("role", user.getAuthorities().toArray()[0]);
 		return METODO_PAGO;
 	}
 
@@ -309,6 +315,7 @@ public class PedidoController {
 	 * @param direccionDestino
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@PostMapping("/metodo-de-pago/envio-post")
 	public String createPedidoPost(@RequestParam("id_pais") int idPais,
 			@RequestParam("direccion_destino") String direccionDestino) {
@@ -346,6 +353,7 @@ public class PedidoController {
 	 * @param HttpServletRequest request: carrito de compras
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/metodo-de-pago/paypal")
 	public ModelAndView metodoDePagoPaypal(HttpServletRequest request) {
 		float totalAPagar = 0.0f;
@@ -361,6 +369,10 @@ public class PedidoController {
 
 		LOG.info("TOTAL: " + totalAPagar);
 		mav.addObject("total", String.format("%.2f", totalAPagar));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0]);
 		return mav;
 	}
 
@@ -373,6 +385,7 @@ public class PedidoController {
 	 * @param password
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@PostMapping("/metodo-de-pago/paypal/post")
 	public String metodoDePagoPaypalPost(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpServletRequest request, RedirectAttributes redirectAttrs) {
@@ -461,6 +474,7 @@ public class PedidoController {
 	 * @param HttpServletRequest request: carrito de compras
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/metodo-de-pago/tarjeta")
 	public ModelAndView metodoDePagoTarjeta(HttpServletRequest request) {
 		float totalAPagar = 0.0f;
@@ -476,6 +490,10 @@ public class PedidoController {
 
 		LOG.info("TOTAL: " + totalAPagar);
 		mav.addObject("total", String.format("%.2f", totalAPagar));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0]);
 		return mav;
 	}
 
@@ -486,6 +504,7 @@ public class PedidoController {
 	 * @param HttpServletRequest request: carrito de compras
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@PostMapping("/metodo-de-pago/tarjeta/post")
 	public String metodoDePagoTarjetaPost(@RequestParam("numero") String numero,
 			@RequestParam("fecha") String fechaExpiracion, @RequestParam("codigo") String codigo,
