@@ -33,11 +33,23 @@ public class DataRestController {
 	@Qualifier("userServiceImpl")
 	private UserServiceImpl userServiceImpl;
 	
+	@Autowired
+	@Qualifier("productoServiceImpl")
+	private ProductoService productService;
+	
 	@GetMapping("/productos-agregados")
 	public List<ProductoCarrito> getCarrito(HttpServletRequest request){
 		HttpSession session = request.getSession();
 		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 		return productosCarritos;
+	}
+	
+	@GetMapping("/cantidad-disponible/{id}")
+	public int cantidadDisponible(@PathVariable("id") int id_producto) {
+		Producto producto = productService.findById(id_producto);
+		int cantidad = producto.getKardex().getUnidadesDisponibles();
+		
+		return cantidad;
 	}
 	
 	/*@GetMapping("/user-email/{email}")
