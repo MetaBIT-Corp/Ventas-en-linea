@@ -95,13 +95,16 @@
 											<td th:text="${uc.apellidoCliente}"></td>
 											<td th:text="${uc.user.email}"></td>
 											<td th:text="${uc.direccion}"></td>
-											<!-- <div th:switch="${uc.user.role}">
-		                      	<td th:case="${0}">Administrador</td>
-		                      	<td th:case="${1}">Encargado de bodega</td>
-		                      	<td th:case="${2}">Encargado de ventas</td>
-		                      	<td th:case="${3}">Cliente</td>
-		                      </div> -->
-											<td >Admin</td>
+											<td>
+												<div th:each="ur:${uc.user.userRoles}">
+								                     <div th:switch="${ur.role}">
+													  <p th:case="'ROLE_ADMIN'">Administrator</p>
+													  <p th:case="'ROLE_VENTAS'">Encargado de ventas</p>
+													  <p th:case="'ROLE_CLIENTE'">Cliente</p>
+													  <p th:case="'ROLE_BODEGA'">Encargado de bodega</p>
+													</div>
+												</div>
+											</td>
 											<td>
 												<button title="Deshabilitar cuenta de usuario"
 													class="btn btn-sm btn-danger"

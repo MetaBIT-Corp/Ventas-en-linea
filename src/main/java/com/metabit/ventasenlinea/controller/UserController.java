@@ -1,5 +1,7 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.service.EmpleadoService;
@@ -26,12 +29,17 @@ public class UserController {
 	@Autowired
 	@Qualifier("empleadoServiceImpl")
 	private EmpleadoService empleadoService;
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/listar")
 	public ModelAndView listUsuarios() {
 		ModelAndView mav = new ModelAndView("/user/listUser");
 		mav.addObject("empleados",empleadoService.getEmpleados());
 		mav.addObject("usersClient", userServiceImpl.findAllClientes());
+		
+		List<Cliente> clientes = userServiceImpl.findAllClientes();
+		
+		System.out.println("-------------------"+clientes.get(0).getUser().getUserRoles().get(0).getRole());
 		return mav;
 	}
 	

@@ -1,6 +1,8 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -12,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //import org.hibernate.validator.constraints.UniqueElements;
 
@@ -49,12 +53,17 @@ public class User {
 	//Indica los roles que tiene el usuario (no se crea en la base de datos)
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<UserRole> userRole = new HashSet<UserRole>();
+	
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
+    private List<UserRole> userRoles =  new ArrayList<>();
 
 	public User() {
 	}
 
 	public User(int idUser, String email, String password, String passwordConfirm, String codigoVerificacion,
-			int verifyed, int role) {
+			int verifyed) {
 		super();
 		this.idUser = idUser;
 		this.email = email;
@@ -62,7 +71,6 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 		this.codigoVerificacion = codigoVerificacion;
 		this.verifyed = verifyed;
-		//this.role = role; //0: admin; 1: encargado bodega; 2: encargado ventas; 3: cliente
 	}
 	
 	//Constructor con role
@@ -75,7 +83,6 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 		this.codigoVerificacion = codigoVerificacion;
 		this.verifyed = verifyed;
-		//this.role = role;
 		this.userRole = userRole;
 	}
 
@@ -126,21 +133,21 @@ public class User {
 	public void setVerifyed(int verifyed) {
 		this.verifyed = verifyed;
 	}
-/*
-	public int getRole() {
-		return role;
-	}
-
-	public void setRole(int role) {
-		this.role = role;
-	}*/
-
+	
 	public Set<UserRole> getUserRole() {
 		return userRole;
 	}
 
 	public void setUserRole(Set<UserRole> userRole) {
 		this.userRole = userRole;
+	}
+
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 	@Override
