@@ -63,46 +63,56 @@
 													con otros vendedores!
 												</p>
 											</div>
+											<!-- Mensaje de consulta -->
+												<div
+													th:classappend="'alert-' + (${clase != null} ? ${clase} : info)"
+													th:if="${mensaje != null}" th:text="${mensaje}"
+													class="alert"></div>
+											<div th:if="${no}" class="alert alert-danger"> No ha agregado artículos al carro de compras</div>
 
-											<form class="user">
+											<form th:unless="${no}" class="user" action="#"
+													th:action="@{/pedido/metodo-de-pago/tarjeta/post}"
+													method="POST">
 												<div class="form-group row">
 													<div class="col-sm-6 mb-3 mb-sm-0">
 														<input type="text" class="form-control form-control-user"
-															placeholder="Número de tarjeta">
+															placeholder="Número de tarjeta" id="numero" name="numero" required>
 													</div>
 
 												</div>
 												<div class="form-group row">
 													<div class="col-sm-6 mb-3 mb-sm-0">
+														<input type="date" class="form-control form-control-user"
+															placeholder="Fecha de expiración" id="fecha" name="fecha" required>
+													</div>
+													<div class="col-sm-6">
+														<input class="form-control form-control-user" type="text"
+															id="codigo" name="codigo"
+															placeholder="Código de seguridad" required>
+													</div>
+												</div>
+												<div class="form-group row">
+													<div class="col-sm-6 mb-3 mb-sm-0">
 														<input type="text" class="form-control form-control-user"
-															placeholder="Fecha de expiración">
+															placeholder="Nombre" id="nombre" name="nombre" required>
 													</div>
 													<div class="col-sm-6">
 														<input type="text" class="form-control form-control-user"
-															placeholder="Código de seguridad">
+															placeholder="Apellidos" id="apellido" name="apellido" required>
 													</div>
 												</div>
-												<div class="form-group row">
-													<div class="col-sm-6 mb-3 mb-sm-0">
-														<input type="text" class="form-control form-control-user"
-															placeholder="Nombre">
-													</div>
-													<div class="col-sm-6">
-														<input type="text" class="form-control form-control-user"
-															placeholder="Apellidos">
-													</div>
-												</div>
-												<a href="#"
-													class="btn btn-primary btn-user btn-block"> Listo </a>
+												<button type="submit"
+														class="btn btn-primary btn-user btn-block">
+														LISTO</button>
 												<hr>
-												 <a href="#" th:href="@{/producto/index}"
-													class="btn btn-user btn-block">  Cancelar
-												</a>
+												<a href="#" th:href="@{/producto/index}"
+													class="btn btn-user btn-block"> Cancelar </a>
 											</form>
 											<hr>
 											<div class="text-center">
-													<a class="small" href="#" th:href="@{/producto/index}"> Volver a la tienda</a>
-												</div>
+												<a class="small" href="#" th:href="@{/producto/index}">
+													Volver a la tienda</a>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -139,8 +149,16 @@
 	<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
 	<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 
-	<!-- Page level custom scripts -->
-	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+	
+	<script th:src="@{/js/maskedinput/src/jquery.maskedinput.js}"></script>
+
+	<script>
+	jQuery(function($){
+	     $("#codigo").mask("999");
+	     $("#numero").mask("9999-9999-9999-9999");
+	});
+	</script>
+	
 
 </body>
 </html>
