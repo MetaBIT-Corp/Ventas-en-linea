@@ -92,4 +92,11 @@ public class Cliente {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Cliente [idCliente=" + idCliente + ", nombreCliente=" + nombreCliente + ", apellidoCliente="
+				+ apellidoCliente + ", direccion=" + direccion + ", user=" + user + "]";
+	}
+	
+
 }

@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -114,7 +118,7 @@ public class ClienteController {
 			
 		    cuentaServiceImpl.createCuenta(cuenta);
 			
-			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_ADMIN"));
+			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
 			
 			sendEmail(user.getEmail(), asunto, contenido);
 			redirAttrs.addFlashAttribute("success", "succeess");
@@ -148,7 +152,43 @@ public class ClienteController {
 			return "redirect:/cliente/verificar-codigo/"+id_user;
 		}
 	}
-	
+	@GetMapping("/updateCliente")
+	public String updateCliente(Model model) {		
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		User user2=userServiceImpl.findByEmail(userDetail.getUsername());
+		Cliente cliente=clienteServiceImpl.BuscarUsuario(user2);
+		model.addAttribute("cliente", cliente);
+		model.addAttribute("user2", user2);
+		model.addAttribute("user", userDetail.getUsername());
+		model.addAttribute("role",userDetail.getAuthorities().toArray()[0].toString());
+		
+		return "cliente/updateCliente";
+	}
+	@PostMapping("/updateCuenta")
+	public String updateCuenta(@Valid @ModelAttribute("cliente") Cliente cliente, BindingResult bindingClient,
+								@Valid @ModelAttribute("user2") User user2, BindingResult bindingUser,Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();		
+		User exisUser = userServiceImpl.findByEmail(userDetail.getUsername());
+		System.out.print("Esta pasando aqui"+cliente.toString());
+		if( bindingClient.hasErrors()) {
+			System.out.print("\nEsta pasando aqui Errores");
+			return "cliente/updateCliente";
+		}
+		else {			
+			
+			Cliente clienteA=clienteServiceImpl.BuscarUsuario(exisUser);
+			clienteA.setNombreCliente(cliente.getNombreCliente());
+			clienteA.setApellidoCliente(cliente.getApellidoCliente());
+			clienteA.setDireccion(cliente.getDireccion());
+			clienteServiceImpl.createCliente(clienteA);
+			return "redirect:/ventas-online/base";			
+			
+		}
+		
+	}
 	public String codigo(int required) {
 		String codigo = "";
 		char[] numeros = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};

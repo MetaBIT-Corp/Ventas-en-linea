@@ -211,6 +211,10 @@
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
+                <a th:if="${user!= null}" th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#" >
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                 Editar mi Cuenta
+                </a>
                 
                 <a th:if="${user== null}" class="dropdown-item" th:href="@{/ventas-online/login}" >
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
