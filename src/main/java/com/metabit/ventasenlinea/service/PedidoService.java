@@ -19,4 +19,8 @@ public interface PedidoService {
 	public Pedido updatePedido(Pedido pedido);
 
 	public Pedido getPedido(int id_pedido);
+	
+	public Pedido createPedido(Pedido pedido);
+	
+	public abstract Pedido getUltimoPedido();
 }

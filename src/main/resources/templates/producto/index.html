@@ -78,7 +78,7 @@
 	<div th:insert="fragments/modallogout::modallogout"></div>
 
 
-<!-- Modal elimanr Asignación de área a clave-->
+<!-- Modal agregar productos al carrito-->
 <div class="modal fade" id="agregarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -94,6 +94,7 @@
           <div class="form-group">
             <label for="cantidad-producto">Cantidad*</label>
             <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
+            <em id="existencia" style="color: red"></em>
           </div>
         </div>
         <div class="modal-footer">
@@ -138,6 +139,7 @@
 	$('#agregar').on('click', agregarProductoCarrito);
 	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
+	$('#cantidad-producto').keyup(verificarCantidad);
 
 	function lanzarModal(){
 		$('#id-producto').attr('value', $(this).val());
@@ -214,6 +216,22 @@
 			 $('#cantidad-producto').val("");
 			 $('#id-producto').val("");
 		});
+	}
+
+	function verificarCantidad(){
+		var id = $('#id-producto').val();
+		var cantidad = $('#cantidad-producto').val();
+
+		$.get('/api/cantidad-disponible/'+id, function(existencia){
+
+			if(existencia < cantidad){
+				$('#agregar').attr('disabled', 'true');
+				$('#existencia').text('La cantidad ingresada supera las unidades disponibles');
+			}else{
+				$('#existencia').text('');
+				$('#agregar').removeAttr('disabled');
+			}
+		})
 	}
 
 	

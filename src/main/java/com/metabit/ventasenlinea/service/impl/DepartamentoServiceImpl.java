@@ -38,4 +38,12 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 		return departamentoJpaRepository.save(departamento);
 	}
 
+	@Override
+	public Boolean existsDepartamento(int id) {
+		if(departamentoJpaRepository.findById(id).get() == null) {
+			return false;
+		}
+		return true;
+	}
+
 }

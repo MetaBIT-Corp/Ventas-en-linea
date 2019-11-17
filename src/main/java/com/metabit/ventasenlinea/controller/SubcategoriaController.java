@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import com.metabit.ventasenlinea.service.CategoriaService;
 import com.metabit.ventasenlinea.service.SubcategoriaService;
 
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/departamento/categoria/{id_categoria}/subcategoria")
 public class SubcategoriaController {
 	// importamos servicios

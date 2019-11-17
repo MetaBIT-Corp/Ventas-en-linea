@@ -32,9 +32,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.metabit.ventasenlinea.entity.Kardex;
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
 import com.metabit.ventasenlinea.entity.Subcategoria;
+import com.metabit.ventasenlinea.service.KardexService;
 import com.metabit.ventasenlinea.service.ProductoService;
 import com.metabit.ventasenlinea.service.SubcategoriaService;
 
@@ -52,6 +54,10 @@ public class ProductoController {
 	@Autowired
 	@Qualifier("subcategoriaServiceImpl")
 	private SubcategoriaService subcategoriaService;
+	
+	@Autowired
+	@Qualifier("kardexServiceImpl")
+	private KardexService kardexService;
 
 	@GetMapping("/index")
 	public ModelAndView indexProducto(HttpServletRequest request) {
@@ -164,7 +170,6 @@ public class ProductoController {
 	public @ResponseBody String agregarProductoCarrito(HttpServletRequest request, @PathVariable("cantidad") int cantidad, @PathVariable("id") int id) {
 		ProductoCarrito productoCarrito = new ProductoCarrito();
 		Producto producto = productService.findById(id);
-		System.out.println("Aqui 1-----------------------------"+producto);
 		productoCarrito.setProducto(producto);
 		productoCarrito.setCantidad(cantidad);
 		HttpSession session = request.getSession(true);
@@ -183,7 +188,6 @@ public class ProductoController {
 		
 		productosCarrito.add(productoCarrito);
 		session.setAttribute("productosCarrito", productosCarrito);
-		System.out.println("Aqui 1-----------------------------"+productosCarrito.size());
 		return "OK";
 	}
 	
@@ -209,6 +213,7 @@ public class ProductoController {
 		ModelAndView mav = new ModelAndView("producto/createProducto");
 		
 		mav.addObject("producto", new Producto());
+		mav.addObject("kardex", new Kardex());
 		mav.addObject("idSubcateogria", idSubcategoria);
 		
 		return mav;
@@ -217,8 +222,8 @@ public class ProductoController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@PostMapping("/nuevo")
 	public String storeProducto(
-			@Valid @ModelAttribute("producto") Producto producto, 
-			BindingResult bindingResult, 
+			@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult,
+			@ModelAttribute("kardex") Kardex kardex,
 			@RequestParam("image") MultipartFile image,
 			@RequestParam("idSubcategoria") int idSubcategoria,
 			RedirectAttributes redirAttrs) {
@@ -234,6 +239,9 @@ public class ProductoController {
 				producto.setHabilitado(1);
 				producto.setSubcategoria(subcategoria);
 				productService.addProduct(producto);
+				
+				kardex.setProducto(producto);
+				kardexService.addKardex(kardex);
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -281,7 +289,7 @@ public class ProductoController {
 				}
 			}
 			redirAttrs.addFlashAttribute("message", "Se ha actualizado el producto con éxito");
-			return "redirect:/producto/listar";
+			return "redirect:/producto/listar/"+p.getSubcategoria().getIdSubcategoria();
 		}
 	}
 	

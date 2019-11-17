@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,9 @@ import com.metabit.ventasenlinea.service.CategoriaService;
 import com.metabit.ventasenlinea.service.DepartamentoService;
 
 @Controller
+
 @RequestMapping("/departamento/{id_departamento}/categoria")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CategoriaController {
 
 	@Autowired
@@ -38,6 +41,7 @@ public class CategoriaController {
 	private static final String INDEX_VIEW = "categoria/index";
 	private static final String CREAR_CATEGORIA_VIEW = "categoria/crearCategoria";
 
+	
 	@GetMapping("/listar")
 	public ModelAndView index(@PathVariable("id_departamento") int idDepartamento) {
 		Departamento departamento = departamentoService.getDepartamento(idDepartamento);

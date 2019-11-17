@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.metabit.ventasenlinea.entity.Cliente;
 import com.metabit.ventasenlinea.entity.Cuenta;
+import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.repository.CuentaJpaRepository;
 import com.metabit.ventasenlinea.service.CuentaService;
 
@@ -19,4 +21,11 @@ public class CuentaServiceImpl implements CuentaService{
 	public void createCuenta(Cuenta cuenta) {
 		cuentaJpaRepository.save(cuenta);
 	}
+
+	@Override
+	public Cuenta getCuenta(Cliente cliente) {
+		return cuentaJpaRepository.findByCliente(cliente);
+	}
+
+	
 }

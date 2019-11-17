@@ -18,4 +18,6 @@ public interface PedidoJpaRepository extends JpaRepository<Pedido, Serializable>
 	public List<Pedido> findByEstado(Estado id_estado);
 	
 	public Pedido findByIdPedido(int id_pedido);
+	
+	public List<Pedido> findTopByOrderByIdPedidoDesc();
 }
