@@ -108,4 +108,12 @@ public class Pedido {
 	public void setListaArticulo(List<ArticuloPedido> listaArticulo) {
 		this.listaArticulo = listaArticulo;
 	}
+
+	@Override
+	public String toString() {
+		return "Pedido [idPedido=" + idPedido + ", direccionDestino=" + direccionDestino + ", fechaPedido="
+				+ fechaPedido + ", pais=" + pais + ", estado=" + estado + ", cliente=" + cliente + ", listaArticulo="
+				+ listaArticulo + "]";
+	}
+	
 }

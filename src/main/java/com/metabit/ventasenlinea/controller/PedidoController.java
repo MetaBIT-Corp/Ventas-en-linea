@@ -37,13 +37,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.metabit.ventasenlinea.entity.ArticuloPedido;
 import com.metabit.ventasenlinea.entity.Cliente;
+import com.metabit.ventasenlinea.entity.Cuenta;
 import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.entity.Estado;
 import com.metabit.ventasenlinea.entity.Kardex;
 import com.metabit.ventasenlinea.entity.Pais;
 import com.metabit.ventasenlinea.entity.Pedido;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
+import com.metabit.ventasenlinea.service.ArticuloPedidoService;
 import com.metabit.ventasenlinea.service.ClienteService;
+import com.metabit.ventasenlinea.service.CuentaService;
 import com.metabit.ventasenlinea.service.EstadoService;
 import com.metabit.ventasenlinea.service.KardexService;
 import com.metabit.ventasenlinea.service.PaisService;
@@ -79,16 +82,24 @@ public class PedidoController {
 	@Autowired
 	@Qualifier("estadoServiceImpl")
 	private EstadoService estadoService;
-	
+
 	@Autowired
 	@Qualifier("kardexServiceImpl")
 	private KardexService kardexService;
-	
+
 	@Autowired
 	@Qualifier("paisServiceImpl")
 	private PaisService paisService;
 
-	//Se añade este Bean para poder comparar con la contraseña encriptada
+	@Autowired
+	@Qualifier("articuloPedidoServiceImpl")
+	private ArticuloPedidoService articuloPedidoService;
+
+	@Autowired
+	@Qualifier("cuentaServiceImpl")
+	private CuentaService cuentaService;
+
+	// Se añade este Bean para poder comparar con la contraseña encriptada
 	@Bean
 	PasswordEncoder getEncoder() {
 		return new BCryptPasswordEncoder();
@@ -239,7 +250,8 @@ public class PedidoController {
 		Pedido pedido = pedidoService.findById(pedido_id);
 		int estado_actual = pedido.getEstado().getId_estado();
 		// 1--Enviado
-		// 2--Pendiente (Este estado es cuando el pedido ha sido pagado, pero ún no es autorizado y menos enviado)
+		// 2--Pendiente (Este estado es cuando el pedido ha sido pagado, pero ún no es
+		// autorizado y menos enviado)
 		// 3--Autorizado
 		// 4--Solicitado (Este estado es cuando el pedido aún no ha sido pagado)
 		Estado estado_nuevo;
@@ -257,133 +269,185 @@ public class PedidoController {
 
 	// PAGO DE ARTICULOS
 	/**
-	 * Metodo que despliega un formulario para indicar los parametros de envío (pais, direccion de destino) además muestra
-	 * las opciones de metodo de pago. si no se han indicado los parametros de envío estas aparecerán bloqueadas
+	 * Metodo que despliega un formulario para indicar los parametros de envío
+	 * (pais, direccion de destino) además muestra las opciones de metodo de pago.
+	 * si no se han indicado los parametros de envío estas aparecerán bloqueadas
 	 * 
 	 * @author Edwin Palacios
-	 * @param id:  id del pedido, si este ya fue creado
+	 * @param id: id del pedido, si este ya fue creado
 	 * @return
 	 */
-	@RequestMapping(path = {"/metodo-de-pago", "/metodo-de-pago/{id}"})
-	public String metodoDePago(
-			@PathVariable("id") Optional<Integer> id, 
-			Model model) {
-		if(id.isPresent()) {
-			//activamos metodos de pago
+	@RequestMapping(path = { "/metodo-de-pago", "/metodo-de-pago/{id}" })
+	public String metodoDePago(@PathVariable("id") Optional<Integer> id, Model model) {
+		if (id.isPresent()) {
+			// activamos metodos de pago
 			Integer num = Integer.valueOf(id.get());
 			Pedido pedido = pedidoService.getPedido(num);
-			if(pedido!= null) {
+			if (pedido != null) {
 				Pais pais = paisService.getPaisById(pedido.getPais().getIdPais());
 				model.addAttribute("pedido", pedido);
 				model.addAttribute("pais", pais);
-			}else {
+			} else {
 				model.addAttribute("paises", paisService.getAllPais());
 			}
-			
-		}else {
+
+		} else {
 			model.addAttribute("paises", paisService.getAllPais());
 		}
 		return METODO_PAGO;
 	}
-	
-		/**
-		 *  método para recibir el post del formulario de parametros de envio
-		 * 
-		 * @author Edwin Palacios
-		 * @param id_pais
-		 * @param direccionDestino
-		 * @return
-		 */
-		@PostMapping("/metodo-de-pago/envio-post")
-		public String createDepartamentoPost(
-				@RequestParam("id_pais") int idPais,
-				@RequestParam("direccion_destino") String direccionDestino) {
-			if ( direccionDestino.isEmpty()) {
-				LOG.info("INFORMACION" + idPais + " " + direccionDestino);
-				return "redirect:/producto/index";
-			} else {
-				//obtenemos cliente
-				com.metabit.ventasenlinea.entity.User user = getUser();
-				Cliente cliente = clienteService.BuscarUsuario(user);
-				//obtenemos pais
-				Pais pais = paisService.getPaisById(idPais);
-				
-				//obtenemos estado
-				Estado estado = estadoService.getEstado(4);
-				
-				//creamos pedido
-				Pedido pedido = new Pedido();
-				pedido.setDireccionDestino(direccionDestino);
-				pedido.setFechaPedido(new Date());
-				pedido.setEstado(estado);
-				pedido.setCliente(cliente);
-				pedido.setPais(pais);
-				pedidoService.createPedido(pedido);
-				LOG.info("INFORMACION: " + pedido.getIdPedido());
-				return "redirect:/pedido/metodo-de-pago/"+pedido.getIdPedido();
-			}
 
+	/**
+	 * método para recibir el post del formulario de parametros de envio. el cual
+	 * permite crear el pedido
+	 * 
+	 * @author Edwin Palacios
+	 * @param id_pais
+	 * @param direccionDestino
+	 * @return
+	 */
+	@PostMapping("/metodo-de-pago/envio-post")
+	public String createPedidoPost(@RequestParam("id_pais") int idPais,
+			@RequestParam("direccion_destino") String direccionDestino) {
+		if (direccionDestino.isEmpty()) {
+			LOG.info("INFORMACION" + idPais + " " + direccionDestino);
+			return "redirect:/producto/index";
+		} else {
+			// obtenemos cliente
+			com.metabit.ventasenlinea.entity.User user = getUser();
+			Cliente cliente = clienteService.BuscarUsuario(user);
+			// obtenemos pais
+			Pais pais = paisService.getPaisById(idPais);
+
+			// obtenemos estado
+			Estado estado = estadoService.getEstado(4);
+
+			// creamos pedido
+			Pedido pedido = new Pedido();
+			pedido.setDireccionDestino(direccionDestino);
+			pedido.setFechaPedido(new Date());
+			pedido.setEstado(estado);
+			pedido.setCliente(cliente);
+			pedido.setPais(pais);
+			pedidoService.createPedido(pedido);
+			LOG.info("INFORMACION: " + pedido.getIdPedido());
+			return "redirect:/pedido/metodo-de-pago/" + pedido.getIdPedido();
 		}
 
+	}
+
+	/**
+	 * método para desplegar el formulario de pago con paypal
+	 * 
+	 * @author Edwin Palacios
+	 * @param HttpServletRequest request: carrito de compras
+	 * @return
+	 */
 	@GetMapping("/metodo-de-pago/paypal")
 	public ModelAndView metodoDePagoPaypal(HttpServletRequest request) {
 		float totalAPagar = 0.0f;
-		//Obtenemos productos de carrito de compra
+		ModelAndView mav = new ModelAndView(PAYPAL);
+		// Obtenemos productos de carrito de compra
 		HttpSession session = request.getSession();
 		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
-		float precio = 0.0f;
-		if(productosCarritos != null) {
-			for (ProductoCarrito pc : productosCarritos) {
-				LOG.info(pc.getProducto().toString());
-				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
-			}
+		if (productosCarritos != null) {
+			totalAPagar = totalAPagar(productosCarritos);
+		} else {
+			mav.addObject("no", true);
 		}
-		ModelAndView mav = new ModelAndView(PAYPAL);
+
+		LOG.info("TOTAL: " + totalAPagar);
+		mav.addObject("total", String.format("%.2f", totalAPagar));
 		return mav;
 	}
 
+	/**
+	 * método que recibe el post de paypal
+	 * 
+	 * @author Edwin Palacios
+	 * @param HttpServletRequest request: carrito de compras
+	 * @param email
+	 * @param password
+	 * @return
+	 */
 	@PostMapping("/metodo-de-pago/paypal/post")
-	public String metodoDePagoPaypalPost(
-			@RequestParam("email") String email, 
-			@RequestParam("password") String password,
-			HttpServletRequest request,
-			RedirectAttributes redirectAttrs) {
-		
+	public String metodoDePagoPaypalPost(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
+		// total a pagar de todo el pedido
+		float totalAPagar = 0.0f;
+
 		// obtenemos el usuario loggeado
 		com.metabit.ventasenlinea.entity.User user = getUser();
-		
-		//Si el email y la contraseña son válidos
-		if (user.getEmail().equals(email) && getEncoder().matches(password, user.getPassword())) {
-			//Obtenemos productos de carrito de compra
-			HttpSession session = request.getSession();
-			List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
-			
-			if(productosCarritos != null) {
-				for (ProductoCarrito pc : productosCarritos) {
-					LOG.info(pc.getProducto().toString());
-				}
-			}
-			
-			//Obtenemos cuenta
-			
-			//verificamos si posee lo necesario para pagar
-			
-			//disminuir a cuenta
-			
-			//crear pedido
-			
-			//crear articulos pedidos
-			
-			//borrar carrito
-			
-			return "redirect:/producto/index";
-		} else {
-		    redirectAttrs
-            	.addFlashAttribute("mensaje", "El email y/o la contraseña no son válidos, por favor verificar.")
-            	.addFlashAttribute("clase", "danger");
-			return "redirect:/pedido/metodo-de-pago/paypal";
-		}
 
+		// Si el email y la contraseña son válidos
+		if (user.getEmail().equals(email) && getEncoder().matches(password, user.getPassword())) {
+
+			// Obtenemos pedido
+			Pedido pedido = pedidoService.getUltimoPedido();
+			LOG.info(pedido.toString());
+
+			// Obtenemos productos de carrito de compra
+			HttpSession session = request.getSession();
+			List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session
+					.getAttribute("productosCarrito");
+
+			if (productosCarritos != null) {
+				
+				// Obtenemos cuenta
+				Cuenta cuenta = cuentaService.getCuenta(clienteService.BuscarUsuario(user));
+
+				// verificamos si posee lo necesario para pagar
+				if (cuenta.getSaldo() > totalAPagar(productosCarritos)) {
+					// disminuir a cuenta
+					cuenta.setSaldo(cuenta.getSaldo() - totalAPagar);
+					
+					for (ProductoCarrito pc : productosCarritos) {
+
+						Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+						float precioSinCombros = 0.0f;
+						float precioConCombros = 0.0f;
+						precioSinCombros = (float) (kardex.getCostoUnitario()
+								+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
+
+						float totalConCobros = (float) (precioSinCombros
+								+ precioSinCombros * pedido.getPais().getCostoEnvio()
+								+ precioSinCombros * pedido.getPais().getImpuesto()
+								- precioSinCombros * pc.getProducto().getMargenGanancia());
+						// Creamos ArticuloPedido
+						ArticuloPedido ap = new ArticuloPedido();
+						ap.setCantidad(pc.getCantidad());
+						ap.setPedido(pedido);
+						ap.setPrecioUnitario(totalConCobros);
+						ap.setProducto(pc.getProducto());
+						articuloPedidoService.createArticuloPedido(ap);
+
+						totalConCobros *= pc.getCantidad();
+						totalAPagar += totalConCobros;
+						
+						
+						
+					}
+					productosCarritos.removeAll(productosCarritos);
+					return "redirect:/producto/index";
+
+				} else {
+					redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
+							.addFlashAttribute("clase", "danger");
+				}
+
+			} else {
+				redirectAttrs.addFlashAttribute("mensaje", "No ha agregado productos en el carro de compra.")
+						.addFlashAttribute("clase", "danger");
+			}
+
+		} else {
+			redirectAttrs
+					.addFlashAttribute("mensaje", "El email y/o la contraseña no son válidos, por favor verificar.")
+					.addFlashAttribute("clase", "danger");
+
+		}
+		return "redirect:/pedido/metodo-de-pago/paypal";
 	}
 
 	@GetMapping("/metodo-de-pago/tarjeta")
@@ -391,12 +455,12 @@ public class PedidoController {
 		ModelAndView mav = new ModelAndView(TARJETA);
 		return mav;
 	}
-	
+
 	public void llenarBdPais() {
-		//vaciamos los paises
+		// vaciamos los paises
 		paisService.deleteAllPais();
-		
-		//creamos paises
+
+		// creamos paises
 		ArrayList<String> nombresPais = new ArrayList<String>();
 		nombresPais.add("Antigua Y Barbuda");
 		nombresPais.add("Argentina");
@@ -433,14 +497,40 @@ public class PedidoController {
 		nombresPais.add("Trinidad y Tobago");
 		nombresPais.add("Uruguay");
 		nombresPais.add("Venezuela");
-		
-		for(String pais : nombresPais) {
+
+		for (String pais : nombresPais) {
 			Pais paisNuevo = new Pais();
 			paisNuevo.setNombrePais(pais);
-			paisNuevo.setCostoEnvio((float)(Math.random()));
-			paisNuevo.setImpuesto((float)(Math.random()));
+			paisNuevo.setCostoEnvio((float) (Math.random()));
+			paisNuevo.setImpuesto((float) (Math.random()));
 			paisService.createPais(paisNuevo);
 		}
-		
+
+	}
+
+	public float totalAPagar(List<ProductoCarrito> productosCarritos) {
+		float total = 0.0f;
+		// Obtenemos pedido
+		Pedido pedido = pedidoService.getUltimoPedido();
+		LOG.info(pedido.toString());
+
+		if (productosCarritos != null) {
+			for (ProductoCarrito pc : productosCarritos) {
+
+				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+				float precioSinCombros = 0.0f;
+				float precioConCombros = 0.0f;
+				precioSinCombros = (float) (kardex.getCostoUnitario()
+						+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
+
+				float totalConCobros = (float) (precioSinCombros + precioSinCombros * pedido.getPais().getCostoEnvio()
+						+ precioSinCombros * pedido.getPais().getImpuesto()
+						- precioSinCombros * pc.getProducto().getMargenGanancia());
+				totalConCobros *= pc.getCantidad();
+				total += totalConCobros;
+			}
+
+		}
+		return total;
 	}
 }

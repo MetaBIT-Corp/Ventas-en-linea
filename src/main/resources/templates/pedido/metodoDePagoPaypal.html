@@ -60,6 +60,10 @@
 													th:classappend="'alert-' + (${clase != null} ? ${clase} : info)"
 													th:if="${mensaje != null}" th:text="${mensaje}"
 													class="alert"></div>
+													
+												<div  th:if="${no}" class="alert alert-danger">
+													No ha agregado articulos a su carro de compras
+												</div>
 												<!-- Mensaje de consulta -->
 
 												<div align="justify">
@@ -68,11 +72,11 @@
 														width="100">
 													<h1 class="h5 text-gray-900 float-right">
 														<i class="fas fa-shopping-cart fa-sm text-black-50"></i>
-														$27.98 USD
+														<span th:if="${total != null}" th:text="${'$' + total + ' USD'}"></span>
 													</h1>
 												</div>
 												<hr>
-												<form action="#"
+												<form th:unless="${no}" action="#"
 													th:action="@{/pedido/metodo-de-pago/paypal/post}"
 													method="POST">
 													<h1 class="h5 text-gray-900 mt-3">Pagar con Paypal</h1>

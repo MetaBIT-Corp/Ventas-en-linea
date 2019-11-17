@@ -21,4 +21,6 @@ public interface PedidoService {
 	public Pedido getPedido(int id_pedido);
 	
 	public Pedido createPedido(Pedido pedido);
+	
+	public abstract Pedido getUltimoPedido();
 }

@@ -54,6 +54,11 @@ public class PedidoServiceImpl implements PedidoService{
 	public Pedido createPedido(Pedido pedido) {
 		return pedidoJpaRepository.save(pedido);
 	}
+
+	@Override
+	public Pedido getUltimoPedido() {
+		return pedidoJpaRepository.findTopByOrderByIdPedidoDesc().get(0);
+	}
 	
 	
 
