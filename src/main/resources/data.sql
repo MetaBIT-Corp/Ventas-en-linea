@@ -12,6 +12,11 @@ INSERT INTO productos (id_articulo, descripcion_articulo, imagen, marca, margen_
 (2, "Consola de video juego con potencia para correr juegos en 4K", "/img_products/play.jpg","Sony", 20, 0.0, "Play Station 5", 1, 1),
 (3, "Consola con potencia para 4K, microprocesador Scorpio con 100teraflops", "/img_products/xbox.jpg", "Microsoft", 20, 0.0, "Xbox One S", 0, 1);
 
+INSERT INTO kardex (id_kardex, costo_unitario, stock_maximo, stock_minimo, unidades_disponibles, producto_id_articulo) VALUES
+(1, 50, 20, 1, 20, 1),
+(2, 60, 30, 1, 25, 2),
+(3, 70, 40, 1, 30, 3);
+
 INSERT INTO users (id_user, codigo_verificacion, email, password, verifyed) VALUES
 (1, "111111", "ventas@gmail.com", "$2a$10$eKUggP4YYTN6sy1ftSa4K.7UshfN1gEqDuHvV1i45WUKfaaojMSW.", 1),
 (2, "111111", "admin@gmail.com", "$2a$10$eKUggP4YYTN6sy1ftSa4K.7UshfN1gEqDuHvV1i45WUKfaaojMSW.", 1);

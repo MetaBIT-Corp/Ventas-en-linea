@@ -170,7 +170,6 @@ public class ProductoController {
 	public @ResponseBody String agregarProductoCarrito(HttpServletRequest request, @PathVariable("cantidad") int cantidad, @PathVariable("id") int id) {
 		ProductoCarrito productoCarrito = new ProductoCarrito();
 		Producto producto = productService.findById(id);
-		System.out.println("Aqui 1-----------------------------"+producto);
 		productoCarrito.setProducto(producto);
 		productoCarrito.setCantidad(cantidad);
 		HttpSession session = request.getSession(true);
@@ -189,7 +188,6 @@ public class ProductoController {
 		
 		productosCarrito.add(productoCarrito);
 		session.setAttribute("productosCarrito", productosCarrito);
-		System.out.println("Aqui 1-----------------------------"+productosCarrito.size());
 		return "OK";
 	}
 	
