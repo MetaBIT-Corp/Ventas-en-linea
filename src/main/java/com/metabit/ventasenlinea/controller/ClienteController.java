@@ -114,7 +114,7 @@ public class ClienteController {
 			
 		    cuentaServiceImpl.createCuenta(cuenta);
 			
-			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_ADMIN"));
+			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
 			
 			sendEmail(user.getEmail(), asunto, contenido);
 			redirAttrs.addFlashAttribute("success", "succeess");

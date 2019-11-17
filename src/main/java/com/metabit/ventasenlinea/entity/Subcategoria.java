@@ -48,7 +48,7 @@ public class Subcategoria {
 
 	@OneToMany(mappedBy = "subcategoria", fetch = FetchType.LAZY)
 	@JsonIgnore
-    private List<Producto> productos =  new ArrayList<>();;
+    private List<Producto> productos =  new ArrayList<>();
 	 
 	public Subcategoria() {
 		super();
