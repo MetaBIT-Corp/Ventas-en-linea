@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description: ventas en linea" content="" />
+<meta name="author:metabit" content="" />
+
+<title>MetaBit Store Online</title>
+<style type="text/css">
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+
+
+
+
+#contact input[type="text"],
+#contact input[type="email"],
+#contact input[type="tel"],
+#contact input[type="url"],
+#contact textarea,
+#contact button[type="submit"] {
+  font: 400 20px/16px "Roboto", Helvetica, Arial, sans-serif;
+}
+
+
+
+
+
+fieldset {
+  border: medium none !important;
+  margin: 0 0 10px;
+  min-width: 100%;
+  padding: 0;
+  width: 100%;
+}
+
+#contact input[type="text"],
+#contact input[type="email"],
+#contact input[type="tel"],
+#contact input[type="url"],
+#contact textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+}
+
+#contact input[type="text"]:hover,
+#contact input[type="email"]:hover,
+#contact input[type="tel"]:hover,
+#contact input[type="url"]:hover,
+#contact textarea:hover {
+  -webkit-transition: border-color 0.3s ease-in-out;
+  -moz-transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
+  border: 1px solid #aaa;
+}
+
+#contact textarea {
+  height: 100px;
+  max-width: 100%;
+  resize: none;
+}
+
+#contact button[type="submit"] {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: #434ca0;
+  color: #FFF;
+  margin: 0 0 5px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+#contact button[type="submit"]:hover {
+  background: #43A047;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#contact button[type="submit"]:active {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.copyright {
+  text-align: center;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+  outline: 0;
+  border: 1px solid #aaa;
+}
+
+::-webkit-input-placeholder {
+  color: #888;
+}
+
+:-moz-placeholder {
+  color: #888;
+}
+
+::-moz-placeholder {
+  color: #888;
+}
+
+:-ms-input-placeholder {
+  color: #888;
+}
+</style>
+<!-- Custom fonts for this template-->
+<link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}"
+	rel="stylesheet">
+</head>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<div th:insert="fragments/sidebar::sidebar"></div>
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+			<!-- Main Content -->
+			<div id="content">
+				<div th:insert="fragments/topbar::topbar"></div>
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+				<a href="#" th:href="@{/ventas-online/base}"
+							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+							<i class="fas fa-arrow-circle-left fa-sm text-white-50"> </i>
+							Regresar
+				</a>
+						<!-- ESPACIO DE TRABAJO  -->
+						<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-8">
+						<div class="container">
+						<br>
+						<br>
+						<div th:if="${message}">
+								<div class="alert alert-danger">
+									<h4 th:text="${message}"></h4>
+								</div>
+						</div>
+						<form id="contact"  method="post" th:action="@{/cliente/updateCuenta}">
+						<br>
+						    <h3 class="text-center">Actualizacion de Datos</h3>
+						    <fieldset>
+						      <input th:field="*{cliente.nombreCliente}" placeholder="Nombre" type="text" tabindex="1"  autofocus>
+						      <p th:if="${#fields.hasErrors('cliente.nombreCliente')}" th:errors="*{cliente.nombreCliente}" class="alert alert-danger"></p>
+						    </fieldset>
+						    <fieldset>
+						      <input th:field="*{cliente.apellidoCliente}" placeholder="Apellidos" type="text" tabindex="1"  autofocus>
+						      <p th:if="${#fields.hasErrors('cliente.apellidoCliente')}" th:errors="*{cliente.apellidoCliente}" class="alert alert-danger"></p>
+						    </fieldset>
+						    <fieldset>
+						      <input readonly th:field="*{user2.email}" placeholder="Email" type="email" tabindex="2" >
+						      <p th:if="${#fields.hasErrors('user2.email')}" th:errors="*{user2.email}" class="alert alert-danger"></p>
+						    </fieldset>					   
+						    
+						    <fieldset>
+						      <textarea th:field="*{cliente.direccion}" placeholder="Direccion" tabindex="5" ></textarea>
+						      <p th:if="${#fields.hasErrors('cliente.direccion')}" th:errors="*{cliente.direccion}" class="alert alert-danger"></p>
+						    </fieldset>
+						    <fieldset>
+						      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Actualizar</button>
+						    </fieldset>
+						    
+						  </form>
+						  </div>
+						  </div>
+						  <div class="col-md-2"></div>
+						  </div>
+						<!-- FIN DE ESPACIO DE TRABAJO -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div th:insert="fragments/modallogout::modallogout"></div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script th:src="@{/js/sb-admin-2.min.js}"></script>
+
+	<!-- Page level plugins -->
+	<script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+
+	<!-- Page level custom scripts -->
+	<script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+</body>
+</html>
