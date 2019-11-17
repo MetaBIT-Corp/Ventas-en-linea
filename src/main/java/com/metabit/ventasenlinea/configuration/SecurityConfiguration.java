@@ -59,8 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/api/cantidad-disponible/{id}",
 				//Recuperacion de contraseña
 				"/forgot-password**",
-				"/reset-password**",
-				"/subcategoria/**"
+				"/reset-password**"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

@@ -39,7 +39,7 @@ public class BaseController {
 	 */
 	@GetMapping({"/loginsuccess","/"})
 	public String loginCheck() {
-	return "redirect:/ventas-online/base";
+	return "redirect:/producto/index";
 		
 	}
 	

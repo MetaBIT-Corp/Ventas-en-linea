@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.metabit.ventasenlinea.entity.Categoria;
@@ -12,6 +13,7 @@ import com.metabit.ventasenlinea.repository.SubcategoriaJpaRepository;
 import com.metabit.ventasenlinea.service.SubcategoriaService;
 
 @Service("subcategoriaServiceImpl")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class SubcategoriaServiceImpl implements SubcategoriaService{
 
 	//importamos repositorio

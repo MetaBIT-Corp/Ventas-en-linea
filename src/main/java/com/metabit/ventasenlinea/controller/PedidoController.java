@@ -1,9 +1,12 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -277,7 +280,9 @@ public class PedidoController {
 	 * @param id: id del pedido, si este ya fue creado
 	 * @return
 	 */
+	
 	@RequestMapping(path = { "/metodo-de-pago", "/metodo-de-pago/{id}" })
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	public String metodoDePago(@PathVariable("id") Optional<Integer> id, Model model) {
 		if (id.isPresent()) {
 			// activamos metodos de pago
@@ -294,6 +299,10 @@ public class PedidoController {
 		} else {
 			model.addAttribute("paises", paisService.getAllPais());
 		}
+		//user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("user", user.getUsername());
+		model.addAttribute("role", user.getAuthorities().toArray()[0]);
 		return METODO_PAGO;
 	}
 
@@ -306,6 +315,7 @@ public class PedidoController {
 	 * @param direccionDestino
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@PostMapping("/metodo-de-pago/envio-post")
 	public String createPedidoPost(@RequestParam("id_pais") int idPais,
 			@RequestParam("direccion_destino") String direccionDestino) {
@@ -343,6 +353,7 @@ public class PedidoController {
 	 * @param HttpServletRequest request: carrito de compras
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/metodo-de-pago/paypal")
 	public ModelAndView metodoDePagoPaypal(HttpServletRequest request) {
 		float totalAPagar = 0.0f;
@@ -358,6 +369,10 @@ public class PedidoController {
 
 		LOG.info("TOTAL: " + totalAPagar);
 		mav.addObject("total", String.format("%.2f", totalAPagar));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0]);
 		return mav;
 	}
 
@@ -370,6 +385,7 @@ public class PedidoController {
 	 * @param password
 	 * @return
 	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@PostMapping("/metodo-de-pago/paypal/post")
 	public String metodoDePagoPaypalPost(@RequestParam("email") String email, @RequestParam("password") String password,
 			HttpServletRequest request, RedirectAttributes redirectAttrs) {
@@ -393,15 +409,13 @@ public class PedidoController {
 					.getAttribute("productosCarrito");
 
 			if (productosCarritos != null) {
-				
+
 				// Obtenemos cuenta
 				Cuenta cuenta = cuentaService.getCuenta(clienteService.BuscarUsuario(user));
 
 				// verificamos si posee lo necesario para pagar
 				if (cuenta.getSaldo() > totalAPagar(productosCarritos)) {
-					// disminuir a cuenta
-					cuenta.setSaldo(cuenta.getSaldo() - totalAPagar);
-					
+
 					for (ProductoCarrito pc : productosCarritos) {
 
 						Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
@@ -424,10 +438,13 @@ public class PedidoController {
 
 						totalConCobros *= pc.getCantidad();
 						totalAPagar += totalConCobros;
-						
-						
-						
+
 					}
+					// disminuir a cuenta
+					cuenta.setSaldo(cuenta.getSaldo()- totalAPagar);
+					LOG.info("SALDOOOOO: " + cuenta.getSaldo());
+					cuentaService.createCuenta(cuenta);
+					
 					productosCarritos.removeAll(productosCarritos);
 					return "redirect:/producto/index";
 
@@ -450,10 +467,145 @@ public class PedidoController {
 		return "redirect:/pedido/metodo-de-pago/paypal";
 	}
 
+	/**
+	 * método para desplegar el formulario de pago con tarjeta
+	 * 
+	 * @author Edwin Palacios
+	 * @param HttpServletRequest request: carrito de compras
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/metodo-de-pago/tarjeta")
-	public ModelAndView metodoDePagoTarjeta() {
+	public ModelAndView metodoDePagoTarjeta(HttpServletRequest request) {
+		float totalAPagar = 0.0f;
 		ModelAndView mav = new ModelAndView(TARJETA);
+		// Obtenemos productos de carrito de compra
+		HttpSession session = request.getSession();
+		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
+		if (productosCarritos != null) {
+			totalAPagar = totalAPagar(productosCarritos);
+		} else {
+			mav.addObject("no", true);
+		}
+
+		LOG.info("TOTAL: " + totalAPagar);
+		mav.addObject("total", String.format("%.2f", totalAPagar));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0]);
 		return mav;
+	}
+
+	/**
+	 * método para recibir el post del formulario de pago con tarjeta
+	 * 
+	 * @author Edwin Palacios
+	 * @param HttpServletRequest request: carrito de compras
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
+	@PostMapping("/metodo-de-pago/tarjeta/post")
+	public String metodoDePagoTarjetaPost(@RequestParam("numero") String numero,
+			@RequestParam("fecha") String fechaExpiracion, @RequestParam("codigo") String codigo,
+			@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
+			HttpServletRequest request, RedirectAttributes redirectAttrs) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		
+
+		try {
+			Date date = formatter.parse(fechaExpiracion);
+			;
+
+			// total a pagar de todo el pedido
+			float totalAPagar = 0.0f;
+
+			// obtenemos el usuario loggeado
+			com.metabit.ventasenlinea.entity.User user = getUser();
+			
+			//obtenemos cliente
+			
+			Cliente cliente = clienteService.BuscarUsuario(user);
+			LOG.info(cliente.getNombreCliente());
+			LOG.info(nombre);
+			// Obtenemos cuenta
+			Cuenta cuenta = cuentaService.getCuenta(cliente);
+			//validacion 
+			//el metodo compareTo da como resultado un 1 si la fecha es mayor, un 0 si las fechas son iguales o un -1 si la fecha es menor.
+			if(cuenta.getCodigo() == Integer.parseInt(codigo) && 
+					cuenta.getNumeroTarjeta().equals(numero) && 
+					cuenta.getFechaDeVencimiento().compareTo(date) == 1 &&
+					cliente.getNombreCliente().equals(nombre) &&
+					cliente.getApellidoCliente().equals(apellido)
+					) {
+				
+				LOG.info(cuenta.getFechaDeVencimiento());
+				
+				// Obtenemos pedido
+				Pedido pedido = pedidoService.getUltimoPedido();
+				LOG.info(pedido.toString());
+				
+				// Obtenemos productos de carrito de compra
+				HttpSession session = request.getSession();
+				List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session
+						.getAttribute("productosCarrito");
+				
+				if (productosCarritos != null) {
+
+					// verificamos si posee lo necesario para pagar
+					if (cuenta.getSaldo() > totalAPagar(productosCarritos)) {
+						
+
+						for (ProductoCarrito pc : productosCarritos) {
+
+							Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+							float precioSinCombros = 0.0f;
+							float precioConCombros = 0.0f;
+							precioSinCombros = (float) (kardex.getCostoUnitario()
+									+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
+
+							float totalConCobros = (float) (precioSinCombros
+									+ precioSinCombros * pedido.getPais().getCostoEnvio()
+									+ precioSinCombros * pedido.getPais().getImpuesto()
+									- precioSinCombros * pc.getProducto().getMargenGanancia());
+							// Creamos ArticuloPedido
+							ArticuloPedido ap = new ArticuloPedido();
+							ap.setCantidad(pc.getCantidad());
+							ap.setPedido(pedido);
+							ap.setPrecioUnitario(totalConCobros);
+							ap.setProducto(pc.getProducto());
+							articuloPedidoService.createArticuloPedido(ap);
+
+							totalConCobros *= pc.getCantidad();
+							totalAPagar += totalConCobros;
+
+						}
+						// disminuir a cuenta
+						cuenta.setSaldo(cuenta.getSaldo() - totalAPagar);
+						cuentaService.createCuenta(cuenta);
+						productosCarritos.removeAll(productosCarritos);
+						return "redirect:/producto/index";
+
+					} else {
+						redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
+								.addFlashAttribute("clase", "danger");
+					}
+
+				} else {
+					redirectAttrs.addFlashAttribute("mensaje", "No ha agregado productos en el carro de compra.")
+							.addFlashAttribute("clase", "danger");
+				}
+			}else {
+				redirectAttrs
+				.addFlashAttribute("mensaje", "Los datos no son válidos, por favor verificar.")
+				.addFlashAttribute("clase", "danger");
+			}
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return "redirect:/pedido/metodo-de-pago/tarjeta";
 	}
 
 	public void llenarBdPais() {
