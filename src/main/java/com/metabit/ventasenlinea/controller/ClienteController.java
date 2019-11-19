@@ -1,6 +1,10 @@
 package com.metabit.ventasenlinea.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.validation.Valid;
 
@@ -115,9 +119,39 @@ public class ClienteController {
 		    cuenta.setSaldo(saldo);
 			
 		    cuenta.setCliente(cliente);
+		    
+		   Date d1 = null;
+			try {
+				d1 = new SimpleDateFormat("dd/MM/yyyy").parse("1/01/2020");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    Date d2 = null;
+			try {
+				d2 = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2020");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+			Date randomDate = null;
+			try {
+				randomDate = new SimpleDateFormat("dd/MM/yyyy").parse("31/12/2020");
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
+			if(d1 != null && d2 != null)
+				randomDate = new Date(ThreadLocalRandom.current().nextLong(d1.getTime(), d2.getTime()));
+		    
+			cuenta.setFechaDeVencimiento(randomDate);
+			
+		    System.out.println("FECHA: " + cuenta.getFechaDeVencimiento().toString());
+		    
 		    cuentaServiceImpl.createCuenta(cuenta);
-			
+		    
 			userRoleServiceImpl.createUserRole(new UserRole(user, "ROLE_CLIENTE"));
 			
 			sendEmail(user.getEmail(), asunto, contenido);

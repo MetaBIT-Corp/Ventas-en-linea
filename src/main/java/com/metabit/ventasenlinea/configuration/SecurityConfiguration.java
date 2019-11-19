@@ -48,13 +48,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				//"/pedido/**",
 				//FIN RICARDO PRUEBAS
 				"/producto/agregar-producto",
-				"/producto/asignar-descuento",
-				"/producto/hab-deshab",
-				"/producto/ver-detalle/{id}",
+				//"/producto/asignar-descuento",
+				//"/producto/hab-deshab",
+				//"/producto/ver-detalle/{id}",
 				"/producto/agregar-producto/{cantidad}/{id}",
 				"/producto/remover-producto/{id}",
-				"/usuario/deshabilitar",
-				"/pedido/cambio-estado",
+				//"/usuario/deshabilitar",
+				//"/pedido/cambio-estado",
 				"/api/productos-agregados",
 				"/api/cantidad-disponible/{id}",
 				//Recuperacion de contraseña
