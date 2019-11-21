@@ -55,7 +55,7 @@ public class User {
 	private Set<UserRole> userRole = new HashSet<UserRole>();
 	
 
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	@JsonIgnore
     private List<UserRole> userRoles =  new ArrayList<>();
 

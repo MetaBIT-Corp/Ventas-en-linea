@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,10 @@ public class EntradaSalidaController {
 		mav.addObject("kardex", kardex);
 		mav.addObject("es", new EntradaSalida());
 		mav.addObject("listado", entradaSalidaService.getAllEntradaSalida(kardex));
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 

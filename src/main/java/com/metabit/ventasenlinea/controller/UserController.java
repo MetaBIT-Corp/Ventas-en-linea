@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +40,10 @@ public class UserController {
 		
 		List<Cliente> clientes = userServiceImpl.findAllClientes();
 		
-		System.out.println("-------------------"+clientes.get(0).getUser().getUserRoles().get(0).getRole());
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 	

@@ -129,6 +129,12 @@ public class ProductoController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			mav.addObject("user", userDetail.getUsername());
 			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
+			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_ADMIN") || userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_VENTAS")) {
+				mav.setViewName("redirect:/departamento/listar"); //cambiar a listado de productos (Datatable)
+			}
+			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_BODEGA")) {
+				mav.setViewName("redirect:/kardex/list");
+			}
 		}
 
 		return mav;
@@ -216,6 +222,11 @@ public class ProductoController {
 		mav.addObject("kardex", new Kardex());
 		mav.addObject("idSubcateogria", idSubcategoria);
 		
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
+		
 		return mav;
 	}
 	
@@ -257,6 +268,11 @@ public class ProductoController {
 		ModelAndView mav = new ModelAndView("producto/updateProducto");
 		Producto producto = productService.findById(id);
 		mav.addObject("producto", producto);
+		
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		
 		return mav;
 	}
@@ -310,6 +326,11 @@ public class ProductoController {
 		
 		ModelAndView mav = new ModelAndView("/producto/listProducto");
 		mav.addObject("subcategoria", subcategoria);
+		
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		
 		return mav;
 	}

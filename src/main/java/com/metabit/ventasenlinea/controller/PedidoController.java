@@ -109,7 +109,7 @@ public class PedidoController {
 	}
 
 	// No me funciona el PreAthorize
-	// @PreAuthorize("hasRole('ROLE_ADMIN') and hasRole('ROLE_VENTAS')")
+	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/list-pedido")
 	public ModelAndView viewListPedido() {
 
@@ -124,9 +124,13 @@ public class PedidoController {
 		// Enviamos los pedidos a la vista y los montos totales de cada pedido
 		mav.addObject("pedidos", pedidos);
 		mav.addObject("montos", calcularMontos(pedidos));
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
-
+	
+	@PreAuthorize("hasRole('ROLE_BODEGA') or hasRole('ROLE_VENTAS')")
 	@GetMapping({ "/list", "/list/{estado}" })
 	public ModelAndView viewListPedidoEmployees(@PathVariable(required = false) Integer estado) {
 		ModelAndView mav = new ModelAndView(PEDIDOS_EMPLEADOS);
@@ -446,6 +450,10 @@ public class PedidoController {
 					cuentaService.createCuenta(cuenta);
 					
 					productosCarritos.removeAll(productosCarritos);
+					//cambiar estado
+					Estado estado = estadoService.getEstado(2);
+					pedido.setEstado(estado);
+					pedidoService.updatePedido(pedido);
 					return "redirect:/producto/index";
 
 				} else {
@@ -477,10 +485,13 @@ public class PedidoController {
 	@PreAuthorize("hasRole('ROLE_CLIENTE')")
 	@GetMapping("/metodo-de-pago/tarjeta")
 	public ModelAndView metodoDePagoTarjeta(HttpServletRequest request) {
+		LOG.info("Aqui -------------------------------------- 1 ");
 		float totalAPagar = 0.0f;
 		ModelAndView mav = new ModelAndView(TARJETA);
 		// Obtenemos productos de carrito de compra
+		LOG.info("Aqui -------------------------------------- 2 ");
 		HttpSession session = request.getSession();
+		LOG.info("Aqui -------------------------------------- 3 ");
 		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
 		if (productosCarritos != null) {
 			totalAPagar = totalAPagar(productosCarritos);
@@ -584,6 +595,12 @@ public class PedidoController {
 						cuenta.setSaldo(cuenta.getSaldo() - totalAPagar);
 						cuentaService.createCuenta(cuenta);
 						productosCarritos.removeAll(productosCarritos);
+						
+						//cambiar estado
+						Estado estado = estadoService.getEstado(2);
+						pedido.setEstado(estado);
+						pedidoService.updatePedido(pedido);
+						
 						return "redirect:/producto/index";
 
 					} else {

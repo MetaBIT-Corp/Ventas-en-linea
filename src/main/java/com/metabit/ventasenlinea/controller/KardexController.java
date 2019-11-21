@@ -3,6 +3,7 @@ package com.metabit.ventasenlinea.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,10 @@ public class KardexController {
 	public ModelAndView indexKardex() {
 		ModelAndView mav=new ModelAndView(INDEX_KARDEX);
 		mav.addObject("listado", kardexService.getAllKardex());
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 	
