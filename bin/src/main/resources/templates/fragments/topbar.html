@@ -155,11 +155,11 @@
             </li>
 			-->
 
-
+			<!-- Carrito de compras -->
             <div th:if="${esProducto}">
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow">
-              <span class="nav-link dropdown-toggle" id="carrito" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span title="Carrito de compras" class="nav-link dropdown-toggle" id="carrito" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-shopping-cart"></i>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
@@ -176,9 +176,33 @@
                   </div>
                   </div>
                 </div>
+                
+                <div class="dropdown-footer ">
+                  <a href="#" th:href="@{/pedido/metodo-de-pago}" class="btn btn-primary btn-icon-split mt-2 mb-2 mr-2 float-right ">
+                    <span class="icon text-gray-200">
+                      <i class="fas fa-arrow-right"></i>
+                    </span>
+                    <span class="text">Realizar pago</span>
+                  </a>
+                </div>
               </div>
             </li>
             </div>
+            <!-- Carrito de compras -->
+            
+            <!-- Pedidos -->
+            <div th:if="${esProducto}">
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow">
+              <a th:href="@{/pedido/list-pedido}" class="nav-link dropdown-toggle" id="carrito" aria-haspopup="true" aria-expanded="false" title="Ver pedido">
+                <i class="fas fa-clipboard-list"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
+              </a>
+              <!-- Dropdown - Alerts -->
+            </li>
+            </div>
+             <!-- Pedidos -->
 
 
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -188,7 +212,7 @@
               <a  class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${user!= null}" th:text="${user}" > </span>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${role!= null}" th:text="${role}" > </span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile rounded-circle" src="https://cdn0.iconfinder.com/data/icons/user-collection-4/512/user-512.png">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -210,6 +234,10 @@
                 <a th:if="${user!= null}" class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
+                </a>
+                <a th:if="${user!= null}" th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#" >
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                 Editar mi Cuenta
                 </a>
                 
                 <a th:if="${user== null}" class="dropdown-item" th:href="@{/ventas-online/login}" >

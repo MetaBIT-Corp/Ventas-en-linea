@@ -19,19 +19,46 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
       
-      <!-- Nav Item - Tables -->
-      <li class="nav-item active">
+      
+      <li class="nav-item active" th:if="${role == 'ROLE_CLIENTE'}">
         <a class="nav-link" th:href=@{/producto/index}>
           <i class="fas fa-fw fa-table"></i>
-          <span>Productos</span></a>
+          <span>Productos en tienda</span></a>
       </li>
       
-        <!-- Nav Item - Tables -->
+        
       <li class="nav-item" th:if="${role == 'ROLE_ADMIN'}" >
         <a class="nav-link" th:href=@{/departamento/listar}>
           <i class="fas fa-fw fa-table"></i>
           <span>Departamento</span></a>
       </li>
+      
+      
+      <li class="nav-item" th:if="${role == 'ROLE_ADMIN'}" >
+        <a class="nav-link" th:href=@{/usuario/listar}>
+          <i class="fas fa-fw fa-table"></i>
+          <span>Empleados</span></a>
+      </li>
+      
+      <li class="nav-item" th:if="${role == 'ROLE_BODEGA'}" >
+        <a class="nav-link" th:href=@{/kardex/list}>
+          <i class="fas fa-fw fa-table"></i>
+          <span>Kardex</span></a>
+      </li>
+      
+      <li class="nav-item" th:if="${role == 'ROLE_BODEGA' || role == 'ROLE_VENTAS'}" >
+        <a class="nav-link" th:href=@{/pedido/list}>
+          <i class="fas fa-fw fa-table"></i>
+          <span>Pedidos</span></a>
+      </li>
+      
+      <li class="nav-item" th:if="${role == 'ROLE_ADMIN' || role == 'ROLE_VENTAS'}">
+        <a class="nav-link" th:href=@{/producto/listar}>
+          <i class="fas fa-fw fa-table"></i>
+          <span>Productos</span></a>
+      </li>
+      
+      
       
       <!-- Nav Item - Dashboard 
       <li class="nav-item">

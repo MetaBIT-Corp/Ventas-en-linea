@@ -79,7 +79,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
+										<tr th:if="${#arrays.length(pedidos) > 0}" th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
 											<td th:text="${pedidos[i].fechaPedido}"></td>
 											<td th:text="${pedidos[i].direccionDestino}"></td>
 											<td th:text="${pedidos[i].pais.nombrePais}"></td>
@@ -90,7 +90,7 @@
 											<span th:if="${pedidos[i].estado.tituloEstado!= 'En Camino' and pedidos[i].estado.tituloEstado!= 'Entregado'}"
 											 class='badge badge-warning'>EN PROCESO</span>
 											</td>
-											<td><a href="#"	class="btn btn-info text-white">Ver Detalle Pedido</a></td>
+											<td><a th:href="@{/pedido/{pedido}/resumen-compra(pedido=${pedidos[i].idPedido})}"	class="btn btn-info text-white" title="Ver Resumen de Compra"><i class="fas fa-list-ol"></i></a></td>
 										</tr>
 									</tbody>
 									<tfoot>

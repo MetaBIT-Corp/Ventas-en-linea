@@ -78,9 +78,12 @@
 										<td>
 											<button class="btn-sm btn-secondary"
 												title="Listado de productos">
-												<a style="text-decoration: none; color: white;" href="#"><i class="fas fa-list"></i></a>
+												<a style="text-decoration: none; color: white;" 
+												th:href="@{/producto/listar/{id}(id=${subcategoria.idSubcategoria})}">
+												<i class="fas fa-list"></i>
+												</a>
 											</button>
-											<button class="btn-sm btn-primary" title="Editar">
+											<button class="btn-sm btn-primary" title="Editar" >
 												<a style="text-decoration: none; color: white;"
 													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria/'+${subcategoria.idSubcategoria}+''}">
 													<i class="fas fa-pencil-alt"></i>

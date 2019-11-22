@@ -53,7 +53,7 @@
 						<div class="card-header py-3">
 							<div class="row">
 								<div class="col">
-									<h4 class="m-0 font-weight-bold text-primary float-left">Usuarios</h4>
+									<h4 class="h3 mb-0 text-gray-800">Empleados</h4>
 								</div>
 								<div class="col">
 									<a class="btn btn-sm mb-3 float-right"										
@@ -95,13 +95,16 @@
 											<td th:text="${uc.apellidoCliente}"></td>
 											<td th:text="${uc.user.email}"></td>
 											<td th:text="${uc.direccion}"></td>
-											<!-- <div th:switch="${uc.user.role}">
-		                      	<td th:case="${0}">Administrador</td>
-		                      	<td th:case="${1}">Encargado de bodega</td>
-		                      	<td th:case="${2}">Encargado de ventas</td>
-		                      	<td th:case="${3}">Cliente</td>
-		                      </div> -->
-											<td >Admin</td>
+											<td>
+												<div th:each="ur:${uc.user.userRoles}">
+								                     <div th:switch="${ur.role}">
+													  <p th:case="'ROLE_ADMIN'">Administrator</p>
+													  <p th:case="'ROLE_VENTAS'">Encargado de ventas</p>
+													  <p th:case="'ROLE_CLIENTE'">Cliente</p>
+													  <p th:case="'ROLE_BODEGA'">Encargado de bodega</p>
+													</div>
+												</div>
+											</td>
 											<td>
 												<button title="Deshabilitar cuenta de usuario"
 													class="btn btn-sm btn-danger"
@@ -125,6 +128,11 @@
 													th:onclick="|deshab_usuario('${ue.user.idUser}')|">
 													<i class="fas fa-minus-circle"></i>
 												</button>
+												<a th:href="@{/empleado/edit-empleado/__${ue.idEmpleado}__}">
+												<button  class="btn btn-sm btn-warning" title="Editar Cuenta de Empleado">
+												<i class="fas fa-pen-square"></i>
+												</button>
+												</a>
 											</td>
 										</tr>
 									</tbody>

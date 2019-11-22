@@ -52,7 +52,12 @@ public class UserController {
 	public String DeshabUsuario(HttpServletRequest request) {
 		int usuario_id = Integer.parseInt(request.getParameter("usuario_id_deshab"));
 		User usuario = userServiceImpl.findById(usuario_id);
-		usuario.setVerifyed(0);
+		
+		if(usuario.getVerifyed() == 1)
+			usuario.setVerifyed(0);
+		else
+			usuario.setVerifyed(1);
+			
 		userServiceImpl.updateUser(usuario);
 		
 		return "redirect:/usuario/listar";

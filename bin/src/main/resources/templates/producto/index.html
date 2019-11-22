@@ -49,13 +49,18 @@
 					<!-- ESPACIO DE TRABAJO  -->
 
 					<div class="row ml-5 mr-4">
-						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;"
-							th:each=producto:${productos}>
-							<img th:src=${producto.imagen} class="card-img-top">
-							<div class="card-body">
+						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos}>
+							 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+						        <img th:src=${producto.imagen} class="rounded card-img-top">
+						        <!-- Para poner texto sobre imagen pero no me gusto -->
+						        <div class="carousel-caption align-text-bottom">
+						          
+						        </div>
+						     </div>
+							<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
 								<h5 class="card-title" th:text=${producto.titulo}>
-									<strong>$50.00</strong>
 								</h5>
+								<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
 								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
 							</div>
 							<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
@@ -78,7 +83,7 @@
 	<div th:insert="fragments/modallogout::modallogout"></div>
 
 
-<!-- Modal elimanr Asignación de área a clave-->
+<!-- Modal agregar productos al carrito-->
 <div class="modal fade" id="agregarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -93,7 +98,8 @@
           <input type="hidden" value="" id="id-producto" name="producto_id">
           <div class="form-group">
             <label for="cantidad-producto">Cantidad*</label>
-            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad" value="1">
+            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
+            <em id="existencia" style="color: red"></em>
           </div>
         </div>
         <div class="modal-footer">
@@ -138,6 +144,7 @@
 	$('#agregar').on('click', agregarProductoCarrito);
 	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
+	$('#cantidad-producto').keyup(verificarCantidad);
 
 	function lanzarModal(){
 		$('#id-producto').attr('value', $(this).val());
@@ -214,6 +221,22 @@
 			 $('#cantidad-producto').val("");
 			 $('#id-producto').val("");
 		});
+	}
+
+	function verificarCantidad(){
+		var id = $('#id-producto').val();
+		var cantidad = $('#cantidad-producto').val();
+
+		$.get('/api/cantidad-disponible/'+id, function(existencia){
+
+			if(existencia < cantidad){
+				$('#agregar').attr('disabled', 'true');
+				$('#existencia').text('La cantidad ingresada supera las unidades disponibles');
+			}else{
+				$('#existencia').text('');
+				$('#agregar').removeAttr('disabled');
+			}
+		})
 	}
 
 	

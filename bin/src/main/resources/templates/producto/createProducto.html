@@ -49,37 +49,71 @@
 					<!-- ESPACIO DE TRABAJO  -->
 					<div class="container">
 						<div class="row ml-5">
-							<div class="col-md-8">
+							<div class="col-md-10">
 								<div class="card">
 								  <div class="card-header">
 								    <h5 class="card-title">Nuevo Producto</h5>
 								  </div>
 								  <div class="card-body">
-									<form method="post" th:action="@{/producto/nuevo}" enctype="multipart/form-data"  th:object="${producto}" class="user">
-									<div class="form-group">
-										<label for="">Nombre del producto*</label>
-									  	<input type="text" th:field="*{titulo}" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="alert alert-danger"></p>
-									</div>
-									<div class="form-group">
-										<label for="">Marca del producto*</label>
-									  	<input type="text" th:field="*{marca}" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}" class="alert alert-danger"></p>
-									</div>
-									<div class="form-group">
-										<label for="">Margen de ganancia*</label>
-									  	<input type="number" th:field="*{margenGanancia}" min="0" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('margenGanancia')}" th:errors="*{margenGanancia}" class="alert alert-danger"></p>
-									</div>
-									<div class="form-group">
-										<label for="">Porcentaje de descuento</label>
-									  <input type="number" th:field="*{porcentajeDescuento}" min="0" class="form-control form-control-user">
-									  <p th:if="${#fields.hasErrors('porcentajeDescuento')}" th:errors="*{porcentajeDescuento}" class="alert alert-danger"></p>
-									</div>
+									<form method="post" th:action="@{/producto/nuevo}" enctype="multipart/form-data" class="user">
+									<input type="hidden" th:value="${idSubcateogria}" name="idSubcategoria"/>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                    <label for="">Nombre del producto*</label>
+									  	<input type="text" th:field="*{producto.titulo}" class="form-control form-control-user">
+									  	<p th:if="${#fields.hasErrors('producto.titulo')}" th:errors="*{producto.titulo}" class="alert alert-danger"></p>
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Marca del producto*</label>
+									  	<input type="text" th:field="*{producto.marca}" class="form-control form-control-user">
+									  	<p th:if="${#fields.hasErrors('producto.marca')}" th:errors="*{producto.marca}" class="alert alert-danger"></p>
+					                  </div>
+					                </div>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                    <label for="">Margen de ganancia*</label>
+									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user">
+									  	<p th:if="${#fields.hasErrors('producto.margenGanancia')}" th:errors="*{producto.margenGanancia}" class="alert alert-danger"></p>
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Porcentaje de descuento*</label>
+									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user">
+									  <p th:if="${#fields.hasErrors('producto.porcentajeDescuento')}" th:errors="*{producto.porcentajeDescuento}" class="alert alert-danger"></p>
+					                  </div>
+					                </div>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                    <label for="">Costo unitario*</label>
+										  <input type="number" th:field="*{kardex.costoUnitario}" min="0" class="form-control form-control-user">
+										  <p th:if="${#fields.hasErrors('kardex.costoUnitario')}" th:errors="*{kardex.costoUnitario}" class="alert alert-danger"></p>
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Unidades disponibles*</label>
+									    <input type="number" th:field="*{kardex.unidadesDisponibles}" min="0" class="form-control form-control-user">
+									    <p th:if="${#fields.hasErrors('kardex.unidadesDisponibles')}" th:errors="*{kardex.unidadesDisponibles}" class="alert alert-danger"></p>
+					                  </div>
+					                </div>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                      <label for="">Cantidad máxima*</label>
+										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user">
+										  <p th:if="${#fields.hasErrors('kardex.stockMaximo')}" th:errors="*{kardex.stockMaximo}" class="alert alert-danger"></p>
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Catidad mínima*</label>
+										  <input type="number" th:field="*{kardex.stockMinimo}" min="0" class="form-control form-control-user">
+										  <p th:if="${#fields.hasErrors('kardex.stockMinimo')}" th:errors="*{kardex.stockMinimo}" class="alert alert-danger"></p>
+					                  </div>
+					                </div>
+
 									<div class="form-group">
 										<label for="">Descripción del producto*</label>
-									  	<textarea th:field="*{descripcionArticulo}" class="form-control form-control-user"></textarea>
-									  	<p th:if="${#fields.hasErrors('descripcionArticulo')}" th:errors="*{descripcionArticulo}" class="alert alert-danger"></p>
+									  	<textarea th:field="*{producto.descripcionArticulo}" class="form-control form-control-user"></textarea>
+									  	<p th:if="${#fields.hasErrors('producto.descripcionArticulo')}" th:errors="*{producto.descripcionArticulo}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Imagen del producto*</label>

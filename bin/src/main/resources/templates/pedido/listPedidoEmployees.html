@@ -85,7 +85,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr
+										<tr th:if="${#arrays.length(pedidos) > 0}"
 											th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
 											<td th:text="${pedidos[i].fechaPedido}"></td>
 											<td th:text="${pedidos[i].direccionDestino}"></td>
