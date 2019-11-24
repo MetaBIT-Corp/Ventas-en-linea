@@ -156,9 +156,9 @@
 			-->
 
 			<!-- Carrito de compras -->
-            <div th:if="${esProducto}">
+            <div th:if="${esProducto }" >
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow">
+            <li class="nav-item dropdown no-arrow" th:if="${role == 'ROLE_CLIENTE'}">
               <span title="Carrito de compras" class="nav-link dropdown-toggle" id="carrito" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-shopping-cart"></i>
                 <!-- Counter - Alerts -->
@@ -193,7 +193,7 @@
             <!-- Pedidos -->
             <div th:if="${esProducto}">
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow">
+            <li class="nav-item dropdown no-arrow" th:if="${role == 'ROLE_CLIENTE'}">
               <a th:href="@{/pedido/list-pedido}" class="nav-link dropdown-toggle" id="carrito" aria-haspopup="true" aria-expanded="false" title="Ver pedido">
                 <i class="fas fa-clipboard-list"></i>
                 <!-- Counter - Alerts -->
