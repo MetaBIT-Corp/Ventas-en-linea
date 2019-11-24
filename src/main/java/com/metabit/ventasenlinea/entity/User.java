@@ -150,12 +150,7 @@ public class User {
 		this.userRoles = userRoles;
 	}
 
-	@Override
-	public String toString() {
-		return "User [idUser=" + idUser + ", email=" + email + ", password=" + password + ", passwordConfirm="
-				+ passwordConfirm + ", codigoVerificacion=" + codigoVerificacion + ", verifyed=" + verifyed
-				+ ", userRole=" + userRole + "]";
-	}
+	
 	
 	
 
