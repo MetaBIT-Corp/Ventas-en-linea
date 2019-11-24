@@ -200,6 +200,10 @@ public class PedidoController {
 		pedido.add(pedidoService.getPedido(id_pedido));
 		mav.addObject("pedido", pedidoService.getPedido(id_pedido));
 		mav.addObject("monto", calcularMontos(pedido));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 
@@ -455,7 +459,7 @@ public class PedidoController {
 					Estado estado = estadoService.getEstado(2);
 					pedido.setEstado(estado);
 					pedidoService.updatePedido(pedido);
-					return "redirect:/producto/index";
+					return "redirect:/pedido/" +pedido.getIdPedido()+ "/comprobante-compra";
 
 				} else {
 					redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
@@ -603,7 +607,7 @@ public class PedidoController {
 						pedido.setEstado(estado);
 						pedidoService.updatePedido(pedido);
 						
-						return "redirect:/producto/index";
+						return "redirect:/pedido/" +pedido.getIdPedido()+ "/comprobante-compra";
 
 					} else {
 						redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
