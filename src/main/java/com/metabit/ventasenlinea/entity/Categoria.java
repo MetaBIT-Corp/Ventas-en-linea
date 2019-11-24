@@ -1,14 +1,21 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "categorias")
@@ -24,6 +31,14 @@ public class Categoria {
 	@Column(name = "nombre_categoria", nullable = false)
 	private String nombre;
 
+	public List<Subcategoria> getSubcategorias() {
+		return subcategorias;
+	}
+
+	public void setSubcategorias(List<Subcategoria> subcategorias) {
+		this.subcategorias = subcategorias;
+	}
+
 	@NotNull
 	@Size(min = 2, max = 255)
 	@Column(name = "descripcion_categoria", nullable = false)
@@ -35,7 +50,11 @@ public class Categoria {
 	@ManyToOne
 	@JoinColumn(name = "id_departamento", nullable = false)
 	private Departamento departamento;
-
+	
+	@OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
+	@JsonIgnore
+    private List<Subcategoria> subcategorias =  new ArrayList<>();
+	
 	public int getId() {
 		return id;
 	}

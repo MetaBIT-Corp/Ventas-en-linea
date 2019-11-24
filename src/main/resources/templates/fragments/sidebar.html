@@ -57,7 +57,25 @@
           <i class="fas fa-fw fa-table"></i>
           <span>Productos</span></a>
       </li>
-      
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+      <li class="nav-item" th:each=departamento:${departamentos} >
+        <a class="nav-link collapsed" href="" data-toggle="collapse" th:attr="data-target='#customerModel'+${departamento.nombre } ,aria-controls = ${departamento.nombre}"   aria-expanded="true" >
+          
+          <span th:text="${departamento.nombre}"></span>
+        </a>
+        <div th:attr="id = 'customerModel'+${departamento.nombre}"  class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+          
+          <div th:each=categoria:${departamento.categoria}> 
+          	<a th:href="@{/producto/categoria/__${categoria.id}__}" class="collapse-header" th:text="${categoria.nombre}"></a>
+          	<div th:each="sub_categoria:${categoria.subcategorias}">
+          		<a class="collapse-item" th:href="@{/producto/subcategoria/__${sub_categoria.idSubcategoria}__}" th:text="${sub_categoria.nombreSubcategoria}">Buttons</a>
+          	</div> 
+          </div>          	
+          </div>
+        </div>
+      </li>
       
       
       <!-- Nav Item - Dashboard 

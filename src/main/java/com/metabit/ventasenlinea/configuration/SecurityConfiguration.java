@@ -59,7 +59,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/api/cantidad-disponible/{id}",
 				//Recuperacion de contraseña
 				"/forgot-password**",
-				"/reset-password**"
+				"/reset-password**",
+				//Prueba de que no me funciona :( la busqueda por el security
+				"/producto/subcategoria/**",
+				"/producto/categoria/**"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()

@@ -1,12 +1,19 @@
 package com.metabit.ventasenlinea.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "departamentos")
@@ -28,8 +35,19 @@ public class Departamento {
 	private String descripcion;
 
 	@Column(name = "habilitado")
-
 	private boolean habilitado;
+	
+	@OneToMany(mappedBy = "departamento", fetch = FetchType.LAZY)
+	@JsonIgnore
+    private List<Categoria> categoria =  new ArrayList<>(); 
+	
+	public List<Categoria> getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(List<Categoria> categoria) {
+		this.categoria = categoria;
+	}
 
 	public boolean isHabilitado() {
 		return habilitado;

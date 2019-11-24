@@ -32,10 +32,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.metabit.ventasenlinea.entity.Categoria;
 import com.metabit.ventasenlinea.entity.Kardex;
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
 import com.metabit.ventasenlinea.entity.Subcategoria;
+import com.metabit.ventasenlinea.service.CategoriaService;
+import com.metabit.ventasenlinea.service.DepartamentoService;
 import com.metabit.ventasenlinea.service.KardexService;
 import com.metabit.ventasenlinea.service.ProductoService;
 import com.metabit.ventasenlinea.service.SubcategoriaService;
@@ -58,7 +61,13 @@ public class ProductoController {
 	@Autowired
 	@Qualifier("kardexServiceImpl")
 	private KardexService kardexService;
-
+	
+	@Autowired
+	@Qualifier("departamentoServiceImpl")
+	private DepartamentoService departamentoService;
+	@Autowired
+	@Qualifier("categoriaServiceImpl")
+	private CategoriaService categoriaService;
 	@GetMapping("/index")
 	public ModelAndView indexProducto(HttpServletRequest request) {
 		ModelAndView mav = new ModelAndView(INDEX_VIEW);
@@ -119,7 +128,7 @@ public class ProductoController {
 				System.out.println(" :"+pc.getCantidad());
 			}
 		}*/
-		
+		mav.addObject("departamentos", departamentoService.getDepartamentos());
 		mav.addObject("productos", productService.getProductos());
 		mav.addObject("esProducto", 1);
 
@@ -367,6 +376,50 @@ public class ProductoController {
 		Producto producto = productService.findById(id);
 		mav.addObject("producto", producto);
 		
+		return mav;
+	}	
+	
+	@GetMapping("/categoria/{id_cat}")
+	public ModelAndView buscarCategoria(@PathVariable("id_cat") int id_cat) {
+		ModelAndView mav = new ModelAndView("/producto/index");
+		//Buscamos la Categoria
+		Categoria cat=categoriaService.getCategoria(id_cat);
+		mav.addObject("esProducto", 1);
+		List<Subcategoria> sub_cats=cat.getSubcategorias();
+		
+		List<Producto> productos=new ArrayList<>();
+		for(Subcategoria sub:sub_cats) {
+			productos.addAll(sub.getProductos());
+		}
+		for(Producto p:productos) {
+			System.out.print(p.toString());
+		}
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    UserDetails userDetail = (UserDetails) auth.getPrincipal();
+	    mav.addObject("user", userDetail.getUsername());
+		mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
+		mav.addObject("departamentos", departamentoService.getDepartamentos());
+		mav.addObject("productos", productos);
+		return mav;
+	}
+	
+	@GetMapping("/subcategoria/{id_subcat}")
+	public ModelAndView buscarSubCat(@PathVariable("id_subcat") int id) {
+		ModelAndView mav =new ModelAndView("/producto/index");		
+		//Buscamos la subCategoria
+		Subcategoria sub_cat=subcategoriaService.getSubcategoria(id);
+		List<Producto> productos=sub_cat.getProductos();
+		for(Producto p:productos) {
+			System.out.print(p.toString());
+		}
+		
+		mav.addObject("departamentos", departamentoService.getDepartamentos());
+		mav.addObject("productos", productos);
+		mav.addObject("esProducto", 1);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    UserDetails userDetail = (UserDetails) auth.getPrincipal();
+	    mav.addObject("user", userDetail.getUsername());
+		mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 }
