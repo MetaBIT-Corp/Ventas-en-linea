@@ -200,6 +200,10 @@ public class PedidoController {
 		pedido.add(pedidoService.getPedido(id_pedido));
 		mav.addObject("pedido", pedidoService.getPedido(id_pedido));
 		mav.addObject("monto", calcularMontos(pedido));
+		// user
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 
@@ -424,14 +428,15 @@ public class PedidoController {
 
 						Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
 						float precioSinCombros = 0.0f;
-						float precioConCombros = 0.0f;
+						float totalConCobros = 0.0f;
 						precioSinCombros = (float) (kardex.getCostoUnitario()
-								+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
+								+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100));
 
-						float totalConCobros = (float) (precioSinCombros
+						totalConCobros = (float) (
+								precioSinCombros
 								+ precioSinCombros * pedido.getPais().getCostoEnvio()
 								+ precioSinCombros * pedido.getPais().getImpuesto()
-								- precioSinCombros * pc.getProducto().getMargenGanancia());
+								- precioSinCombros * (pc.getProducto().getPorcentajeDescuento()/100));
 						// Creamos ArticuloPedido
 						ArticuloPedido ap = new ArticuloPedido();
 						ap.setCantidad(pc.getCantidad());
@@ -448,13 +453,13 @@ public class PedidoController {
 					cuenta.setSaldo(cuenta.getSaldo()- totalAPagar);
 					LOG.info("SALDOOOOO: " + cuenta.getSaldo());
 					cuentaService.createCuenta(cuenta);
-					
+					//borramos carrito
 					productosCarritos.removeAll(productosCarritos);
 					//cambiar estado
 					Estado estado = estadoService.getEstado(2);
 					pedido.setEstado(estado);
 					pedidoService.updatePedido(pedido);
-					return "redirect:/producto/index";
+					return "redirect:/pedido/" +pedido.getIdPedido()+ "/comprobante-compra";
 
 				} else {
 					redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
@@ -521,12 +526,12 @@ public class PedidoController {
 			@RequestParam("fecha") String fechaExpiracion, @RequestParam("codigo") String codigo,
 			@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
 			HttpServletRequest request, RedirectAttributes redirectAttrs) {
+		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		
 
 		try {
 			Date date = formatter.parse(fechaExpiracion);
-			;
 
 			// total a pagar de todo el pedido
 			float totalAPagar = 0.0f;
@@ -545,9 +550,7 @@ public class PedidoController {
 			//el metodo compareTo da como resultado un 1 si la fecha es mayor, un 0 si las fechas son iguales o un -1 si la fecha es menor.
 			if(cuenta.getCodigo() == Integer.parseInt(codigo) && 
 					cuenta.getNumeroTarjeta().equals(numero) && 
-					cuenta.getFechaDeVencimiento().compareTo(date) == 1 &&
-					cliente.getNombreCliente().equals(nombre) &&
-					cliente.getApellidoCliente().equals(apellido)
+					cuenta.getFechaDeVencimiento().compareTo(date) == 1 
 					) {
 				
 				LOG.info(cuenta.getFechaDeVencimiento());
@@ -571,14 +574,15 @@ public class PedidoController {
 
 							Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
 							float precioSinCombros = 0.0f;
-							float precioConCombros = 0.0f;
+							float totalConCobros = 0.0f;
 							precioSinCombros = (float) (kardex.getCostoUnitario()
-									+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
+									+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100));
 
-							float totalConCobros = (float) (precioSinCombros
+							totalConCobros = (float) (
+									  precioSinCombros
 									+ precioSinCombros * pedido.getPais().getCostoEnvio()
 									+ precioSinCombros * pedido.getPais().getImpuesto()
-									- precioSinCombros * pc.getProducto().getMargenGanancia());
+									- precioSinCombros * (pc.getProducto().getPorcentajeDescuento()/100));
 							// Creamos ArticuloPedido
 							ArticuloPedido ap = new ArticuloPedido();
 							ap.setCantidad(pc.getCantidad());
@@ -594,6 +598,8 @@ public class PedidoController {
 						// disminuir a cuenta
 						cuenta.setSaldo(cuenta.getSaldo() - totalAPagar);
 						cuentaService.createCuenta(cuenta);
+						
+						//borramos carrito
 						productosCarritos.removeAll(productosCarritos);
 						
 						//cambiar estado
@@ -601,7 +607,7 @@ public class PedidoController {
 						pedido.setEstado(estado);
 						pedidoService.updatePedido(pedido);
 						
-						return "redirect:/producto/index";
+						return "redirect:/pedido/" +pedido.getIdPedido()+ "/comprobante-compra";
 
 					} else {
 						redirectAttrs.addFlashAttribute("mensaje", "El saldo en su cuenta es insuficiente.")
@@ -688,18 +694,24 @@ public class PedidoController {
 
 				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
 				float precioSinCombros = 0.0f;
-				float precioConCombros = 0.0f;
+				float totalConCobros = 0.0f;
 				precioSinCombros = (float) (kardex.getCostoUnitario()
-						+ kardex.getCostoUnitario() * pc.getProducto().getMargenGanancia());
-
-				float totalConCobros = (float) (precioSinCombros + precioSinCombros * pedido.getPais().getCostoEnvio()
+						+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100));
+				LOG.info("PRECIO SIN COBROS------------" + precioSinCombros);
+				totalConCobros = (float) (
+						precioSinCombros 
+						+ precioSinCombros * pedido.getPais().getCostoEnvio()
 						+ precioSinCombros * pedido.getPais().getImpuesto()
-						- precioSinCombros * pc.getProducto().getMargenGanancia());
+						- precioSinCombros * (pc.getProducto().getPorcentajeDescuento()/100));
+				LOG.info("PRECIO CON COBROS------------" + totalConCobros);
 				totalConCobros *= pc.getCantidad();
+				LOG.info("TOTAL CON COBROS------------" + totalConCobros);
 				total += totalConCobros;
 			}
+			
 
 		}
+		LOG.info("TOTAL TOTAL------------" + total);
 		return total;
 	}
 }

@@ -21,7 +21,7 @@ public class UserRole {
 	@Column(name = "user_role_id", unique = true, nullable = false)
 	private int userRoleId;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_user", nullable = false)
 	private User user;
 	
@@ -62,10 +62,7 @@ public class UserRole {
 		this.role = role;
 	}
 
-	@Override
-	public String toString() {
-		return "UserRole [userRoleId=" + userRoleId + ", user=" + user + ", role=" + role + "]";
-	}
+	
 	
 	
 }

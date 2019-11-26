@@ -51,9 +51,10 @@ public class SubcategoriaController {
 		mav.addObject("subcategorias", subcategorias);
 		mav.addObject("categoria", categoria);
 		// user
+		// user
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		mav.addObject("user", user.getUsername());
-		mav.addObject("role", user.getAuthorities().toArray()[0]);
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
 

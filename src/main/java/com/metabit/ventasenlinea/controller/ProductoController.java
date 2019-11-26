@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -75,59 +76,6 @@ public class ProductoController {
 		ArrayList<ProductoCarrito> getProductos;
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
-		// Borramos toda la BD para evitar que se repitan
-		//productService.deleteAll();
-
-		// Agregando productos a la BD
-		/*Producto p1 = new Producto();
-		p1.setImagen("/img_products/nintendo.jpg");
-		p1.setMarca("Nintento");
-		p1.setTitulo("Nintendo Switch");
-		p1.setDescripcionArticulo("Consola de videojuego que puede jugarse en modo portatil y modo Dock");
-		productService.addProduct(p1);
-
-		Producto p2 = new Producto();
-		p2.setImagen("/img_products/play.jpg");
-		p2.setMarca("Sony");
-		p2.setTitulo("Play Station 5");
-		p2.setDescripcionArticulo("Consola de video juego con potencia para correr juegos en 4K");
-		productService.addProduct(p2);
-
-		Producto p3 = new Producto();
-		p3.setImagen("/img_products/xbox.jpg");
-		p3.setMarca("Microsoft");
-		p3.setTitulo("Xbox One S");
-		p3.setDescripcionArticulo("Consola con potencia para 4K, microprocesador Scorpio con 100teraflops");
-		productService.addProduct(p3);*/
-
-		/*
-		 * Por si quieren probar con mas datos
-		 * 
-		 * 
-		 * Producto p4 = new Producto(); p4.setImagen("/img_products/nintendo.jpg");
-		 * p4.setMarca("Nintento"); p4.setTitulo("Nintendo Switch"); p4.
-		 * setDescripcionArticulo("Consola de videojuego que puede jugarse en modo portatil y modo Dock"
-		 * ); productService.addProduct(p4);
-		 * 
-		 * Producto p5 = new Producto(); p5.setImagen("/img_products/play.jpg");
-		 * p5.setMarca("Sony"); p5.setTitulo("Play Station 5"); p5.
-		 * setDescripcionArticulo("Consola de video juego con potencia para correr juegos en 4K"
-		 * ); productService.addProduct(p5);
-		 * 
-		 * Producto p6 = new Producto(); p6.setImagen("/img_products/xbox.jpg");
-		 * p6.setMarca("Microsoft"); p6.setTitulo("Xbox One S"); p6.
-		 * setDescripcionArticulo("Consola con potencia para 4K, microprocesador Scorpio con 100teraflops"
-		 * ); productService.addProduct(p6);
-		 */
-
-		// Recuperamos todos los datos de la BD
-		
-		/*if(getProductos != null) {
-			for (ProductoCarrito pc : getProductos) {
-				System.out.print("------------------------------------------------------"+pc.getProducto().getTitulo());
-				System.out.println(" :"+pc.getCantidad());
-			}
-		}*/
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
 		mav.addObject("productos", productService.getProductos());
 		mav.addObject("esProducto", 1);
@@ -329,12 +277,21 @@ public class ProductoController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
-	@GetMapping("/listar/{id}")
-	public ModelAndView listProducto(@PathVariable("id") int idSubcategoria) {
-		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria);
-		
+	@GetMapping(path = {"/listar", "/listar/{id}"})
+	public ModelAndView listProducto(@PathVariable("id") Optional<Integer> idSubcategoria) {
 		ModelAndView mav = new ModelAndView("/producto/listProducto");
-		mav.addObject("subcategoria", subcategoria);
+		List<Producto> productos = new ArrayList<Producto>();
+		
+		if(idSubcategoria.isPresent()) {
+			Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria.get());
+			productos = subcategoria.getProductos();
+			mav.addObject("subcategoria", subcategoria);
+		}else {
+			productos = productService.getProductos();
+			mav.addObject("todos", 1);
+		}
+		
+		mav.addObject("productos", productos);
 		
 		// user
 		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
