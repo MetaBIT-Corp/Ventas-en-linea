@@ -13,7 +13,7 @@ import com.metabit.ventasenlinea.repository.SubcategoriaJpaRepository;
 import com.metabit.ventasenlinea.service.SubcategoriaService;
 
 @Service("subcategoriaServiceImpl")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+
 public class SubcategoriaServiceImpl implements SubcategoriaService{
 
 	//importamos repositorio

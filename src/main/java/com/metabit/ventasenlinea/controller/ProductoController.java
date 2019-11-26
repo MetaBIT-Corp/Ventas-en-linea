@@ -422,4 +422,6 @@ public class ProductoController {
 		mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
 		return mav;
 	}
+	
+	
 }
