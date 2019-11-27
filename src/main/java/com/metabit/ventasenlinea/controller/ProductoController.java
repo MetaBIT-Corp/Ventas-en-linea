@@ -86,8 +86,11 @@ public class ProductoController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			mav.addObject("user", userDetail.getUsername());
 			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
-			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_ADMIN") || userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_VENTAS")) {
+			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_ADMIN")) {
 				mav.setViewName("redirect:/departamento/listar"); //cambiar a listado de productos (Datatable)
+			}
+			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_VENTAS")) {
+				mav.setViewName("redirect:/pedido/list");
 			}
 			if(userDetail.getAuthorities().toArray()[0].toString().equals("ROLE_BODEGA")) {
 				mav.setViewName("redirect:/kardex/list");

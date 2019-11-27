@@ -218,7 +218,7 @@ public class ClienteController {
 			clienteA.setApellidoCliente(cliente.getApellidoCliente());
 			clienteA.setDireccion(cliente.getDireccion());
 			clienteServiceImpl.createCliente(clienteA);
-			return "redirect:/ventas-online/base";			
+			return "redirect:/producto/index";			
 			
 		}
 		

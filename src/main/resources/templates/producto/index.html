@@ -49,7 +49,7 @@
 					<!-- ESPACIO DE TRABAJO  -->
 
 					<div class="row ml-5 mr-4">
-						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos}>
+						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos} th:if="${producto.habilitado}">
 							 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
 						        <img th:src=${producto.imagen} class="rounded card-img-top">
 						        <!-- Para poner texto sobre imagen pero no me gusto -->

@@ -98,21 +98,21 @@
 												class='badge badge-primary'>AUTORIZADO</span> <span
 												th:if="${pedidos[i].estado.tituloEstado =='Pendiente'}"
 												class='badge badge-danger'>PENDIENTE</span></td>
-											<td th:if="${role =='ROLE_ADMIN'}">
+											<td th:if="${role =='ROLE_BODEGA'}">
 												<!-- SE PUSO ADMIN SOLO POR PRUEBA LOS UNICOS CON ACCESO SON  ENC BODEGA Y ENC VENTAS -->
 												<!-- SIMULANDO ENCARGADO BODEGA --> <a
 												th:if="${pedidos[i].estado.tituloEstado == 'Pendiente'}"
 												href="#" th:onclick="|cambiarEstado('${pedidos[i].idPedido}','Pendiente');|" class="btn btn-primary text-white">Autorizar</a>
 												<button
-													th:unless="${role =='ROLE_ADMIN' and pedidos[i].estado.tituloEstado =='Pendiente'}"
+													th:unless="${role =='ROLE_BODEGA' and pedidos[i].estado.tituloEstado =='Pendiente'}"
 													href="#" class="btn btn-primary text-white" disabled>Autorizar</button>
 											</td>
-											<td th:unless="${role =='ROLE_ADMIN'}">
+											<td th:unless="${role =='ROLE_BODEGA'}">
 												<!-- SIMULANDO ENCARGADO VENTAS --> <a
-												th:if="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+												th:if="${role =='ROLE_VENTAS' and pedidos[i].estado.tituloEstado =='Autorizado'}"
 												href="#" th:onclick="|cambiarEstado('${pedidos[i].idPedido}','Autorizado')|" class="btn btn-success text-white">Enviar</a>
 												<button
-													th:unless="${role =='ROLE_CLIENTE' and pedidos[i].estado.tituloEstado =='Autorizado'}"
+													th:unless="${role =='ROLE_VENTAS' and pedidos[i].estado.tituloEstado =='Autorizado'}"
 													href="#" class="btn btn-success text-white" disabled>Enviar</button>
 											</td>
 										</tr>

@@ -169,6 +169,7 @@ public class PedidoController {
 		mav.addObject("pedidos", pedidos);
 		mav.addObject("montos", calcularMontos(pedidos));
 		mav.addObject("role", role);
+		mav.addObject("user", userDetails.getUsername());
 		return mav;
 	}
 
