@@ -47,50 +47,73 @@
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 					<!-- ESPACIO DE TRABAJO  -->
+
 					<div class="container">
 						<div class="row ml-5">
-							<div class="col-md-8">
+							<div class="col-md-10">
+									<p th:if="${error}" class="alert alert-danger ml-2 mr-2" role="alert" th:text="${error}"></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="container">
+						<div class="row ml-5">
+							<div class="col-md-10">
 								<div class="card">
 								  <div class="card-header">
-								    <h5 class="card-title">Nuevo Producto</h5>
+								    <h5 class="card-title">Actualizar Producto</h5>
 								  </div>
 								  <div class="card-body">
-									<form method="post" th:action="@{/producto/actualizar}" enctype="multipart/form-data"  th:object="${producto}" class="user">
-										<input type="hidden" th:field="*{idArticulo}">
-										<input type="hidden" th:field="*{imagen}">
-										<div class="form-group">
-											<label for="">Nombre del producto*</label>
-								          <input type="text" th:field="*{titulo}" class="form-control form-control-user" >
-								          <p th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="alert alert-danger"></p>
-								        </div>
-								        <div class="form-group">
-								        	<label for="">Marca del producto*</label>
-								          <input type="text" th:field="*{marca}" class="form-control form-control-user">
-								          <p th:if="${#fields.hasErrors('marca')}" th:errors="*{marca}" class="alert alert-danger"></p>
-								        </div>
-								        <div class="form-group">
-								        	<label for="">Margen de ganancia*</label>
-								          <input type="number" th:field="*{margenGanancia}" min="0" class="form-control form-control-user">
-								          <p th:if="${#fields.hasErrors('margenGanancia')}" th:errors="*{margenGanancia}" class="alert alert-danger"></p>
-								        </div>
-								        <div class="form-group">
-								        	<label for="">Porcentaje de descuento</label>
-								          <input type="number" th:field="*{porcentajeDescuento}" min="0" class="form-control form-control-user">
-								          <p th:if="${#fields.hasErrors('porcentajeDescuento')}" th:errors="*{porcentajeDescuento}" class="alert alert-danger"></p>
-								        </div>
-								        <div class="form-group">
-								        	<label for="">Descripción del artículo*</label>
-								          <textarea th:field="*{descripcionArticulo}" class="form-control form-control-user"></textarea>
-								          <p th:if="${#fields.hasErrors('descripcionArticulo')}" th:errors="*{descripcionArticulo}" class="alert alert-danger"></p>
-								        </div>
-								        <div class="form-group">
-								        	<label for="">Imagen del producto*</label>
-								          <input type="file" name="image" class="form-control btn btn-default">
-								          <small class="form-text text-muted">Al no seleccionar una imagen se mantendrá la anterior.</small>
-								        </div>
-								        <div class="form-group" style="float: right;">
-								          <input type="submit" class="btn btn-primary" value="Guardar cambios">
-								        </div>
+									<form method="post" th:action="@{/producto/actualizar}" enctype="multipart/form-data" class="user">
+									<input type="hidden" th:field="*{producto.idArticulo}">
+									<input type="hidden" th:field="*{producto.imagen}">
+									<input type="hidden" th:field="*{kardex.idKardex}">
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                    <label for="">Nombre del producto*</label>
+									  	<input type="text" th:field="*{producto.titulo}" class="form-control form-control-user">
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Marca del producto*</label>
+									  	<input type="text" th:field="*{producto.marca}" class="form-control form-control-user">
+					                  </div>
+					                </div>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                    <label for="">Margen de ganancia*</label>
+									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user">
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Porcentaje de descuento*</label>
+									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user">
+					                  </div>
+					                </div>
+
+									<div class="form-group row">
+					                  <div class="col-sm-6 mb-3 mb-sm-0">
+					                      <label for="">Cantidad máxima*</label>
+										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user">
+					                  </div>
+					                  <div class="col-sm-6">
+					                    <label for="">Catidad mínima*</label>
+										  <input type="number" th:field="*{kardex.stockMinimo}" min="0" class="form-control form-control-user">
+					                  </div>
+					                </div>
+
+									<div class="form-group">
+										<label for="">Descripción del producto*</label>
+									  	<textarea th:field="*{producto.descripcionArticulo}" class="form-control form-control-user"></textarea>
+									</div>
+									<div class="form-group">
+										<label for="">Imagen del producto*</label>
+									  <input type="file" name="image" class="form-control btn btn-default">
+									  <small class="form-text text-muted">Al no seleccionar una imagen se mantendrá la anterior.</small>
+									</div>
+									<div class="form-group" style="float: right;">
+									  <input type="submit" class="btn btn-primary" value="Guardar cambios">
+									</div>
 									</form>
 								  </div>
 								</div>

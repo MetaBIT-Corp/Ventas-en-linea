@@ -47,6 +47,17 @@
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 					<!-- ESPACIO DE TRABAJO  -->
+
+					<div class="container">
+						<div class="row ml-5">
+							<div class="col-md-10">
+								<ul th:if="${errors}" class="alert alert-danger ml-2 mr-2" role="alert">
+									<li  class="ml-2" th:each="error : ${errors}" th:text="${error.defaultMessage}"></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
 					<div class="container">
 						<div class="row ml-5">
 							<div class="col-md-10">
@@ -62,12 +73,10 @@
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                    <label for="">Nombre del producto*</label>
 									  	<input type="text" th:field="*{producto.titulo}" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('producto.titulo')}" th:errors="*{producto.titulo}" class="alert alert-danger"></p>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Marca del producto*</label>
 									  	<input type="text" th:field="*{producto.marca}" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('producto.marca')}" th:errors="*{producto.marca}" class="alert alert-danger"></p>
 					                  </div>
 					                </div>
 
@@ -75,25 +84,10 @@
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                    <label for="">Margen de ganancia*</label>
 									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user">
-									  	<p th:if="${#fields.hasErrors('producto.margenGanancia')}" th:errors="*{producto.margenGanancia}" class="alert alert-danger"></p>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Porcentaje de descuento*</label>
 									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user">
-									  <p th:if="${#fields.hasErrors('producto.porcentajeDescuento')}" th:errors="*{producto.porcentajeDescuento}" class="alert alert-danger"></p>
-					                  </div>
-					                </div>
-
-									<div class="form-group row">
-					                  <div class="col-sm-6 mb-3 mb-sm-0">
-					                    <label for="">Costo unitario*</label>
-										  <input type="number" th:field="*{kardex.costoUnitario}" min="0" class="form-control form-control-user">
-										  <p th:if="${#fields.hasErrors('kardex.costoUnitario')}" th:errors="*{kardex.costoUnitario}" class="alert alert-danger"></p>
-					                  </div>
-					                  <div class="col-sm-6">
-					                    <label for="">Unidades disponibles*</label>
-									    <input type="number" th:field="*{kardex.unidadesDisponibles}" min="0" class="form-control form-control-user">
-									    <p th:if="${#fields.hasErrors('kardex.unidadesDisponibles')}" th:errors="*{kardex.unidadesDisponibles}" class="alert alert-danger"></p>
 					                  </div>
 					                </div>
 
@@ -101,19 +95,16 @@
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                      <label for="">Cantidad máxima*</label>
 										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user">
-										  <p th:if="${#fields.hasErrors('kardex.stockMaximo')}" th:errors="*{kardex.stockMaximo}" class="alert alert-danger"></p>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Catidad mínima*</label>
 										  <input type="number" th:field="*{kardex.stockMinimo}" min="0" class="form-control form-control-user">
-										  <p th:if="${#fields.hasErrors('kardex.stockMinimo')}" th:errors="*{kardex.stockMinimo}" class="alert alert-danger"></p>
 					                  </div>
 					                </div>
 
 									<div class="form-group">
 										<label for="">Descripción del producto*</label>
 									  	<textarea th:field="*{producto.descripcionArticulo}" class="form-control form-control-user"></textarea>
-									  	<p th:if="${#fields.hasErrors('producto.descripcionArticulo')}" th:errors="*{producto.descripcionArticulo}" class="alert alert-danger"></p>
 									</div>
 									<div class="form-group">
 										<label for="">Imagen del producto*</label>
@@ -143,13 +134,5 @@
 	<!-- Logout Modal-->
 	<div th:insert="fragments/modallogout::modallogout"></div>
 </body>
-
-<script>
-	$(document).ready(function(){
-	  	setTimeout(function() {
-	       $(".alert").fadeOut();           
-	  	},3000);
-	})
-</script>
 
 </html>
