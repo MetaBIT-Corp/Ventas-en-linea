@@ -199,7 +199,8 @@ public class ProductoController {
 		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria); 
 		
 		if(bindingResult.hasErrors()) {
-			return "producto/createProducto";
+			redirAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());
+			return "redirect:/producto/nuevo/"+subcategoria.getIdSubcategoria();
 		}else {
 			try {
 				path = uploadImage(image);
@@ -248,7 +249,8 @@ public class ProductoController {
 		Kardex k = kardexService.getKardex(kardex.getIdKardex());
 
 		if(bindingResult.hasErrors()) {
-			return "producto/updateProducto";
+			redirAttrs.addFlashAttribute("error", "Favor completar todos los campos");
+			return "redirect:/producto/actualizar/"+p.getIdArticulo();
 		}else {
 			p.setTitulo(producto.getTitulo());
 			p.setMarca(producto.getMarca());
