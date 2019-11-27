@@ -86,19 +86,6 @@
 
 									<div class="form-group row">
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
-					                    <label for="">Costo unitario*</label>
-										  <input type="number" th:field="*{kardex.costoUnitario}" min="0" class="form-control form-control-user">
-										  <p th:if="${#fields.hasErrors('kardex.costoUnitario')}" th:errors="*{kardex.costoUnitario}" class="alert alert-danger"></p>
-					                  </div>
-					                  <div class="col-sm-6">
-					                    <label for="">Unidades disponibles*</label>
-									    <input type="number" th:field="*{kardex.unidadesDisponibles}" min="0" class="form-control form-control-user">
-									    <p th:if="${#fields.hasErrors('kardex.unidadesDisponibles')}" th:errors="*{kardex.unidadesDisponibles}" class="alert alert-danger"></p>
-					                  </div>
-					                </div>
-
-									<div class="form-group row">
-					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                      <label for="">Cantidad máxima*</label>
 										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user">
 										  <p th:if="${#fields.hasErrors('kardex.stockMaximo')}" th:errors="*{kardex.stockMaximo}" class="alert alert-danger"></p>

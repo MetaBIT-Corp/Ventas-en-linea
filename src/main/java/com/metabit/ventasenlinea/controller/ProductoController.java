@@ -224,6 +224,8 @@ public class ProductoController {
 	public ModelAndView editProducto(@PathVariable("id") int id) {
 		ModelAndView mav = new ModelAndView("producto/updateProducto");
 		Producto producto = productService.findById(id);
+		Kardex kardex = kardexService.getKardex(producto.getKardex().getIdKardex());
+		mav.addObject("kardex", kardex);
 		mav.addObject("producto", producto);
 		
 		// user
@@ -236,9 +238,14 @@ public class ProductoController {
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_VENTAS')")
 	@PostMapping("/actualizar")
-	public String updateProducto(@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult, @RequestParam("image") MultipartFile image, RedirectAttributes redirAttrs) {
+	public String updateProducto(
+			@Valid @ModelAttribute("producto") Producto producto, BindingResult bindingResult,
+			@ModelAttribute("kardex") Kardex kardex,
+			@RequestParam("image") MultipartFile image, 
+			RedirectAttributes redirAttrs) {
 		String path;
 		Producto p = productService.findById(producto.getIdArticulo());
+		Kardex k = kardexService.getKardex(kardex.getIdKardex());
 
 		if(bindingResult.hasErrors()) {
 			return "producto/updateProducto";
@@ -249,6 +256,9 @@ public class ProductoController {
 			p.setPorcentajeDescuento(producto.getPorcentajeDescuento());
 			p.setDescripcionArticulo(producto.getDescripcionArticulo());
 			
+			k.setStockMinimo(kardex.getStockMinimo());
+			k.setStockMaximo(kardex.getStockMaximo());
+			
 			if(image.isEmpty()) {
 				p.setImagen(producto.getImagen());
 				productService.updateProducto(p);
@@ -257,6 +267,7 @@ public class ProductoController {
 					path = uploadImage(image);
 					p.setImagen(path);
 					productService.updateProducto(p);
+					kardexService.addKardex(k);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
