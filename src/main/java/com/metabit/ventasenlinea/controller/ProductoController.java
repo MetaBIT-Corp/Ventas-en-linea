@@ -351,10 +351,13 @@ public class ProductoController {
 		for(Producto p:productos) {
 			System.out.print(p.toString());
 		}
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    UserDetails userDetail = (UserDetails) auth.getPrincipal();
-	    mav.addObject("user", userDetail.getUsername());
-		mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
+		if(isUserLoggedIn()) {
+	    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		    mav.addObject("user", userDetail.getUsername());
+			mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
+	    }
+	    
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
 		mav.addObject("productos", productos);
 		return mav;
@@ -373,10 +376,15 @@ public class ProductoController {
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
 		mav.addObject("productos", productos);
 		mav.addObject("esProducto", 1);
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    UserDetails userDetail = (UserDetails) auth.getPrincipal();
-	    mav.addObject("user", userDetail.getUsername());
-		mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
+		
+	    if(isUserLoggedIn()) {
+	    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		    mav.addObject("user", userDetail.getUsername());
+			mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
+	    }
+	    
+	    
 		return mav;
 	}
 	
