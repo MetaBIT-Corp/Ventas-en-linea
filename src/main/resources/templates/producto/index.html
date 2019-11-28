@@ -49,7 +49,7 @@
 					<!-- ESPACIO DE TRABAJO  -->
 
 					<div class="row ml-5 mr-4">
-<<<<<<< HEAD
+
 						
 											<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos}>
 							
@@ -71,24 +71,7 @@
 
 
 																
-=======
-						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos} th:if="${producto.habilitado}">
-							 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
-						        <img th:src=${producto.imagen} class="rounded card-img-top">
-						        <!-- Para poner texto sobre imagen pero no me gusto -->
-						        <div class="carousel-caption align-text-bottom">
-						          
-						        </div>
-						     </div>
-							<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * (producto.margenGanancia/100) )+ producto.kardex.costoUnitario}">
-								<h5 class="card-title" th:text=${producto.titulo}>
-								</h5>
-								<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
-								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
-							</div>
-							<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
-						</div>
->>>>>>> 2ee829ab2f0529e816fd1c46023c16a27bad8374
+
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
 

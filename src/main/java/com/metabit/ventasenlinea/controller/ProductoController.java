@@ -78,7 +78,7 @@ public class ProductoController {
 		ArrayList<ProductoCarrito> getProductos;
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
-		mav.addObject("departamentos", ValidadDepartamento(departamentoService.getDepartamentos()));
+		mav.addObject("departamentos", departamentoService.getDepartamentos());
 		
 		mav.addObject("esProducto", 1);		
 		
@@ -439,47 +439,6 @@ public class ProductoController {
 		return productoContext;
 	}
 	
-	public List<Departamento> ValidadDepartamento(List<Departamento> departamentos){
-		List<Departamento> departamentoContext=new ArrayList<>();
-		int count=0;
-		for(Departamento d: departamentos) {		
-			
-			
-			for(Categoria cat:d.getCategoria()) {
-				
-				if(cat.getSubcategorias().isEmpty()) {
-					//d.getCategoria().remove(cat);
-					//Collection<Categoria> toDelete= new ArrayList<Categoria>();
-					//toDelete.add(cat);
-					//d.getCategoria().removeAll(toDelete);
-					
-					
-					System.out.print("Esta Null\n");
-				}
-				else {
-					for(Subcategoria sub_cat: cat.getSubcategorias()) {
-						if(sub_cat.isHabilitado()==false) {
-							count++;
-						}
-					}
-					if(cat.getSubcategorias().size()==count) {
-						System.out.print("Si son iguales\n");
-						//d.getCategoria().remove(cat);
-					}
-				}
-				
-			}
-			departamentoContext.add(d);
-			
-		}
-		for(Departamento dep:departamentoContext) {
-			System.out.print("\n"+dep.toString());
-			for(Categoria cat:dep.getCategoria()) {
-				System.out.print("\n"+cat.toString());
-			}
-		}
-		
-		return  departamentoContext;
-	}
+	
 	
 }
