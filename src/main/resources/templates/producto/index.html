@@ -49,22 +49,29 @@
 					<!-- ESPACIO DE TRABAJO  -->
 
 					<div class="row ml-5 mr-4">
-						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos} th:if="${producto.habilitado}">
-							 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
-						        <img th:src=${producto.imagen} class="rounded card-img-top">
-						        <!-- Para poner texto sobre imagen pero no me gusto -->
-						        <div class="carousel-caption align-text-bottom">
-						          
-						        </div>
-						     </div>
-							<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * (producto.margenGanancia/100) )+ producto.kardex.costoUnitario}">
-								<h5 class="card-title" th:text=${producto.titulo}>
-								</h5>
-								<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
-								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
-							</div>
-							<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
-						</div>
+
+						
+											<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos}>
+							
+												 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+											        <img th:src=${producto.imagen} class="rounded card-img-top">
+											        <!-- Para poner texto sobre imagen pero no me gusto -->
+											        <div class="carousel-caption align-text-bottom">
+											          
+											        </div>
+											     </div>
+												<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+													<h5 class="card-title" th:text=${producto.titulo}>
+													</h5>
+													<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
+													<p class="card-text" th:text=${producto.descripcionArticulo}></p>
+												</div>
+												<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
+											</div>
+
+
+																
+
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
 
@@ -228,8 +235,6 @@
 	}
 
 	function verificarCantidad(){
-		//modo=0 -- Agregar
-		//modo=1 -- Editar
 		var modo = 0;
 		if($('#id-producto').val() == "")
 			modo = 1;
@@ -240,14 +245,29 @@
 		if(modo == 0){
 			id = $('#id-producto').val();
 			cantidad = $('#cantidad-producto').val();
-			console.log(cantidad);
 		}else{
 			id = $('#id_producto').val();
 			cantidad = $('#cantidad_producto').val();
 		}
 
 		if(cantidad == 0){
-			$('#agregar').attr('disabled', 'true');	
+			if(modo == 0){
+				$('#agregar').attr('disabled', 'true');	
+			}else{
+				$('#btnGuardar').attr('disabled', 'true');
+			}
+			return;
+		}
+
+		var num = cantidad % 1;
+		if(!Number.isInteger(num)){
+			if(modo == 0){
+				$('#agregar').attr('disabled', 'true');
+				$('#existencia').text('Debe ingresar un número entero');
+			}else{
+				$('#btnGuardar').attr('disabled', 'true');
+				$('#existencia_edit').text('Debe ingresar un número entero');
+			}
 			return;
 		}
 

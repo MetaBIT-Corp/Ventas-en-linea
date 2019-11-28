@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Categoria;
+import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.entity.Kardex;
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
@@ -77,9 +79,11 @@ public class ProductoController {
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productService.getProductos());
-		mav.addObject("esProducto", 1);
-
+		
+		mav.addObject("esProducto", 1);		
+		
+		
+		mav.addObject("productos", ValidarProductos(productService.getProductos()));
 		// Si el usuario está autenticado devuelve a la vista el username y el role
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isUserLoggedIn()) {
@@ -385,7 +389,7 @@ public class ProductoController {
 	    }
 	    
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productos);
+		mav.addObject("productos", ValidarProductos(productos));
 		return mav;
 	}
 	
@@ -394,13 +398,11 @@ public class ProductoController {
 		ModelAndView mav =new ModelAndView("/producto/index");		
 		//Buscamos la subCategoria
 		Subcategoria sub_cat=subcategoriaService.getSubcategoria(id);
-		List<Producto> productos=sub_cat.getProductos();
-		for(Producto p:productos) {
-			System.out.print(p.toString());
-		}
+		List<Producto> productos=sub_cat.getProductos();	
 		
-		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productos);
+		mav.addObject("departamentos", departamentoService.getDepartamentos());		
+		
+		mav.addObject("productos", ValidarProductos(productos));
 		mav.addObject("esProducto", 1);
 		
 	    if(isUserLoggedIn()) {
@@ -413,6 +415,30 @@ public class ProductoController {
 	    
 		return mav;
 	}
+	
+	
+	//Metodo que retorna los productos en existencia
+	public  List<Producto> ValidarProductos(List<Producto> productos) {
+		
+		
+		List<Producto> productoContext= new ArrayList<>();
+		
+		for(Producto p: productos) {
+			if(p.getHabilitado()==1) {
+				if(p.getSubcategoria().isHabilitado()==true) {
+					if(p.getSubcategoria().getCategoria().isHabilitado()==true) {
+						if(p.getSubcategoria().getCategoria().getDepartamento().isHabilitado()==true) {							
+							if(p.getKardex().getUnidadesDisponibles()!=0) {
+								productoContext.add(p);
+							}
+						}
+					}
+				}
+			}
+		}
+		return productoContext;
+	}
+	
 	
 	
 }
