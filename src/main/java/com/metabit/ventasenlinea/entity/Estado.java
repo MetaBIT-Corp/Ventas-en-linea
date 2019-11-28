@@ -22,6 +22,14 @@ public class Estado {
 		super();
 	}
 
+	public int getIdEstado() {
+		return idEstado;
+	}
+
+	public void setIdEstado(int idEstado) {
+		this.idEstado = idEstado;
+	}
+
 	public Estado(int id_estado, String tituloEstado) {
 		super();
 		this.idEstado = id_estado;
