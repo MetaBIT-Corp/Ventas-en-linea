@@ -205,8 +205,13 @@ public class ProductoController {
 		String path;
 		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria); 
 		
-		if(bindingResult.hasErrors()) {
-			redirAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());
+		if(bindingResult.hasErrors() || image.isEmpty()) {
+			if(bindingResult.hasErrors()) {
+				redirAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());	
+			}
+			if(image.isEmpty()) {
+				redirAttrs.addFlashAttribute("imageError", "Debe seleccionar una imagen para el producto");
+			}
 			return "redirect:/producto/nuevo/"+subcategoria.getIdSubcategoria();
 		}else {
 			try {
@@ -352,6 +357,11 @@ public class ProductoController {
 		ModelAndView mav = new ModelAndView("producto/verDetalleProducto");
 		Producto producto = productService.findById(id);
 		mav.addObject("producto", producto);
+		
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
 		
 		return mav;
 	}	

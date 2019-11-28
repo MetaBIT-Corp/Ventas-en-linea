@@ -292,7 +292,7 @@ public class PedidoController {
 	
 	@RequestMapping(path = { "/metodo-de-pago", "/metodo-de-pago/{id}" })
 	@PreAuthorize("hasRole('ROLE_CLIENTE')")
-	public String metodoDePago(@PathVariable("id") Optional<Integer> id, Model model) {
+	public String metodoDePago(@PathVariable("id") Optional<Integer> id, Model model,HttpServletRequest request) {
 		if (id.isPresent()) {
 			// activamos metodos de pago
 			Integer num = Integer.valueOf(id.get());
@@ -308,6 +308,18 @@ public class PedidoController {
 		} else {
 			model.addAttribute("paises", paisService.getAllPais());
 		}
+		
+		
+		// Obtenemos productos de carrito de compra
+		HttpSession session = request.getSession();
+		List<ProductoCarrito> productosCarritos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
+		if (productosCarritos != null) {
+			model.addAttribute("carrito", productosCarritos);
+			model.addAttribute("total", totalAPagarBruto(productosCarritos));
+			model.addAttribute("descuento", totalDescuento(productosCarritos));
+			
+		}
+		
 		//user
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("user", user.getUsername());
@@ -708,6 +720,52 @@ public class PedidoController {
 				totalConCobros *= pc.getCantidad();
 				LOG.info("TOTAL CON COBROS------------" + totalConCobros);
 				total += totalConCobros;
+			}
+			
+
+		}
+		LOG.info("TOTAL TOTAL------------" + total);
+		return total;
+	}
+	
+	public float totalAPagarBruto(List<ProductoCarrito> productosCarritos) {
+		float total = 0.0f;
+		// Obtenemos pedido
+		Pedido pedido = pedidoService.getUltimoPedido();
+		LOG.info(pedido.toString());
+
+		if (productosCarritos != null) {
+			for (ProductoCarrito pc : productosCarritos) {
+
+				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+				float precioSinCombros = 0.0f;
+				float totalConCobros = 0.0f;
+				precioSinCombros = (float) (kardex.getCostoUnitario()
+						+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100));
+				total += precioSinCombros*pc.getCantidad();
+			}
+			
+
+		}
+		LOG.info("TOTAL TOTAL------------" + total);
+		return total;
+	}
+	
+	public float totalDescuento(List<ProductoCarrito> productosCarritos) {
+		float total = 0.0f;
+		// Obtenemos pedido
+		Pedido pedido = pedidoService.getUltimoPedido();
+		LOG.info(pedido.toString());
+
+		if (productosCarritos != null) {
+			for (ProductoCarrito pc : productosCarritos) {
+
+				Kardex kardex = kardexService.getKardexByProducto(pc.getProducto());
+				float descuento = 0.0f;
+				
+				descuento = (float) ((kardex.getCostoUnitario()
+						+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100))*(pc.getProducto().getPorcentajeDescuento()/100));
+				total += descuento*pc.getCantidad();
 			}
 			
 

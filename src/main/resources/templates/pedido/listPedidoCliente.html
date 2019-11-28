@@ -78,18 +78,20 @@
 											<th>Acciones</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr th:if="${#arrays.length(pedidos) > 0}" th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}">
+									<tbody th:if="${#arrays.length(pedidos) > 0}">
+										<tr  th:each="i:${#numbers.sequence(0,#arrays.length(pedidos)-1)}" th:if="${pedidos[i].estado.idEstado !=4}">
+											
 											<td th:text="${pedidos[i].fechaPedido}"></td>
 											<td th:text="${pedidos[i].direccionDestino}"></td>
 											<td th:text="${pedidos[i].pais.nombrePais}"></td>
-											<td th:text="'$ '+${montos[i]}"></td>
+											<td th:text="'$ '+${#numbers.formatDecimal(montos[i],1,2,'POINT')}"></td>
 											<td class="text-center">
 											<span th:if="${pedidos[i].estado.tituloEstado== 'Enviado'}" class='badge badge-primary'>DESPACHADO</span>
 											<span th:if="${pedidos[i].estado.tituloEstado!= 'Enviado'}"
 											 class='badge badge-warning'>EN PROCESO</span>
 											</td>
 											<td><a th:href="@{/pedido/{pedido}/resumen-compra(pedido=${pedidos[i].idPedido})}"	class="btn btn-info text-white" title="Ver Resumen de Compra"><i class="fas fa-list-ol"></i></a></td>
+											
 										</tr>
 									</tbody>
 									<tfoot>

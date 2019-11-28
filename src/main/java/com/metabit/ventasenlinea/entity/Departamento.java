@@ -37,7 +37,7 @@ public class Departamento {
 	@Column(name = "habilitado")
 	private boolean habilitado;
 	
-	@OneToMany(mappedBy = "departamento", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "departamento", fetch = FetchType.EAGER)
 	@JsonIgnore
     private List<Categoria> categoria =  new ArrayList<>(); 
 	
