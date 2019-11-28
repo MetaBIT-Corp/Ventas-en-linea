@@ -72,28 +72,30 @@
 										<td th:unless="${departamento.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
 										<td>				
-											<a class="btn btn-sm btn-secondary" title="Listado de Categorias" style="text-decoration: none; color: white;"
+											<a th:if="${departamento.habilitado}" class="btn btn-sm btn-secondary" title="Listado de Categorias" style="text-decoration: none; color: white;"
 												th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i
 												class="fas fa-list"></i>
 											</a>
 													
-											<a class="btn btn-sm btn-primary" style="text-decoration: none; color: white;"
+											<a th:if="${departamento.habilitado}" class="btn btn-sm btn-primary" style="text-decoration: none; color: white;"
 												th:href="@{'/departamento/form-departamento/'+${departamento.id}+''}" title="Editar">
 												<span><i class="fas fa-pencil-alt"></i></span>
 											</a>
 											
+											
+											
 											<a th:if="${departamento.habilitado}"
 												class="btn btn-sm btn-danger" title="Deshabilitar"
-												data-deshabilitar-departamento th:value="${departamento.id}"
+												data-deshabilitar-departamento th:attr="data-deshabilitar-departamento = ${departamento.id}"
 												style="text-decoration: none; color: white;">
-												<i class="fas fa-minus "></i>
+												<i class="fas fa-lock "></i>
 											</a>
 											
 											<a th:unless="${departamento.habilitado}"
-												class="btn btn-sm btn-option" title="Habilitar"
-												data-habilitar-departamento th:value="${departamento.id}"
+												class="btn btn-sm btn-primary" title="Habilitar"
+												data-habilitar-departamento th:attr="data-habilitar-departamento = ${departamento.id}"
 												style="text-decoration: none; color: white;">
-												<i class="fas fa-check"></i>
+												<i class="fas fa-lock-open"></i>
 											</a>
 										</td>
 									</tr>
@@ -133,7 +135,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="habilitar-departamento-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{/departamento/habilitar-departamento-post}"
 						method="POST">
 						<h5>¿Desea habilitar este departamento?</h5>
@@ -172,7 +174,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="deshabilitar-departamento-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{/departamento/deshabilitar-departamento-post}"
 						method="POST">
 						<h5>¿Desea deshabilitar este departamento?</h5>
@@ -224,12 +226,12 @@
 		$('[data-habilitar-departamento]').on('click', habilitarDepartamento);
 
 		function deshabilitarDepartamento() {
-			$('#id_departamento').attr('value', $(this).val());
+			$('#id_departamento').attr('value', $(this).data('deshabilitar-departamento'));
 			$('#deshabilitarDepartamento').modal('show');
 		}
 
 		function habilitarDepartamento() {
-			$('#id_departamento_habilitar').attr('value', $(this).val());
+			$('#id_departamento_habilitar').attr('value', $(this).data('habilitar-departamento'));
 			$('#habilitarDepartamento').modal('show');
 		}
 	</script>

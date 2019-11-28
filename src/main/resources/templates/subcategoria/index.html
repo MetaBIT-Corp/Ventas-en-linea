@@ -45,7 +45,10 @@
 						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h4 mb-0 text-gray-800">Listado de Subcategorías</h1>
 						<h1 class="h4 mb-0 text-gray-800">
-							Categoría: <span th:text="${categoria.nombre}"></span>
+							Categoría: 
+							<a th:href="@{'/departamento/'+${categoria.departamento.id}+'/categoria/listar'}">
+							<span th:text="${categoria.nombre}"></span>
+							</a>
 						</h1>
 						<a href="#" 
 							th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria'}"
@@ -76,12 +79,12 @@
 										<td th:unless="${subcategoria.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
 										<td>
-											<a class="btn btn-sm btn-secondary" title="Listado de productos" 
+											<a th:if="${subcategoria.habilitado}" class="btn btn-sm btn-secondary" title="Listado de productos" 
 												style="text-decoration: none; color: white;" 
 												th:href="@{/producto/listar/{id}(id=${subcategoria.idSubcategoria})}">
 												<i class="fas fa-list"></i>
 											</a>
-												<a class="btn btn-sm btn-primary" title="Editar" 
+												<a th:if="${subcategoria.habilitado}" class="btn btn-sm btn-primary" title="Editar" 
 													style="text-decoration: none; color: white;"
 													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria/'+${subcategoria.idSubcategoria}+''}">
 													<i class="fas fa-pencil-alt"></i>
@@ -89,14 +92,14 @@
 											<a th:if="${subcategoria.habilitado}"
 												class="btn btn-sm btn-danger" title="Deshabilitar"
 												style="text-decoration: none; color: white;"
-												data-deshabilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
-												<i class="fas fa-minus "></i>
+												data-deshabilitar-subcategoria th:attr="data-deshabilitar-subcategoria = ${subcategoria.idSubcategoria}">
+												<i class="fas fa-lock "></i>
 											</a>
 											<a th:unless="${subcategoria.habilitado}"
-												class="btn btn-sm btn-option" title="Habilitar"
+												class="btn btn-sm btn-primary" title="Habilitar"
 												style="text-decoration: none; color: white;"
-												data-habilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
-												<i class="fas fa-check"></i>
+												data-habilitar-subcategoria th:attr="data-habilitar-subcategoria = ${subcategoria.idSubcategoria}">
+												<i class="fas fa-lock-open"></i>
 											</a>
 										</td>
 									</tr>
@@ -133,7 +136,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="habilitar-subcategoria-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/habilitar-subcategoria-post'}"
 						method="POST">
 						<h5>¿Desea habilitar esta subcategoria?</h5>
@@ -172,7 +175,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="deshabilitar-subcategoria-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/deshabilitar-subcategoria-post'}"
 						method="POST">
 						<h5>¿Desea deshabilitar esta subcategoria?</h5>
@@ -227,12 +230,12 @@
 		$('[data-habilitar-subcategoria]').on('click', habilitarSubcategoria);
 
 		function deshabilitarSubcategoria() {
-			$('#id_subcategoria').attr('value', $(this).val());
+			$('#id_subcategoria').attr('value',  $(this).data('deshabilitar-subcategoria'));
 			$('#deshabilitarSubcategoria').modal('show');
 		}
 
 		function habilitarSubcategoria() {
-			$('#id_subcategoria_habilitar').attr('value', $(this).val());
+			$('#id_subcategoria_habilitar').attr('value', $(this).data('habilitar-subcategoria'));
 			$('#habilitarSubcategoria').modal('show');
 		}
 	</script>

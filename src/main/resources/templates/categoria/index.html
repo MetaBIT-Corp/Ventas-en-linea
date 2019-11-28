@@ -43,7 +43,11 @@
 					<div
 						class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h4 mb-0 text-gray-800">Listado de Categorías</h1>
-						<h1 class="h4 mb-0 text-gray-800" >Departamento: <span th:text="${departamento.nombre}"></span></h1>
+						<h1 class="h4 mb-0 text-gray-800" >Departamento: 
+						<a href="#" th:href="@{'/departamento/listar'}"><span th:text="${departamento.nombre}"></span></a>
+						
+						
+						</h1>
 						<a href="#"
 							th:href="@{'/departamento/'+${departamento.id}+'/categoria/form-categoria'}"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
@@ -73,25 +77,25 @@
 										<td th:unless="${categoria.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
 										<td>
-											<a class="btn btn-sm btn-secondary" title="Listado de Sub-categorias" style="text-decoration: none; color: white;"
+											<a th:if="${categoria.habilitado}" class="btn btn-sm btn-secondary" title="Listado de Sub-categorias" style="text-decoration: none; color: white;"
 												th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i
 												class="fas fa-list"></i>
 											</a>
-											<a class="btn btn-sm btn-primary" title="Editar" style="text-decoration: none; color: white;"
+											<a th:if="${categoria.habilitado}" class="btn btn-sm btn-primary" title="Editar" style="text-decoration: none; color: white;"
 												th:href="@{'/departamento/'+${departamento.id}+'/categoria/form-categoria/'+${categoria.id}+''}">
 												<i class="fas fa-pencil-alt"></i>
 											</a>
 											<a th:if="${categoria.habilitado}"
 												class="btn btn-sm btn-danger" title="Deshabilitar"
-												data-deshabilitar-categoria th:value="${categoria.id}"
+												data-deshabilitar-categoria th:attr="data-deshabilitar-categoria = ${categoria.id}"
 												style="text-decoration: none; color: white;">
-												<i class="fas fa-minus "></i>
+												<i class="fas fa-lock "></i>
 											</a>
 											<a th:unless="${categoria.habilitado}"
-												class="btn btn-sm btn-option" title="Habilitar"
-												data-habilitar-categoria th:value="${categoria.id}"
+												class="btn btn-sm btn-primary" title="Habilitar"
+												data-habilitar-categoria th:attr="data-habilitar-categoria = ${categoria.id}"
 												style="text-decoration: none; color: white;">
-												<i class="fas fa-check"></i>
+												<i class="fas fa-lock-open"></i>
 											</a>
 										</td>
 									</tr>
@@ -130,7 +134,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="habilitar-categoria-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{'/departamento/'+${departamento.id}+'/categoria/habilitar-categoria-post'}"
 						method="POST">
 						<h5>¿Desea habilitar esta categoria?</h5>
@@ -170,7 +174,7 @@
 					</button>
 				</div>
 				<div class="modal-body" id="deshabilitar-categoria-body">
-					<form class="user" action="#"
+					<form action="#"
 						th:action="@{'/departamento/'+${departamento.id}+'/categoria/deshabilitar-categoria-post'}"
 						method="POST">
 						<h5>¿Desea deshabilitar esta categoria?</h5>
@@ -223,12 +227,12 @@
 				habilitarCategoria);
 
 		function deshabilitarCategoria() {
-			$('#id_categoria').attr('value', $(this).val());
+			$('#id_categoria').attr('value', $(this).data('deshabilitar-categoria'));
 			$('#deshabilitarCategoria').modal('show');
 		}
 		
 		function habilitarCategoria() {
-			$('#id_categoria_habilitar').attr('value', $(this).val());
+			$('#id_categoria_habilitar').attr('value', $(this).data('habilitar-categoria'));
 			$('#habilitarCategoria').modal('show');
 		}
 	</script>
