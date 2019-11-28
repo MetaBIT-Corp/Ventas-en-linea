@@ -144,7 +144,7 @@
 	$('#agregar').on('click', agregarProductoCarrito);
 	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
-	$('#cantidad-producto').keyup(verificarCantidad);
+	$('#cantidad-producto').on('keyup mouseup',verificarCantidad);
 
 	function lanzarModal(){
 		$('#id-producto').attr('value', $(this).val());
@@ -226,6 +226,12 @@
 	function verificarCantidad(){
 		var id = $('#id-producto').val();
 		var cantidad = $('#cantidad-producto').val();
+		console.log(cantidad);
+
+		if(cantidad == 0){
+			$('#agregar').attr('disabled', 'true');	
+			return;
+		}
 
 		$.get('/api/cantidad-disponible/'+id, function(existencia){
 
