@@ -74,7 +74,7 @@
 															<td
 																th:text="'$'+${#numbers.formatDecimal(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100), 0, 'COMMA', 2, 'POINT')  }"></td>
 															<td
-																th:text=" '$'+${#numbers.formatDecimal( product.cantidad* (product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100)) * (product.producto.porcentajeDescuento/100) , 0, 'COMMA', 2, 'POINT')} + ' (' +${product.producto.porcentajeDescuento }+'%)'"></td>
+																th:text=" '$'+${#numbers.formatDecimal( product.cantidad* ( product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100)) * (product.producto.porcentajeDescuento/100) , 0, 'COMMA', 2, 'POINT')} + ' (' +${product.producto.porcentajeDescuento }+'%)'"></td>
 															<td
 																th:text="'$'+${#numbers.formatDecimal(product.cantidad*(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario*(product.producto.margenGanancia/100)), 0, 'COMMA', 2, 'POINT')   }"></td>
 														</tr>

@@ -730,9 +730,6 @@ public class PedidoController {
 	
 	public float totalAPagarBruto(List<ProductoCarrito> productosCarritos) {
 		float total = 0.0f;
-		// Obtenemos pedido
-		Pedido pedido = pedidoService.getUltimoPedido();
-		LOG.info(pedido.toString());
 
 		if (productosCarritos != null) {
 			for (ProductoCarrito pc : productosCarritos) {
@@ -753,10 +750,6 @@ public class PedidoController {
 	
 	public float totalDescuento(List<ProductoCarrito> productosCarritos) {
 		float total = 0.0f;
-		// Obtenemos pedido
-		Pedido pedido = pedidoService.getUltimoPedido();
-		LOG.info(pedido.toString());
-
 		if (productosCarritos != null) {
 			for (ProductoCarrito pc : productosCarritos) {
 
@@ -767,8 +760,6 @@ public class PedidoController {
 						+ kardex.getCostoUnitario() * (pc.getProducto().getMargenGanancia()/100))*(pc.getProducto().getPorcentajeDescuento()/100));
 				total += descuento*pc.getCantidad();
 			}
-			
-
 		}
 		LOG.info("TOTAL TOTAL------------" + total);
 		return total;
