@@ -96,6 +96,7 @@
       <!--<form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">-->
         <div class="modal-body" id="agregar-producto">
           <input type="hidden" value="" id="id-producto" name="producto_id">
+          <input type="hidden" value="0" id="modo">
           <div class="form-group">
             <label for="cantidad-producto">Cantidad*</label>
             <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
@@ -123,9 +124,11 @@
       </div>
         <div class="modal-body" id="editar-producto">
           <input type="hidden" value="" id="id_producto" name="producto_id">
+          <input type="hidden" value="1" id="modo">
           <div class="form-group">
             <label for="cantidad-producto">Cantidad*</label>
             <input type="number" min="1" class="form-control" id="cantidad_producto" name="cantidad" value="">
+            <em id="existencia_edit" style="color: red"></em>
           </div>
         </div>
         <div class="modal-footer">
@@ -145,6 +148,7 @@
 	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
 	$('#cantidad-producto').on('keyup mouseup',verificarCantidad);
+	$('#cantidad_producto').on('keyup mouseup',verificarCantidad);
 
 	function lanzarModal(){
 		$('#id-producto').attr('value', $(this).val());
@@ -169,7 +173,7 @@
 				'</div>'+
 				'<div class="col">'+
 				'<a href="/producto/remover-producto/'+data[i].producto.idArticulo+'" title="Remover" class="float-right btn btn-sm btn-danger"><i class="fas fa-minus-circle"></i></a>'+
-				'<button onclick="editarModal('+data[i].producto.idArticulo+','+data[i].cantidad+')" class="float-right btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></button>'+
+				'<button style="margin-right:5px;" onclick="editarModal('+data[i].producto.idArticulo+','+data[i].cantidad+')" class="float-right btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></button>'+
 				'</div>'+
 				'</div>';
 				if(i<data.length-1){
@@ -224,9 +228,23 @@
 	}
 
 	function verificarCantidad(){
-		var id = $('#id-producto').val();
-		var cantidad = $('#cantidad-producto').val();
-		console.log(cantidad);
+		//modo=0 -- Agregar
+		//modo=1 -- Editar
+		var modo = 0;
+		if($('#id-producto').val() == "")
+			modo = 1;
+		
+		var id = 0;
+		var cantidad = 0;
+		
+		if(modo == 0){
+			id = $('#id-producto').val();
+			cantidad = $('#cantidad-producto').val();
+			console.log(cantidad);
+		}else{
+			id = $('#id_producto').val();
+			cantidad = $('#cantidad_producto').val();
+		}
 
 		if(cantidad == 0){
 			$('#agregar').attr('disabled', 'true');	
@@ -236,11 +254,21 @@
 		$.get('/api/cantidad-disponible/'+id, function(existencia){
 
 			if(existencia < cantidad){
-				$('#agregar').attr('disabled', 'true');
-				$('#existencia').text('La cantidad ingresada supera las unidades disponibles');
+				if(modo == 0){
+					$('#agregar').attr('disabled', 'true');
+					$('#existencia').text('La cantidad ingresada supera las unidades disponibles');	
+				}else{
+					$('#btnGuardar').attr('disabled', 'true');
+					$('#existencia_edit').text('La cantidad ingresada supera las unidades disponibles');	
+				}
 			}else{
-				$('#existencia').text('');
-				$('#agregar').removeAttr('disabled');
+				if(modo == 0){
+					$('#existencia').text('');
+					$('#agregar').removeAttr('disabled');	
+				}else{
+					$('#existencia_edit').text('');
+					$('#btnGuardar').removeAttr('disabled');
+				}
 			}
 		})
 	}
