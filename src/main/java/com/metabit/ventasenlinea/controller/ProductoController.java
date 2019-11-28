@@ -201,8 +201,13 @@ public class ProductoController {
 		String path;
 		Subcategoria subcategoria = subcategoriaService.getSubcategoria(idSubcategoria); 
 		
-		if(bindingResult.hasErrors()) {
-			redirAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());
+		if(bindingResult.hasErrors() || image.isEmpty()) {
+			if(bindingResult.hasErrors()) {
+				redirAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());	
+			}
+			if(image.isEmpty()) {
+				redirAttrs.addFlashAttribute("imageError", "Debe seleccionar una imagen para el producto");
+			}
 			return "redirect:/producto/nuevo/"+subcategoria.getIdSubcategoria();
 		}else {
 			try {
