@@ -57,7 +57,7 @@
 						          
 						        </div>
 						     </div>
-							<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+							<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * (producto.margenGanancia/100) )+ producto.kardex.costoUnitario}">
 								<h5 class="card-title" th:text=${producto.titulo}>
 								</h5>
 								<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
