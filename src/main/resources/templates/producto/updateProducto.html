@@ -83,11 +83,11 @@
 									<div class="form-group row">
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                    <label for="">Margen de ganancia*</label>
-									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user" required>
+									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" max="100" class="form-control form-control-user" required>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Porcentaje de descuento*</label>
-									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user" required>
+									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" max="100" class="form-control form-control-user" required>
 					                  </div>
 					                </div>
 
