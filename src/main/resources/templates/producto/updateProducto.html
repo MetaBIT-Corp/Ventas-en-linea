@@ -72,39 +72,39 @@
 									<div class="form-group row">
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                    <label for="">Nombre del producto*</label>
-									  	<input type="text" th:field="*{producto.titulo}" class="form-control form-control-user">
+									  	<input type="text" th:field="*{producto.titulo}" class="form-control form-control-user" required>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Marca del producto*</label>
-									  	<input type="text" th:field="*{producto.marca}" class="form-control form-control-user">
+									  	<input type="text" th:field="*{producto.marca}" class="form-control form-control-user" required>
 					                  </div>
 					                </div>
 
 									<div class="form-group row">
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
 					                    <label for="">Margen de ganancia*</label>
-									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user">
+									  	<input type="number" th:field="*{producto.margenGanancia}" min="0" class="form-control form-control-user" required>
 					                  </div>
 					                  <div class="col-sm-6">
 					                    <label for="">Porcentaje de descuento*</label>
-									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user">
+									  <input type="number" th:field="*{producto.porcentajeDescuento}" min="0" class="form-control form-control-user" required>
 					                  </div>
 					                </div>
 
 									<div class="form-group row">
 					                  <div class="col-sm-6 mb-3 mb-sm-0">
-					                      <label for="">Cantidad máxima*</label>
-										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user">
+					                  	<label for="">Catidad mínima*</label>
+										  <input type="number" th:field="*{kardex.stockMinimo}" min="0" class="form-control form-control-user" required id="cantidadMinima">
 					                  </div>
 					                  <div class="col-sm-6">
-					                    <label for="">Catidad mínima*</label>
-										  <input type="number" th:field="*{kardex.stockMinimo}" min="0" class="form-control form-control-user">
+					                    <label for="">Cantidad máxima*</label>
+										  <input type="number" th:field="*{kardex.stockMaximo}" min="0" class="form-control form-control-user" required id="cantidadMaxima">
 					                  </div>
 					                </div>
 
 									<div class="form-group">
 										<label for="">Descripción del producto*</label>
-									  	<textarea th:field="*{producto.descripcionArticulo}" class="form-control form-control-user"></textarea>
+									  	<textarea th:field="*{producto.descripcionArticulo}" class="form-control form-control-user" required></textarea>
 									</div>
 									<div class="form-group">
 										<label for="">Imagen del producto*</label>
@@ -141,7 +141,14 @@
 	  	setTimeout(function() {
 	       $(".alert").fadeOut();           
 	  	},3000);
-	})
+	});
+
+	$('#cantidadMinima').on('blur', function(){
+		var cantidad_max = $('#cantidadMaxima');
+		var cantidad_min = $(this).val();
+
+		cantidad_max.attr('min', parseInt(cantidad_min, 10)+1);
+  	});
 </script>
 
 </html>
