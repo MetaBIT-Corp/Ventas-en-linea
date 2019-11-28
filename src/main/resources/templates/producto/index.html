@@ -226,10 +226,16 @@
 	function verificarCantidad(){
 		var id = $('#id-producto').val();
 		var cantidad = $('#cantidad-producto').val();
-		console.log(cantidad);
 
 		if(cantidad == 0){
 			$('#agregar').attr('disabled', 'true');	
+			return;
+		}
+
+		var num = cantidad % 1;
+		if(!Number.isInteger(num)){
+			$('#agregar').attr('disabled', 'true');
+			$('#existencia').text('Debe ingresar un número entero');
 			return;
 		}
 
