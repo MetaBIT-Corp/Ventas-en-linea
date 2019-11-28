@@ -354,6 +354,11 @@ public class ProductoController {
 		Producto producto = productService.findById(id);
 		mav.addObject("producto", producto);
 		
+		// user
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		mav.addObject("user", user.getUsername());
+		mav.addObject("role", user.getAuthorities().toArray()[0].toString());
+		
 		return mav;
 	}	
 	
