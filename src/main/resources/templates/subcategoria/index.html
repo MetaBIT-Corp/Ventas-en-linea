@@ -76,29 +76,28 @@
 										<td th:unless="${subcategoria.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
 										<td>
-											<button class="btn-sm btn-secondary"
-												title="Listado de productos">
-												<a style="text-decoration: none; color: white;" 
+											<a class="btn btn-sm btn-secondary" title="Listado de productos" 
+												style="text-decoration: none; color: white;" 
 												th:href="@{/producto/listar/{id}(id=${subcategoria.idSubcategoria})}">
 												<i class="fas fa-list"></i>
-												</a>
-											</button>
-											<button class="btn-sm btn-primary" title="Editar" >
-												<a style="text-decoration: none; color: white;"
+											</a>
+												<a class="btn btn-sm btn-primary" title="Editar" 
+													style="text-decoration: none; color: white;"
 													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/form-subcategoria/'+${subcategoria.idSubcategoria}+''}">
 													<i class="fas fa-pencil-alt"></i>
 												</a>
-											</button>
-											<button th:if="${subcategoria.habilitado}"
-												class="btn-sm btn-danger" title="Deshabilitar"
+											<a th:if="${subcategoria.habilitado}"
+												class="btn btn-sm btn-danger" title="Deshabilitar"
+												style="text-decoration: none; color: white;"
 												data-deshabilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
 												<i class="fas fa-minus "></i>
-											</button>
-											<button th:unless="${subcategoria.habilitado}"
-												class="btn-sm btn-option" title="Habilitar"
+											</a>
+											<a th:unless="${subcategoria.habilitado}"
+												class="btn btn-sm btn-option" title="Habilitar"
+												style="text-decoration: none; color: white;"
 												data-habilitar-subcategoria th:value="${subcategoria.idSubcategoria}">
 												<i class="fas fa-check"></i>
-											</button>
+											</a>
 										</td>
 									</tr>
 

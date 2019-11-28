@@ -71,30 +71,30 @@
 										<td th:if="${departamento.habilitado}" th:text="Habilitado"><span>Habilitado</span></td>
 										<td th:unless="${departamento.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
-										<td>
-											<button class="btn-sm btn-secondary"
-												title="Listado de Categorias">
-
-												<a style="text-decoration: none; color: white;"
-													th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i
-													class="fas fa-list"></i></a>
-											</button>
-											<button class="btn-sm btn-primary" title="Editar">
-												<a style="text-decoration: none; color: white;"
-													th:href="@{'/departamento/form-departamento/'+${departamento.id}+''}">
-													<i class="fas fa-pencil-alt"></i>
-												</a>
-											</button>
-											<button th:if="${departamento.habilitado}"
-												class="btn-sm btn-danger" title="Deshabilitar"
-												data-deshabilitar-departamento th:value="${departamento.id}">
+										<td>				
+											<a class="btn btn-sm btn-secondary" title="Listado de Categorias" style="text-decoration: none; color: white;"
+												th:href="@{'/departamento/'+${departamento.id}+'/categoria/listar'}"><i
+												class="fas fa-list"></i>
+											</a>
+													
+											<a class="btn btn-sm btn-primary" style="text-decoration: none; color: white;"
+												th:href="@{'/departamento/form-departamento/'+${departamento.id}+''}" title="Editar">
+												<span><i class="fas fa-pencil-alt"></i></span>
+											</a>
+											
+											<a th:if="${departamento.habilitado}"
+												class="btn btn-sm btn-danger" title="Deshabilitar"
+												data-deshabilitar-departamento th:value="${departamento.id}"
+												style="text-decoration: none; color: white;">
 												<i class="fas fa-minus "></i>
-											</button>
-											<button th:unless="${departamento.habilitado}"
-												class="btn-sm btn-option" title="Habilitar"
-												data-habilitar-departamento th:value="${departamento.id}">
+											</a>
+											
+											<a th:unless="${departamento.habilitado}"
+												class="btn btn-sm btn-option" title="Habilitar"
+												data-habilitar-departamento th:value="${departamento.id}"
+												style="text-decoration: none; color: white;">
 												<i class="fas fa-check"></i>
-											</button>
+											</a>
 										</td>
 									</tr>
 								</tbody>

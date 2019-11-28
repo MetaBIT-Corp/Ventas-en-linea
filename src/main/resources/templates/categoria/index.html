@@ -73,28 +73,26 @@
 										<td th:unless="${categoria.habilitado}"
 											th:text="Deshabilitado"><span>Deshabilitado</span></td>
 										<td>
-											<button class="btn-sm btn-secondary"
-												title="Listado de Sub-categorias">
-												<a style="text-decoration: none; color: white;"
-													th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i
-													class="fas fa-list"></i></a>
-											</button>
-											<button class="btn-sm btn-primary" title="Editar">
-												<a style="text-decoration: none; color: white;"
-													th:href="@{'/departamento/'+${departamento.id}+'/categoria/form-categoria/'+${categoria.id}+''}">
-													<i class="fas fa-pencil-alt"></i>
-												</a>
-											</button>
-											<button th:if="${categoria.habilitado}"
-												class="btn-sm btn-danger" title="Deshabilitar"
-												data-deshabilitar-categoria th:value="${categoria.id}">
+											<a class="btn btn-sm btn-secondary" title="Listado de Sub-categorias" style="text-decoration: none; color: white;"
+												th:href="@{'/departamento/categoria/'+${categoria.id}+'/subcategoria/listar'}"><i
+												class="fas fa-list"></i>
+											</a>
+											<a class="btn btn-sm btn-primary" title="Editar" style="text-decoration: none; color: white;"
+												th:href="@{'/departamento/'+${departamento.id}+'/categoria/form-categoria/'+${categoria.id}+''}">
+												<i class="fas fa-pencil-alt"></i>
+											</a>
+											<a th:if="${categoria.habilitado}"
+												class="btn btn-sm btn-danger" title="Deshabilitar"
+												data-deshabilitar-categoria th:value="${categoria.id}"
+												style="text-decoration: none; color: white;">
 												<i class="fas fa-minus "></i>
-											</button>
-											<button th:unless="${categoria.habilitado}"
-												class="btn-sm btn-option" title="Habilitar"
-												data-habilitar-categoria th:value="${categoria.id}">
+											</a>
+											<a th:unless="${categoria.habilitado}"
+												class="btn btn-sm btn-option" title="Habilitar"
+												data-habilitar-categoria th:value="${categoria.id}"
+												style="text-decoration: none; color: white;">
 												<i class="fas fa-check"></i>
-											</button>
+											</a>
 										</td>
 									</tr>
 								</tbody>
