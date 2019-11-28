@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.metabit.ventasenlinea.entity.Categoria;
+import com.metabit.ventasenlinea.entity.Departamento;
 import com.metabit.ventasenlinea.entity.Kardex;
 import com.metabit.ventasenlinea.entity.Producto;
 import com.metabit.ventasenlinea.entity.ProductoCarrito;
@@ -76,10 +78,12 @@ public class ProductoController {
 		ArrayList<ProductoCarrito> getProductos;
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
-		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productService.getProductos());
-		mav.addObject("esProducto", 1);
-
+		mav.addObject("departamentos", ValidadDepartamento(departamentoService.getDepartamentos()));
+		
+		mav.addObject("esProducto", 1);		
+		
+		
+		mav.addObject("productos", ValidarProductos(productService.getProductos()));
 		// Si el usuario está autenticado devuelve a la vista el username y el role
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (isUserLoggedIn()) {
@@ -375,7 +379,7 @@ public class ProductoController {
 	    }
 	    
 		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productos);
+		mav.addObject("productos", ValidarProductos(productos));
 		return mav;
 	}
 	
@@ -384,13 +388,11 @@ public class ProductoController {
 		ModelAndView mav =new ModelAndView("/producto/index");		
 		//Buscamos la subCategoria
 		Subcategoria sub_cat=subcategoriaService.getSubcategoria(id);
-		List<Producto> productos=sub_cat.getProductos();
-		for(Producto p:productos) {
-			System.out.print(p.toString());
-		}
+		List<Producto> productos=sub_cat.getProductos();	
 		
-		mav.addObject("departamentos", departamentoService.getDepartamentos());
-		mav.addObject("productos", productos);
+		mav.addObject("departamentos", departamentoService.getDepartamentos());		
+		
+		mav.addObject("productos", ValidarProductos(productos));
 		mav.addObject("esProducto", 1);
 		
 	    if(isUserLoggedIn()) {
@@ -404,5 +406,70 @@ public class ProductoController {
 		return mav;
 	}
 	
+	
+	//Metodo que retorna los productos en existencia
+	public  List<Producto> ValidarProductos(List<Producto> productos) {
+		
+		
+		List<Producto> productoContext= new ArrayList<>();
+		
+		for(Producto p: productos) {
+			if(p.getHabilitado()==1) {
+				if(p.getSubcategoria().isHabilitado()==true) {
+					if(p.getSubcategoria().getCategoria().isHabilitado()==true) {
+						if(p.getSubcategoria().getCategoria().getDepartamento().isHabilitado()==true) {							
+							if(p.getKardex().getUnidadesDisponibles()!=0) {
+								productoContext.add(p);
+							}
+						}
+					}
+				}
+			}
+		}
+		return productoContext;
+	}
+	
+	public List<Departamento> ValidadDepartamento(List<Departamento> departamentos){
+		List<Departamento> departamentoContext=new ArrayList<>();
+		int count=0;
+		for(Departamento d: departamentos) {		
+			
+			
+			for(Categoria cat:d.getCategoria()) {
+				
+				if(cat.getSubcategorias().isEmpty()) {
+					//d.getCategoria().remove(cat);
+					//Collection<Categoria> toDelete= new ArrayList<Categoria>();
+					//toDelete.add(cat);
+					//d.getCategoria().removeAll(toDelete);
+					
+					
+					System.out.print("Esta Null\n");
+				}
+				else {
+					for(Subcategoria sub_cat: cat.getSubcategorias()) {
+						if(sub_cat.isHabilitado()==false) {
+							count++;
+						}
+					}
+					if(cat.getSubcategorias().size()==count) {
+						System.out.print("Si son iguales\n");
+						//d.getCategoria().remove(cat);
+					}
+				}
+				
+			}
+			departamentoContext.add(d);
+			
+		}
+		for(Departamento dep:departamentoContext) {
+			System.out.print("\n"+dep.toString());
+			for(Categoria cat:dep.getCategoria()) {
+				System.out.print("\n"+cat.toString());
+			}
+		}
+		
+		return  departamentoContext;
+	}
 	
 }
