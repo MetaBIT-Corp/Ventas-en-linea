@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.metabit.ventasenlinea.entity.Empleado;
+import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.repository.EmpleadoJpaRepository;
 import com.metabit.ventasenlinea.service.EmpleadoService;
 
@@ -31,5 +32,10 @@ public class EmpleadoServiceImpl implements EmpleadoService{
 	public Empleado buscarPorID(int id) {
 		
 		return empleadoJpaRepository.findByIdEmpleado(id);
+	}
+	
+	@Override
+	public Empleado buscarPorUser(User user) {
+		return empleadoJpaRepository.findByUser(user);
 	}
 }

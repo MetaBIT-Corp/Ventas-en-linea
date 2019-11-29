@@ -10,6 +10,7 @@
 <meta name="author:metabit" content="" />
 
 <title>MetaBit Store Online</title>
+<!--  
 <style type="text/css">
 
 * {
@@ -126,7 +127,7 @@ fieldset {
 :-ms-input-placeholder {
   color: #888;
 }
-</style>
+</style>-->
 <!-- Custom fonts for this template-->
 <link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
 	rel="stylesheet" type="text/css">
@@ -153,7 +154,7 @@ fieldset {
 				<div th:insert="fragments/topbar::topbar"></div>
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
-				<a href="#" th:href="@{/ventas-online/base}"
+				<a href="#" th:href="@{/producto/index}"
 							class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
 							<i class="fas fa-arrow-circle-left fa-sm text-white-50"> </i>
 							Regresar
@@ -170,28 +171,33 @@ fieldset {
 									<h4 th:text="${message}"></h4>
 								</div>
 						</div>
-						<form id="contact"  method="post" th:action="@{/cliente/updateCuenta}">
+						<form class="user" id="contact"  method="post" th:action="@{/cliente/updateCuenta}">
 						<br>
 						    <h3 class="text-center">Actualizacion de Datos</h3>
+						    <br>
 						    <fieldset>
-						      <input th:field="*{cliente.nombreCliente}" placeholder="Nombre" type="text" tabindex="1"  autofocus>
+						      <input th:field="*{cliente.nombreCliente}" placeholder="Nombre" type="text" tabindex="1" class="form-control form-control-user"  autofocus>
 						      <p th:if="${#fields.hasErrors('cliente.nombreCliente')}" th:errors="*{cliente.nombreCliente}" class="alert alert-danger"></p>
 						    </fieldset>
+						    <br>
 						    <fieldset>
-						      <input th:field="*{cliente.apellidoCliente}" placeholder="Apellidos" type="text" tabindex="1"  autofocus>
+						      <input th:field="*{cliente.apellidoCliente}" placeholder="Apellidos" type="text" tabindex="1" class="form-control form-control-user"  autofocus>
 						      <p th:if="${#fields.hasErrors('cliente.apellidoCliente')}" th:errors="*{cliente.apellidoCliente}" class="alert alert-danger"></p>
 						    </fieldset>
+						    <br>
 						    <fieldset>
-						      <input readonly th:field="*{user2.email}" placeholder="Email" type="email" tabindex="2" >
+						      <input readonly th:field="*{user2.email}" placeholder="Email" type="email" tabindex="2"  class="form-control form-control-user">
 						      <p th:if="${#fields.hasErrors('user2.email')}" th:errors="*{user2.email}" class="alert alert-danger"></p>
 						    </fieldset>					   
 						    
+						    <br>
 						    <fieldset>
-						      <textarea th:field="*{cliente.direccion}" placeholder="Direccion" tabindex="5" ></textarea>
+						      <textarea th:field="*{cliente.direccion}" placeholder="Direccion" tabindex="5" class="form-control form-control-user" ></textarea>
 						      <p th:if="${#fields.hasErrors('cliente.direccion')}" th:errors="*{cliente.direccion}" class="alert alert-danger"></p>
-						    </fieldset>
+						    </fieldset>	
+						    <br>
 						    <fieldset>
-						      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Actualizar</button>
+						      <button name="submit" class="btn btn-primary btn-user btn-block" type="submit" id="contact-submit" data-submit="...Sending">Actualizar</button>
 						    </fieldset>
 						    
 						  </form>

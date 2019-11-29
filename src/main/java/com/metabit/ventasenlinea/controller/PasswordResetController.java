@@ -45,10 +45,12 @@ public class PasswordResetController {
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
         if (resetToken == null){
             model.addAttribute("error", "\r\n" + "No se pudo encontrar el token de restablecimiento de contraseña");
+            
         } else if (resetToken.isExpired()){
             model.addAttribute("error", "\r\n" + "El token ha expirado, solicite un nuevo restablecimiento de contraseña.");
         } else {
             model.addAttribute("token", resetToken.getToken());
+            model.addAttribute("valido", 1);
         }
         return "reset-password";
     }
