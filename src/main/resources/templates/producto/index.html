@@ -235,8 +235,6 @@
 	}
 
 	function verificarCantidad(){
-		//modo=0 -- Agregar
-		//modo=1 -- Editar
 		var modo = 0;
 		if($('#id-producto').val() == "")
 			modo = 1;
@@ -247,14 +245,29 @@
 		if(modo == 0){
 			id = $('#id-producto').val();
 			cantidad = $('#cantidad-producto').val();
-			console.log(cantidad);
 		}else{
 			id = $('#id_producto').val();
 			cantidad = $('#cantidad_producto').val();
 		}
 
 		if(cantidad == 0){
-			$('#agregar').attr('disabled', 'true');	
+			if(modo == 0){
+				$('#agregar').attr('disabled', 'true');	
+			}else{
+				$('#btnGuardar').attr('disabled', 'true');
+			}
+			return;
+		}
+
+		var num = cantidad % 1;
+		if(!Number.isInteger(num)){
+			if(modo == 0){
+				$('#agregar').attr('disabled', 'true');
+				$('#existencia').text('Debe ingresar un número entero');
+			}else{
+				$('#btnGuardar').attr('disabled', 'true');
+				$('#existencia_edit').text('Debe ingresar un número entero');
+			}
 			return;
 		}
 
