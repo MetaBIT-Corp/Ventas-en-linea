@@ -157,10 +157,17 @@
                                 <td width="400" align="center">
                                     <div class="contentEditableContainer contentTextEditable">
                                         <div class="contentEditable" align='left' >
-                                            <p th:text="${'Hola ' + cliente.nombreCliente + ' ' + cliente.apellidoCliente}"></p>
+                                        	<div th:if="${isEmpleado}">
+                                        		
+                                        		<p th:text="${'Hola Empleado:' + empleado.nombreEmpleado + ' ' + empleado.apellidoEmpleado}"></p>
+                                        		
+                                        	</div>
+                                        	<div th:if="${isCliente}">
+                                        		<p th:text="${'Hola Cliente:' + cliente.nombreCliente + ' ' + cliente.apellidoCliente}"></p>
+                                        	</div>                                            
                                                 <br/>
                                                 <br/>
-                                                MetaBIT  ha recibido la solicitud para restablecer tu contraseña de la cuenta de usuario, da clic en el siguiente botón para reestablecerla.   </p>
+                                                MetaBIT  ha recibido la solicitud para restablecer tu contraseña de la cuenta de usuario, da clic en el siguiente botón para reestablecerla.</p>
                                         </div>
                                     </div>
                                 </td>

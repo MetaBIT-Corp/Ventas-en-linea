@@ -146,8 +146,8 @@
 													<i class="fas fa-lock-open"></i>
 												</button>
 												<a th:href="@{/empleado/edit-empleado/__${ue.idEmpleado}__}">
-												<button  class="btn btn-sm btn-warning" title="Editar Cuenta de Empleado">
-												<i class="fas fa-pen-square"></i>
+												<button  class="btn btn-sm btn-primary" title="Editar Cuenta de Empleado">
+												<i class="fas fa-pencil-alt"></i>
 												</button>
 												</a>
 											</td>
@@ -216,10 +216,10 @@
       </div>
       <div class="modal-body text-center">
      	<a th:href="@{/empleado/crear-empleado-venta}">
-         <button type="button" class="btn btn-warning ">Para Ventas</button>
+         <button type="button" class="btn btn-primary btn-user">Para Ventas</button>
          </a>
          <a th:href="@{/empleado/crear-empleado-bodega}">
-          <button type="button" class="btn btn-warning">Para Bodega</button>
+          <button type="button" class="btn btn-primary btn-user">Para Bodega</button>
           </a>
       </div>
       <div class="modal-footer">

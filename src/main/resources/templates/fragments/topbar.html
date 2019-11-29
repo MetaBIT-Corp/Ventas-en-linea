@@ -235,8 +235,8 @@
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
-                <a th:if="${user!= null && role == 'ROLE_BODEGA' || role == 'ROLE_VENTAS' || role == 'ROLE_CLIENTE' }" th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#" >
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                <a th:if="${user!= null && role == 'ROLE_CLIENTE' }" th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#" >
+                  <i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                  Editar mi Cuenta
                 </a>
                 

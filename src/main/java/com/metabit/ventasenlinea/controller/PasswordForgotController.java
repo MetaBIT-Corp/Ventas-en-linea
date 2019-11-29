@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.metabit.ventasenlinea.entity.Cliente;
+import com.metabit.ventasenlinea.entity.Empleado;
 import com.metabit.ventasenlinea.entity.Mail;
 import com.metabit.ventasenlinea.entity.User;
 import com.metabit.ventasenlinea.entity.PasswordResetToken;
 import com.metabit.ventasenlinea.controller.dto.PasswordForgotDto;
 import com.metabit.ventasenlinea.repository.PasswordResetTokenRepository;
+import com.metabit.ventasenlinea.service.ClienteService;
+import com.metabit.ventasenlinea.service.EmpleadoService;
 import com.metabit.ventasenlinea.service.impl.ClienteServiceImpl;
 import com.metabit.ventasenlinea.service.impl.EmailServiceImpl;
 import com.metabit.ventasenlinea.service.impl.UserServiceImpl;
@@ -34,7 +37,12 @@ public class PasswordForgotController {
 	private static final Log LOG= LogFactory.getLog(PasswordForgotController.class);
 	@Autowired
 	@Qualifier("clienteServiceImpl")
-	private ClienteServiceImpl clienteServiceImpl;
+	private ClienteService clienteService;
+	
+	@Autowired
+	@Qualifier("empleadoServiceImpl")
+	private EmpleadoService empleadoService;
+	
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserServiceImpl userServiceImpl;
@@ -69,33 +77,40 @@ public class PasswordForgotController {
             result.rejectValue("email", null, "No pudimos encontrar una cuenta para esa dirección de correo electrónico.");
             return "forgot-password";
         }
-
-        PasswordResetToken token = new PasswordResetToken();
-        //UUID Genera una cadena de 128bits(16bytes)
-        token.setToken(UUID.randomUUID().toString());
-        token.setUser(user);
-        //30 minutos de Expiracion
-        token.setExpiryDate(30);
-        tokenRepository.save(token);
-        Cliente cliente;
-        cliente=clienteServiceImpl.BuscarUsuario(user);
-        cliente.setUser(user);        
-        LOG.info("Cliente "+cliente.getNombreCliente());
-        Mail mail = new Mail();
-        mail.setFrom("Empresa de Venta <ddjochoa.20@gmail.com>");
-        mail.setTo(user.getEmail());
-        mail.setSubject("Recuperacion de Contraseña");
-
-        Map<String, Object> model = new HashMap<>();
-        model.put("token", token);
-        model.put("cliente", cliente);
-        //model.put("signature", "https://memorynotfound.com");
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
-        mail.setModel(model);
-        emailServiceImpl.sendEmail(mail);
-
-        return "redirect:/forgot-password?success";
+        else {
+        	PasswordResetToken token = new PasswordResetToken();
+            //UUID Genera una cadena de 128bits(16bytes)
+            token.setToken(UUID.randomUUID().toString());
+            token.setUser(user);
+            //30 minutos de Expiracion
+            token.setExpiryDate(30);
+            tokenRepository.save(token);
+            Mail mail = new Mail();
+            Map<String, Object> model = new HashMap<>();
+        	Empleado empleado=empleadoService.buscarPorUser(user);
+        	if(empleado!=null) {
+        		empleado.setUser(user);
+        		model.put("isEmpleado", 1);
+        		model.put("empleado", empleado);
+        		
+        	}
+        	Cliente cliente=clienteService.BuscarUsuario(user);
+        	if(cliente!=null) {
+        		cliente.setUser(user);
+        		model.put("isCliente", 1);
+        		 model.put("cliente", cliente);
+        		 
+        	}
+        	mail.setFrom("Empresa de Venta <ddjochoa.20@gmail.com>");
+            mail.setTo(user.getEmail());
+            mail.setSubject("Recuperacion de Contraseña");            
+            model.put("token", token);
+            String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+            model.put("resetUrl", url + "/reset-password?token=" + token.getToken());
+            mail.setModel(model);
+            emailServiceImpl.sendEmail(mail);
+            return "redirect:/forgot-password?success";
+        }
 
     }
 }
