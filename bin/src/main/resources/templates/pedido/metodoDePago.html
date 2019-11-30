@@ -48,9 +48,89 @@
 								<div class="card-body p-0">
 
 
+									<!-- Nested Row within Card Body -->
+									<div class="row">
+
+										<div class="col-lg-8">
+											<div class="p-5">
+												<div class="text-justify mb-3">
+													<h1 class="h4 text-gray-900 mb-2">Productos del
+														carrito</h1>
+												</div>
+												<table class="table" th:if="${carrito != null}">
+													<thead class="thead-dark">
+														<tr >
+															<th scope="col">Producto</th>
+															<th scope="col">Cantidad</th>
+															<th scope="col">Precio Unitario</th>
+															<th scope="col">Descuento</th>
+															<th scope="col">Sub total</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="product : ${carrito}">
+															<th scope="row" th:text="${product.producto.titulo}"></th>
+															<td th:text="${product.cantidad}"></td>
+															<td
+																th:text="'$'+${#numbers.formatDecimal(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100), 0, 'COMMA', 2, 'POINT')  }"></td>
+															<td
+																th:text=" '$'+${#numbers.formatDecimal( product.cantidad* ( product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100)) * (product.producto.porcentajeDescuento/100) , 0, 'COMMA', 2, 'POINT')} + ' (' +${product.producto.porcentajeDescuento }+'%)'"></td>
+															<td
+																th:text="'$'+${#numbers.formatDecimal(product.cantidad*(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario*(product.producto.margenGanancia/100)), 0, 'COMMA', 2, 'POINT')   }"></td>
+														</tr>
+													</tbody>
+												</table>
+												<hr>
+												<div th:unless="${carrito != null}"
+													class="alert alert-danger" role="alert">No ha
+													seleccionado productos en el carrito!</div>
 
 
+											</div>
+										</div>
+										<div class="col-lg-4">
+											<div class="p-5">
+												<div class="text-center mb-3">
+													<h1 class="h4 text-gray-900 mb-2">Resumen</h1>
+												</div>
 
+
+												<table class="table" th:if="${carrito != null}">
+													<thead>
+														<tr>
+															<th class="table-dark" scope="col">SubTotal</th>
+															<td scope="col"
+																th:text="'$'+${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<th class="table-dark" scope="row">Descuento (-)</th>
+															<td th:text="'$'+${#numbers.formatDecimal(descuento, 0, 'COMMA', 2, 'POINT')}"></td>
+														</tr>
+														<tr>
+															<th class="table-dark" scope="row">Costo de envio (+) </th>
+															<td th:if="${pais != null}" th:text="'$'+${#numbers.formatDecimal(total*pais.costoEnvio, 0, 'COMMA', 2, 'POINT')}"></td>
+														</tr>
+														<tr>
+															<th class="table-dark" scope="row">Impuestos (+)</th>
+															<td th:if="${pais != null}" th:text="'$'+${#numbers.formatDecimal(total*pais.impuesto, 0, 'COMMA', 2, 'POINT')}"></td>
+														</tr>
+														<tr>
+															<th class="table-dark" scope="row">Total a pagar (=)</th>
+															<td th:if="${pais != null}" th:text="'$'+${#numbers.formatDecimal(total - descuento + total*pais.costoEnvio +total*pais.impuesto, 0, 'COMMA', 2, 'POINT')}"></td>
+														</tr>
+													</tbody>
+												</table>
+
+
+											</div>
+										</div>
+
+									</div>
+
+									<hr>
 									<!-- Nested Row within Card Body -->
 									<div class="row">
 
@@ -65,8 +145,9 @@
 													</p>
 												</div>
 
-												<form th:if="${paises!=null || pais== null || pedido == null}" action="#"
-													th:action="@{/pedido/metodo-de-pago/envio-post}"
+												<form
+													th:if="${paises!=null || pais== null || pedido == null}"
+													action="#" th:action="@{/pedido/metodo-de-pago/envio-post}"
 													method="POST">
 													<div class="form-group row">
 														<div class="col-sm-6 mb-3 mb-sm-0">
@@ -80,24 +161,25 @@
 													<div class="form-group">
 														<textarea type="text"
 															class="form-control form-control-user"
-															placeholder="Dirección" id="direccion_destino"
-															name="direccion_destino"> </textarea>
+															placeholder="Direccion de destino" id="direccion_destino"
+															name="direccion_destino"></textarea>
 													</div>
-													<button type="submit"
-														class="btn btn-primary btn-user btn-block">
-														Listo</button>
+													<button th:if="${carrito != null}" type="submit"
+														class="btn btn-primary btn-user btn-block">Listo</button>
 													<hr>
 													<a href="#" th:href="@{/producto/index}"
 														class="btn btn-user btn-block"> Cancelar </a>
 												</form>
-												
-												<div th:if="${paises==null && pais!= null && pedido != null} " align="justify">
-													<i class="fas fa-box-open fa-sm text-black-50 mr-3"></i>	
-													<p class="mb-4" th:text="'Direccion de destino: '+ ${pedido.direccionDestino} +', Pais: '+ ${pais.nombrePais}" style="color: black;">
-													
-													</p>
+
+												<div
+													th:if="${paises==null && pais!= null && pedido != null} "
+													align="justify">
+													<i class="fas fa-box-open fa-sm text-black-50 mr-3"></i>
+													<p class="mb-4"
+														th:text="'Direccion de destino: '+ ${pedido.direccionDestino} +', Pais: '+ ${pais.nombrePais}"
+														style="color: black;"></p>
 												</div>
-												
+
 												<hr>
 												<div class="text-center">
 													<a class="small" href="#" th:href="@{/producto/index}">
@@ -116,7 +198,9 @@
 														pago!</p>
 												</div>
 
-												<div  th:if="${paises==null && pais!= null && pedido != null} " class="list-group">
+												<div
+													th:if="${paises==null && pais!= null && pedido != null} "
+													class="list-group">
 													<a th:href="@{/pedido/metodo-de-pago/tarjeta}"
 														class="list-group-item list-group-item-action"> <img
 														class="mr-3" alt=""
@@ -129,22 +213,24 @@
 														width="100"> Paypal
 													</a>
 												</div>
-												
-												<div th:if="${paises!=null || pais== null || pedido == null}" class="list-group">
+
+												<div
+													th:if="${paises!=null || pais== null || pedido == null}"
+													class="list-group">
 													<button th:href="@{/pedido/metodo-de-pago/tarjeta}"
-														class="list-group-item list-group-item-action"> <img
-														class="mr-3" alt=""
-														src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png"
-														width="100"
-														data-toggle="tooltip" data-placement="right" title="Elige el lugar de envío"
-														> Tarjeta de crédito o débito
-													</button> <button th:href="@{/pedido/metodo-de-pago/paypal}"
-														class="list-group-item list-group-item-action"> <img
-														class="mr-3" alt=""
-														src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png"
-														width="100"
-														data-toggle="tooltip" data-placement="right" title="Elige el lugar de envío" 
-														> Paypal
+														class="list-group-item list-group-item-action">
+														<img class="mr-3" alt=""
+															src="https://www.telecomlead.com/wp-content/uploads/2013/10/credit-card.png"
+															width="100" data-toggle="tooltip" data-placement="right"
+															title="Elige el lugar de envío"> Tarjeta de crédito
+														o débito
+													</button>
+													<button th:href="@{/pedido/metodo-de-pago/paypal}"
+														class="list-group-item list-group-item-action">
+														<img class="mr-3" alt=""
+															src="https://blog.casadellibro.com/wp-content/uploads/2019/06/paypal-784404_1280-1024x512.png"
+															width="100" data-toggle="tooltip" data-placement="right"
+															title="Elige el lugar de envío"> Paypal
 													</button>
 												</div>
 												<hr>
@@ -190,10 +276,10 @@
 
 	<!-- Page level custom scripts -->
 	<script th:src="@{/js/demo/datatables-demo.js}"></script>
-	
+
 	<script type="text/javascript">
-	$(function () {
-		  $('[data-toggle="tooltip"]').tooltip()
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip()
 		})
 	</script>
 

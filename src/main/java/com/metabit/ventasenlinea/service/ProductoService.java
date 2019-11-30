@@ -20,4 +20,5 @@ public interface ProductoService {
 	public abstract Producto findById(int id_producto);
 	
 	public abstract Producto updateProducto(Producto producto);
+	public abstract List<Producto> buscarProducto(String nombre);
 }

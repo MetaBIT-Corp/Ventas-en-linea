@@ -58,8 +58,9 @@
           <span>Productos</span></a>
       </li>
       <!-- Divider -->
-      <hr class="sidebar-divider">
-      <li class="nav-item" th:each=departamento:${departamentos} th:if="${departamento.habilitado}" >
+      <hr class="sidebar-divider" th:if="${esProducto}">
+      <div th:if="${esProducto}">
+      <li class="nav-item" th:each=departamento:${departamentos} th:if="${departamento.habilitado }" >
         <a class="nav-link collapsed" href="" data-toggle="collapse" th:attr="data-target='#model'+${departamento.id} ,aria-controls = ${departamento.nombre}"   aria-expanded="true" >
           
           <span th:text="${departamento.nombre}"></span>
@@ -76,6 +77,7 @@
           </div>
         </div>
       </li>
+      </div>
       
       
       <!-- Nav Item - Dashboard 

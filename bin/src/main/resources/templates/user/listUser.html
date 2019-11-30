@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>MetaBit Store Online | Productos</title>
+<title>Lista Usuarios</title>
 
 <!-- Custom fonts for this template-->
 <link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
@@ -56,12 +56,12 @@
 									<h4 class="h3 mb-0 text-gray-800">Empleados</h4>
 								</div>
 								<div class="col">
-									<a class="btn btn-sm mb-3 float-right"										
-										title="Registrar empleado">
-										<button type="button" class="btn btn-primary"
-											data-toggle="modal" data-target="#exampleModalCenter">
-											Nuevo Empleado</button>
-									</a>
+										<button title="Registrar empleado" type="button" 
+										class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm float-right"
+										data-toggle="modal" data-target="#exampleModalCenter">
+										<i class="fas fa-plus-circle"></i>
+											Nuevo Empleado
+										</button>
 								</div>
 							</div>
 						</div>
@@ -91,6 +91,7 @@
 									</tfoot>
 									<tbody>
 										<tr th:each="uc:${usersClient}">
+											<div th:if="${uc.user.userRoles[0].role} != 'ROLE_ADMIN'">
 											<td th:text="${uc.nombreCliente}"></td>
 											<td th:text="${uc.apellidoCliente}"></td>
 											<td th:text="${uc.user.email}"></td>
@@ -114,14 +115,15 @@
 												<button th:if="${uc.user.verifyed} == 1" title="Deshabilitar cuenta de usuario"
 													class="btn btn-sm btn-danger"
 													th:onclick="|deshab_hab_usuario('${uc.user.idUser}',1)|">
-													<i class="fas fa-minus-circle"></i>
+													<i class="fas fa-lock"></i>
 												</button>
 												<button th:if="${uc.user.verifyed} == 0" title="Habilitar cuenta de usuario"
 													class="btn btn-sm btn-primary"
 													th:onclick="|deshab_hab_usuario('${uc.user.idUser}',0)|">
-													<i class="fas fa-plus-circle"></i>
+													<i class="fas fa-lock-open"></i>
 												</button>
 											</td>
+											</div>
 										</tr>
 										<tr th:each="ue:${empleados}">
 											<td th:text="${ue.nombreEmpleado}"></td>
@@ -136,16 +138,16 @@
 												<button th:if="${ue.user.verifyed} == 1" title="Deshabilitar cuenta de empleado"
 													class="btn btn-sm btn-danger"
 													th:onclick="|deshab_hab_usuario('${ue.user.idUser}',1)|">
-													<i class="fas fa-minus-circle"></i>
+													<i class="fas fa-lock"></i>
 												</button>
 												<button th:if="${ue.user.verifyed} == 0" title="Habilitar cuenta de empleado"
 													class="btn btn-sm btn-primary"
 													th:onclick="|deshab_hab_usuario('${ue.user.idUser}',0)|">
-													<i class="fas fa-plus-circle"></i>
+													<i class="fas fa-lock-open"></i>
 												</button>
 												<a th:href="@{/empleado/edit-empleado/__${ue.idEmpleado}__}">
-												<button  class="btn btn-sm btn-warning" title="Editar Cuenta de Empleado">
-												<i class="fas fa-pen-square"></i>
+												<button  class="btn btn-sm btn-primary" title="Editar Cuenta de Empleado">
+												<i class="fas fa-pencil-alt"></i>
 												</button>
 												</a>
 											</td>
@@ -214,10 +216,10 @@
       </div>
       <div class="modal-body text-center">
      	<a th:href="@{/empleado/crear-empleado-venta}">
-         <button type="button" class="btn btn-warning ">Para Ventas</button>
+         <button type="button" class="btn btn-primary btn-user">Para Ventas</button>
          </a>
          <a th:href="@{/empleado/crear-empleado-bodega}">
-          <button type="button" class="btn btn-warning">Para Bodega</button>
+          <button type="button" class="btn btn-primary btn-user">Para Bodega</button>
           </a>
       </div>
       <div class="modal-footer">

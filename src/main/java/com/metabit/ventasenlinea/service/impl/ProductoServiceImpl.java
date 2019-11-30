@@ -42,5 +42,9 @@ public class ProductoServiceImpl implements ProductoService{
 	public Producto updateProducto(Producto producto) {
 		return productoRepository.save(producto);
 	}
+	@Override
+	public List<Producto> buscarProducto(String nombre){
+		return productoRepository.findByTituloContaining(nombre);
+	}
 	 
 }
