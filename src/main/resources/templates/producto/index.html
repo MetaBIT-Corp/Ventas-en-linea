@@ -108,10 +108,18 @@
 									class="btn btn-primary">Añadir a Carrito</button>
 							</div>
 						</div>
+						
 
 
 
-
+					</div>
+					
+					<div th:if="${searchNull}" class="alert alert-warning" role="alert">
+					  <h4 class="alert-heading">Opps</h4>
+					  <p>No Encontramos el Producto que usted busca, le invitamos a seguir navegando por nuestra tienda</p>
+					  <hr>
+					  
+					  <p class="mb-0"> <a th:href="@{/producto/index}">Regresar al Inicio</a></p>
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
 

@@ -444,7 +444,12 @@ public class ProductoController {
 
 	@RequestMapping(value = "/searchProduct", method = RequestMethod.GET)
 	public String search(@RequestParam(value = "search", required = false) String q, Model model) {
-
+		
+		if(q.isEmpty()) {
+			
+			return "redirect:/producto/index";
+		}
+		
 		List<Producto> searchResults = null;
 
 		try {
@@ -458,7 +463,13 @@ public class ProductoController {
 		}
 		model.addAttribute("nombreBusqueda", q);
 		model.addAttribute("esProducto", 1);
-		model.addAttribute("productos", ValidarProductos(searchResults));
+		if(searchResults.isEmpty()) {
+			model.addAttribute("searchNull", 1);
+		}
+		else {
+			model.addAttribute("productos", ValidarProductos(searchResults));
+		}
+		
 		model.addAttribute("departamentos", ValidarDepartamento());
 		if (isUserLoggedIn()) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
