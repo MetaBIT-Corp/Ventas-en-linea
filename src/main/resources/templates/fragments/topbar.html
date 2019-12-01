@@ -1,13 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8"/>
+<meta charset="utf-8" />
 <title>Insert title here</title>
+<!--  
+<style type="text/css">
+
+
+.dropdown.dropdown-lg .dropdown-menu {
+	margin-top: -1px;
+	padding: 6px 20px;
+}
+
+.input-group-btn .btn-group {
+	display: flex !important;
+}
+
+.btn-group .btn {
+	border-radius: 0;
+	margin-left: -1px;
+}
+
+.btn-group .btn:last-child {
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.btn-group .form-horizontal .btn[type="submit"] {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.form-horizontal .form-group {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.form-group .form-control:last-child {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+@media screen and (min-width: 768px) {
+	#adv-search {
+		width: 500px;
+		margin: 0 auto;
+	}
+	.dropdown.dropdown-lg {
+		position: static !important;
+	}
+	.dropdown.dropdown-lg .dropdown-menu {
+		min-width: 500px;
+	}
+}
+</style>
+-->
 </head>
 <body>
-<!-- Topbar -->
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" th:fragment="topbar">
+	<!-- Topbar -->
+	<nav
+		class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+		th:fragment="topbar">
 
+		<!--  
+		<div class="col-md-5">
+			<div class="input-group " id="adv-search">
+				<input type="text" class="form-control bg-light border-0 small"
+					placeholder="Buscar por..." />
+				<div class="input-group-btn">
+					<div class="btn-group " role="group">
+						<div class="dropdown dropdown-lg ">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown" aria-expanded="false">
+								<span class="caret"></span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right col-md-8"
+								role="menu">
+								
+								<form class="col-md-12" role="form">
+									<div class="form-group">
+										<label for="filter">Filter by</label> <select
+											class="form-control">
+											<option value="0" selected>All Snippets</option>
+											<option value="1">Featured</option>
+											<option value="2">Most popular</option>
+											<option value="3">Top rated</option>
+											<option value="4">Most commented</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="contain">Author</label> <input
+											class="form-control" type="text" />
+									</div>
+									<div class="form-group">
+										<label for="contain">Contains the words</label> <input
+											class="form-control" type="text" />
+									</div>
+									<button type="submit" class="btn btn-primary">
+										<span class="fas fa-search fa-sm" aria-hidden="true"></span>
+									</button>
+								</form>
+								
+								
+							</div>
+						</div>
+						<button type="button" class="btn btn-primary">
+							<span class="fas fa-search fa-sm" aria-hidden="true"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+-->
+
+
+<<<<<<< HEAD
           <!-- Sidebar Toggle (Topbar) 
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
             <i class="fa fa-bars"></i>
@@ -29,16 +136,39 @@
 					</div>
 				</div>
 			</form>
+=======
+		<!-- Sidebar Toggle (Topbar) 
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>-->
+         <!--  --> 
+		<!-- Topbar Search-->
+		<form th:if="${esProducto}" th:action="@{/producto/searchProduct}"
+			class="col-md-4">
+			<div class="input-group">
+				<input type="text" th:value="${nombreBusqueda}"
+					class="form-control bg-light border-0 small" name="search"
+					id="search" placeholder="Buscar por..." aria-label="Search"
+					aria-describedby="basic-addon2">			
 
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
+				<div class="input-group-append">
+					<button class="btn btn-primary" type="submit">
+						<i class="fas fa-search fa-sm"></i>
+					</button>
+				</div>
+			</div>
+		</form>
+>>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 
-            <!-- Nav Item - Search Dropdown (Visible Only XS)
+		<!-- Topbar Navbar -->
+		<ul class="navbar-nav ml-auto">
+
+			<!-- Nav Item - Search Dropdown (Visible Only XS)
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-search fa-fw"></i>
               </a> -->
-              <!-- Dropdown - Messages  
+			<!-- Dropdown - Messages  
               <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                 <form class="form-inline mr-auto w-100 navbar-search">
                   <div class="input-group">
@@ -54,7 +184,7 @@
              
             </li>-->
 
-            <!-- Nav Item - Alerts 
+			<!-- Nav Item - Alerts 
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
@@ -103,7 +233,7 @@
               </div>
             </li>
 -->
-            <!-- Nav Item - Messages 
+			<!-- Nav Item - Messages 
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
@@ -161,67 +291,73 @@
 			-->
 
 			<!-- Carrito de compras -->
-            <div th:if="${esProducto }" >
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow">
-              <span title="Carrito de compras" class="nav-link dropdown-toggle" id="carrito" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-shopping-cart"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
-              </span>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header text-center">
-                  Productos agregados
-                </h6>
-                <div class="dropdown-item" id="productos_agregados">
-                  <div class="row">
-                    <div class="col">
-                    <span class="float-left font-weight-bold">No hay productos agregados </span>
-                  </div>
-                  </div>
-                </div>
-                
-                <div class="dropdown-footer ">
-                  <a href="#" th:href="@{/pedido/metodo-de-pago}" class="btn btn-primary btn-icon-split mt-2 mb-2 mr-2 float-right ">
-                    <span class="icon text-gray-200">
-                      <i class="fas fa-arrow-right"></i>
-                    </span>
-                    <span class="text">Realizar pago</span>
-                  </a>
-                </div>
-              </div>
-            </li>
-            </div>
-            <!-- Carrito de compras -->
-            
-            <!-- Pedidos -->
-            <div th:if="${esProducto}">
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow" th:if="${role == 'ROLE_CLIENTE'}">
-              <a th:href="@{/pedido/list-pedido}" class="nav-link dropdown-toggle" id="carrito" aria-haspopup="true" aria-expanded="false" title="Ver pedido">
-                <i class="fas fa-clipboard-list"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
-              </a>
-              <!-- Dropdown - Alerts -->
-            </li>
-            </div>
-             <!-- Pedidos -->
+			<div th:if="${esProducto }">
+				<!-- Nav Item - Alerts -->
+				<li class="nav-item dropdown no-arrow"><span
+					title="Carrito de compras" class="nav-link dropdown-toggle"
+					id="carrito" role="button" data-toggle="dropdown"
+					aria-haspopup="true" aria-expanded="false"> <i
+						class="fas fa-shopping-cart"></i> <!-- Counter - Alerts --> <span
+						class="badge badge-danger badge-counter" id="cantidad_agregada"></span>
+				</span> <!-- Dropdown - Alerts -->
+					<div
+						class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+						aria-labelledby="alertsDropdown">
+						<h6 class="dropdown-header text-center">Productos agregados</h6>
+						<div class="dropdown-item" id="productos_agregados">
+							<div class="row">
+								<div class="col">
+									<span class="float-left font-weight-bold">No hay
+										productos agregados </span>
+								</div>
+							</div>
+						</div>
+
+						<div class="dropdown-footer ">
+							<a href="#" th:href="@{/pedido/metodo-de-pago}"
+								class="btn btn-primary btn-icon-split mt-2 mb-2 mr-2 float-right ">
+								<span class="icon text-gray-200"> <i
+									class="fas fa-arrow-right"></i>
+							</span> <span class="text">Realizar pago</span>
+							</a>
+						</div>
+					</div></li>
+			</div>
+			<!-- Carrito de compras -->
+
+			<!-- Pedidos -->
+			<div th:if="${esProducto}">
+				<!-- Nav Item - Alerts -->
+				<li class="nav-item dropdown no-arrow"
+					th:if="${role == 'ROLE_CLIENTE'}"><a
+					th:href="@{/pedido/list-pedido}" class="nav-link dropdown-toggle"
+					id="carrito" aria-haspopup="true" aria-expanded="false"
+					title="Ver pedido"> <i class="fas fa-clipboard-list"></i> <!-- Counter - Alerts -->
+						<span class="badge badge-danger badge-counter"
+						id="cantidad_agregada"></span>
+				</a> <!-- Dropdown - Alerts --></li>
+			</div>
+			<!-- Pedidos -->
 
 
-            <div class="topbar-divider d-none d-sm-block"></div>
+			<div class="topbar-divider d-none d-sm-block"></div>
 
-            <!-- Nav Item - User Information -->
-            <li class="nav-item dropdown no-arrow">
-              <a  class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${user!= null}" th:text="${user}" > </span>
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:if="${role!= null}" th:text="${role}" > </span>
-                <img class="img-profile rounded-circle" src="https://cdn0.iconfinder.com/data/icons/user-collection-4/512/user-512.png">
-              </a>
-              <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-              <!--  
+			<!-- Nav Item - User Information -->
+			<li class="nav-item dropdown no-arrow"><a
+				class="nav-link dropdown-toggle" href="#" id="userDropdown"
+				role="button" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false"> <span
+					class="mr-2 d-none d-lg-inline text-gray-600 small"
+					th:if="${user!= null}" th:text="${user}"> </span> <span
+					class="mr-2 d-none d-lg-inline text-gray-600 small"
+					th:if="${role!= null}" th:text="${role}"> </span> <img
+					class="img-profile rounded-circle"
+					src="https://cdn0.iconfinder.com/data/icons/user-collection-4/512/user-512.png">
+			</a> <!-- Dropdown - User Information -->
+				<div
+					class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+					aria-labelledby="userDropdown">
+					<!--  
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
@@ -236,26 +372,25 @@
                 </a>
                 <div class="dropdown-divider"></div>
                 -->
-                <a th:if="${user!= null}" class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
-                </a>
-                <a th:if="${user!= null && role == 'ROLE_CLIENTE' }" th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#" >
-                  <i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                 Editar mi Cuenta
-                </a>
-                
-                <a th:if="${user== null}" class="dropdown-item" th:href="@{/ventas-online/login}" >
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Login
-                </a>
-              </div>
-            </li>
+					<a th:if="${user!= null}" class="dropdown-item" href="#"
+						data-toggle="modal" data-target="#logoutModal"> <i
+						class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						Cerrar Sesión
+					</a> <a th:if="${user!= null && role == 'ROLE_CLIENTE' }"
+						th:href="@{/cliente/updateCliente}" class="dropdown-item" href="#">
+						<i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						Editar mi Cuenta
+					</a> <a th:if="${user== null}" class="dropdown-item"
+						th:href="@{/ventas-online/login}"> <i
+						class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+						Iniciar Sesión
+					</a>
+				</div></li>
 
-          </ul>
+		</ul>
 
-        </nav>
-        <!-- End of Topbar -->
+	</nav>
+	<!-- End of Topbar -->
 
 </body>
 </html>

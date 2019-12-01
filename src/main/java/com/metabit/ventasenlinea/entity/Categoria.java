@@ -108,4 +108,11 @@ public class Categoria {
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", habilitado="
+				+ habilitado + ", departamento=" + departamento + ", subcategorias=" + subcategorias + "]";
+	}
+	
+
 }

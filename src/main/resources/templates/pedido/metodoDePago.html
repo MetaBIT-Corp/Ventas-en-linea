@@ -9,7 +9,7 @@
 <meta name="description: ventas en linea" content="" />
 <meta name="author:metabit" content="" />
 
-<title>MetaBit Store Online</title>
+<title>Metodo de Pago</title>
 
 <!-- Custom fonts for this template-->
 <link th:href="@{/vendor/fontawesome-free/css/all.min.css}"
@@ -29,7 +29,7 @@
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 		<!-- Sidebar -->
-		<div th:insert="fragments/sidebar::sidebar"></div>
+		<div th:insert="fragments/sidebar::sidebar" class="bg-gradient-primary"></div>
 		<!-- Content Wrapper -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<!-- Main Content -->
@@ -74,7 +74,7 @@
 															<td
 																th:text="'$'+${#numbers.formatDecimal(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100), 0, 'COMMA', 2, 'POINT')  }"></td>
 															<td
-																th:text=" '$'+${#numbers.formatDecimal( product.cantidad* (product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100)) * (product.producto.porcentajeDescuento/100) , 0, 'COMMA', 2, 'POINT')} + ' (' +${product.producto.porcentajeDescuento }+'%)'"></td>
+																th:text=" '$'+${#numbers.formatDecimal( product.cantidad* ( product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario * (product.producto.margenGanancia/100)) * (product.producto.porcentajeDescuento/100) , 0, 'COMMA', 2, 'POINT')} + ' (' +${product.producto.porcentajeDescuento }+'%)'"></td>
 															<td
 																th:text="'$'+${#numbers.formatDecimal(product.cantidad*(product.producto.kardex.costoUnitario + product.producto.kardex.costoUnitario*(product.producto.margenGanancia/100)), 0, 'COMMA', 2, 'POINT')   }"></td>
 														</tr>

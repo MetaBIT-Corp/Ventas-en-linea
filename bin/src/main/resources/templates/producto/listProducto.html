@@ -61,12 +61,17 @@
 		              	<div class="col">
 		              		<h4 class="m-0 font-weight-bold text-primary float-left">Productos</h4>
 		              	</div>
+		              	<div th:if="${todos} != 1">
 		              	<div class="col">
-		              		<a class="btn btn-sm mb-3 float-right" th:href="@{/producto/nuevo/{id}(id=${subcategoria.idSubcategoria})}" title="Registrar producto">
+		              		<a class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm float-right" 
+		              		th:href="@{/producto/nuevo/{id}(id=${subcategoria.idSubcategoria})}" title="Registrar producto">
 			                	<i class="fas fa-plus-circle"></i>
 			                	<b>Registrar Producto</b>
 			           		</a>
 		              	</div>
+
+
+		              </div>
 		              </div>
 		            </div>
 		            <div class="card-body">
@@ -91,7 +96,7 @@
 		                    </tr>
 		                  </tfoot>
 		                  <tbody>
-		                    <tr th:each="producto:${subcategoria.productos}">
+		                    <tr th:each="producto:${productos}">
 		                      <td th:text="${producto.titulo}"></td>
 		                      <td th:text="${producto.marca}"></td>
 		                      <td th:text="${producto.margenGanancia}"></td>
@@ -150,7 +155,7 @@
           <input type="hidden" value="" id="producto_id" name="producto_id">
           <div class="form-group">
             <label for="cantidad-producto">Nuevo descuento</label>
-            <input type="number" step="5.00" min="0" class="form-control" id="descuento" name="descuento" value="">
+            <input type="number" step="5.00" min="0" max="100" class="form-control" id="descuento" name="descuento" value="">
           </div>
         </div>
         <div class="modal-footer">

@@ -111,4 +111,13 @@ public class Subcategoria {
 	public void setProductos(List<Producto> productos) {
 		this.productos = productos;
 	}
+
+	@Override
+	public String toString() {
+		return "Subcategoria [idSubcategoria=" + idSubcategoria + ", nombreSubcategoria=" + nombreSubcategoria
+				+ ", descripcionSubcategoria=" + descripcionSubcategoria + ", habilitado=" + habilitado + ", categoria="
+				+ categoria + ", productos=" + productos + "]";
+	}
+	
+	
 }
