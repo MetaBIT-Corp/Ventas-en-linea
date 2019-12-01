@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +23,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,7 +81,7 @@ public class ProductoController {
 		ArrayList<ProductoCarrito> getProductos;
 		getProductos = (ArrayList<ProductoCarrito>)session.getAttribute("productosCarrito");
 
-		mav.addObject("departamentos", departamentoService.getDepartamentos());
+		mav.addObject("departamentos", ValidarDepartamento());
 		
 		mav.addObject("esProducto", 1);		
 		
@@ -100,7 +103,7 @@ public class ProductoController {
 				mav.setViewName("redirect:/kardex/list");
 			}
 		}
-
+		mav.addObject("Home", ValidarDepartamento());
 		return mav;
 	}
 
@@ -388,8 +391,9 @@ public class ProductoController {
 			mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
 	    }
 	    
-		mav.addObject("departamentos", departamentoService.getDepartamentos());
+		mav.addObject("departamentos", ValidarDepartamento());
 		mav.addObject("productos", ValidarProductos(productos));
+		mav.addObject("Cat", cat);
 		return mav;
 	}
 	
@@ -400,11 +404,11 @@ public class ProductoController {
 		Subcategoria sub_cat=subcategoriaService.getSubcategoria(id);
 		List<Producto> productos=sub_cat.getProductos();	
 		
-		mav.addObject("departamentos", departamentoService.getDepartamentos());		
+		mav.addObject("departamentos", ValidarDepartamento());		
 		
 		mav.addObject("productos", ValidarProductos(productos));
 		mav.addObject("esProducto", 1);
-		
+		mav.addObject("SubCat", sub_cat);
 	    if(isUserLoggedIn()) {
 	    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		    UserDetails userDetail = (UserDetails) auth.getPrincipal();
@@ -439,6 +443,152 @@ public class ProductoController {
 		return productoContext;
 	}
 	
+	//Buscador de producto
+	@RequestMapping(value = "/searchProduct", method = RequestMethod.GET)
+	public String search(@RequestParam(value = "search", required = false) String q, Model model) {
+
+		List<Producto> searchResults = null;
+
+		try {
+
+			searchResults = productService.buscarProducto(q);
+
+		} catch (Exception ex) {
+			// here you should handle unexpected errors
+			// ...
+			// throw ex;
+		}
+		model.addAttribute("nombreBusqueda", q);
+		model.addAttribute("esProducto", 1);
+		model.addAttribute("productos", ValidarProductos(searchResults));
+		model.addAttribute("departamentos", ValidarDepartamento());
+		if (isUserLoggedIn()) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			model.addAttribute("user", userDetail.getUsername());
+			model.addAttribute("role", userDetail.getAuthorities().toArray()[0].toString());
+		}
+		return "/producto/index";
+	}
+	//Validador de los  departamentos
+	public List<Departamento> ValidarDepartamento() {
+		List<Departamento> departamentos = departamentoService.getDepartamentos();
+		int countSubCat = 0, countProductos = 0, countCategorias = 0,countExistencia=0;		
+		// Bucle para Departamento
+		Iterator<Departamento> dep = departamentos.iterator();
+		while (dep.hasNext()) {
+			Departamento d = dep.next();
+
+			// Si no hay categorias Eliminar el departamento
+			if (d.getCategoria().isEmpty()) {
+				dep.remove();
+			}
+
+			else {
+
+				// Bucle para Categoria
+				Iterator<Categoria> cat = d.getCategoria().iterator();
+				while (cat.hasNext()) {
+					Categoria cate = cat.next();
+					// Si la Categoria no contiene subcategorias la elimina
+					if (cate.getSubcategorias().isEmpty()) {
+						cat.remove();
+					} else {
+						//Cuenta el numero de Categorias Desabilitadas
+						if (cate.isHabilitado() == false) {
+							countCategorias++;
+						}
+						// Bucle para SubCategoria
+						Iterator<Subcategoria> sub_cat = cate.getSubcategorias().iterator();
+						while (sub_cat.hasNext()) {
+							Subcategoria sub = sub_cat.next();
+							// Cuenta las subCategorias desabilitadas
+							if (sub.isHabilitado() == false) {
+								countSubCat++;
+							}
+							// Bucle para Producto
+							Iterator<Producto> product = sub.getProductos().iterator();
+							while (product.hasNext()) {
+								Producto producto = product.next();
+								// si la SubCategoria no tiene productos Elimina la subcategoria
+								if (sub.getProductos().isEmpty()) {
+									sub_cat.remove();
+								} else {
+									// cuenta el numero de productos desabilitados
+									if (producto.getHabilitado() == 0) {
+										countProductos++;
+									}
+									if(producto.getKardex().getUnidadesDisponibles()>0) {
+										countExistencia++;
+									}
+								}
+							}
+
+							// Si el total de productos es igual al numero de productos desabilitados,
+							// elimina la subcategoria
+							if (sub.getProductos().size() == countProductos) {
+								sub_cat.remove();
+							}
+							else {
+								//Elimina la subcategoria si no encuentra existencias
+								if(countExistencia==0) {
+									sub_cat.remove();
+								}
+								countExistencia=0;
+							}	
+							
+							countProductos = 0;
+
+						}
+						// Si el total de subcategorias es igual al numero de subcategorias
+						// desabilitadas, elimina la categoria
+						if (cate.getSubcategorias().size() == countSubCat) {
+
+							cat.remove();
+						}
+						countSubCat = 0;
+					}
+				}
+				// si el total de categorias es igual a la categorias desabilitadas Eliminara el
+				// Departamento de la lista
+				if (d.getCategoria().size() == countCategorias) {
+					dep.remove();
+				}
+				countCategorias = 0;
+
+			}
+
+		}
+
+		return departamentos;
+	}
+	
+	@GetMapping("/departamento/{id_depar}")
+	public ModelAndView buscarDepartamento(@PathVariable("id_depar") int id) {
+		ModelAndView mav = new ModelAndView("/producto/index");
+		
+		Departamento depar=departamentoService.getDepartamento(id);
+		List<Categoria> cat=depar.getCategoria();
+		
+		List<Producto> product= new ArrayList<>();
+		for(Categoria c:cat) {
+			for(Subcategoria sub:c.getSubcategorias()) {
+				product.addAll(sub.getProductos());
+			}
+		}
+		mav.addObject("esProducto", 1);
+		mav.addObject("productos", ValidarProductos(product));
+		mav.addObject("departamentos", ValidarDepartamento());
+		mav.addObject("Dep", depar);
+		
+		if (isUserLoggedIn()) {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			mav.addObject("user", userDetail.getUsername());
+			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
+		}
+		return mav;
+	}
 	
 	
 }

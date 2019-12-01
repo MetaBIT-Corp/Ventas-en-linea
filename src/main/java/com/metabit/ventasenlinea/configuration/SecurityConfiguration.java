@@ -62,7 +62,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/reset-password**",
 				//Prueba de que no me funciona :( la busqueda por el security
 				"/producto/subcategoria/**",
-				"/producto/categoria/**"
+				"/producto/categoria/**",
+				"/producto/searchProduct/**",
+				"/producto/departamento/**"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()
