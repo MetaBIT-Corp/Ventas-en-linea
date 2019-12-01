@@ -84,16 +84,10 @@ public class ProductoController {
 		getProductos = (ArrayList<ProductoCarrito>) session.getAttribute("productosCarrito");
 
 		mav.addObject("departamentos", ValidarDepartamento());
-<<<<<<< HEAD
-		
-		mav.addObject("esProducto", 1);		
-		
-		
-=======
+
 
 		mav.addObject("esProducto", 1);
 		mav.addObject("Home", ValidarDepartamento());
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 		mav.addObject("productos", ValidarProductos(productService.getProductos()));
 		// Si el usuario está autenticado devuelve a la vista el username y el role
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -387,13 +381,8 @@ public class ProductoController {
 			productos.addAll(sub.getProductos());
 		}
 
-		if (isUserLoggedIn()) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			mav.addObject("user", userDetail.getUsername());
-			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
-		}
-<<<<<<< HEAD
+		
+
 		if(isUserLoggedIn()) {
 	    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		    UserDetails userDetail = (UserDetails) auth.getPrincipal();
@@ -404,57 +393,11 @@ public class ProductoController {
 		mav.addObject("departamentos", ValidarDepartamento());
 		mav.addObject("productos", ValidarProductos(productos));
 		mav.addObject("Cat", cat);
-=======
 
-		mav.addObject("departamentos", ValidarDepartamento());
-		mav.addObject("productos", ValidarProductos(productos));
-		
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 		return mav;
 	}
 	
-	@GetMapping("/departamento/{id_depar}")
-	public ModelAndView buscarDepartamento(@PathVariable("id_depar") int id) {
-		ModelAndView mav = new ModelAndView("/producto/index");
-		
-<<<<<<< HEAD
-		mav.addObject("departamentos", ValidarDepartamento());		
-=======
-		Departamento depar=departamentoService.getDepartamento(id);
-		List<Categoria> cat=depar.getCategoria();
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
-		
-		List<Producto> product= new ArrayList<>();
-		for(Categoria c:cat) {
-			for(Subcategoria sub:c.getSubcategorias()) {
-				product.addAll(sub.getProductos());
-			}
-		}
-		mav.addObject("esProducto", 1);
-<<<<<<< HEAD
-		mav.addObject("SubCat", sub_cat);
-	    if(isUserLoggedIn()) {
-	    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		    UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		    mav.addObject("user", userDetail.getUsername());
-			mav.addObject("role",userDetail.getAuthorities().toArray()[0].toString());
-	    }
-	    
-	    
-=======
-		mav.addObject("productos", ValidarProductos(product));
-		mav.addObject("departamentos", ValidarDepartamento());
-		mav.addObject("Dep", depar);
-		
-		if (isUserLoggedIn()) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			mav.addObject("user", userDetail.getUsername());
-			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
-		}
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
-		return mav;
-	}
+	
 
 	@GetMapping("/subcategoria/{id_subcat}")
 	public ModelAndView buscarSubCat(@PathVariable("id_subcat") int id) {
@@ -498,12 +441,7 @@ public class ProductoController {
 		}
 		return productoContext;
 	}
-<<<<<<< HEAD
-	
-	//Buscador de producto
-=======
 
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 	@RequestMapping(value = "/searchProduct", method = RequestMethod.GET)
 	public String search(@RequestParam(value = "search", required = false) String q, Model model) {
 
@@ -530,18 +468,12 @@ public class ProductoController {
 		}
 		return "/producto/index";
 	}
-<<<<<<< HEAD
+
 	//Validador de los  departamentos
 	public List<Departamento> ValidarDepartamento() {
 		List<Departamento> departamentos = departamentoService.getDepartamentos();
-		int countSubCat = 0, countProductos = 0, countCategorias = 0,countExistencia=0;		
-=======
+		int countSubCat = 0, countProductos = 0, countCategorias = 0,countExistencia=0;	
 
-	public List<Departamento> ValidarDepartamento() {
-		List<Departamento> departamentos = departamentoService.getDepartamentos();
-		int countSubCat = 0, countProductos = 0, countCategorias = 0,countExistencia=0;
-		boolean enExistencia=false;
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 		// Bucle para Departamento
 		Iterator<Departamento> dep = departamentos.iterator();
 		while (dep.hasNext()) {
@@ -630,7 +562,7 @@ public class ProductoController {
 
 		return departamentos;
 	}
-<<<<<<< HEAD
+
 	
 	@GetMapping("/departamento/{id_depar}")
 	public ModelAndView buscarDepartamento(@PathVariable("id_depar") int id) {
@@ -657,10 +589,7 @@ public class ProductoController {
 			mav.addObject("role", userDetail.getAuthorities().toArray()[0].toString());
 		}
 		return mav;
-	}
+	}	
 	
-	
-=======
 
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
 }

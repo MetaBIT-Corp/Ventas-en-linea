@@ -60,11 +60,8 @@
       <!-- Divider -->
       <hr class="sidebar-divider" th:if="${esProducto}">
       <div th:if="${esProducto}">
-<<<<<<< HEAD
-      <li class="nav-item" th:each=departamento:${departamentos} th:if="${departamento.habilitado}" >
-=======
-      <li class="nav-item" th:each=departamento:${departamentos} th:if="${departamento.habilitado }" >
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
+
+      <li class="nav-item" th:each=departamento:${departamentos} th:if="${departamento.habilitado}">
         <a class="nav-link collapsed" href="" data-toggle="collapse" th:attr="data-target='#model'+${departamento.id} ,aria-controls = ${departamento.nombre}"   aria-expanded="true" >
           
           <span th:text="${departamento.nombre}"></span>
@@ -181,13 +178,9 @@
       <!-- Sidebar Toggler (Sidebar) 
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-<<<<<<< HEAD
       </div>
       -->
-=======
-      </div>-->
-      
->>>>>>> d60b6aae5c6e563f237abe829f813d205ce21d9d
+
 
     </ul>
     <!-- End of Sidebar -->
