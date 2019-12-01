@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" th:name="${_csrf.parameterName}" th:content="${_csrf.token}"/>
+<meta charset="UTF-8" th:name="${_csrf.parameterName}"
+	th:content="${_csrf.token}" />
 <title>MetaBit Store Online | Productos</title>
 
 <!-- Custom fonts for this template-->
@@ -36,9 +37,9 @@
 <script th:src="@{/js/demo/datatables-demo.js}"></script>
 
 </head>
-<body>
+<body id="page-top">
 	<div id="wrapper">
-		<div th:insert="fragments/sidebar::sidebar"></div>
+		<div th:insert="fragments/sidebar::sidebar" class="bg-gradient-primary"></div>
 		<!-- Content Wrapper -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<!-- Main Content -->
@@ -47,30 +48,70 @@
 				<!-- Begin Page Content -->
 				<div class="container-fluid">
 					<!-- ESPACIO DE TRABAJO  -->
-
-					<div class="row ml-5 mr-4">
+					<nav aria-label="breadcrumb" th:if="${Home}">
+						
+						<!-- Departamentos -->
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item" th:each="dep:${Home}"><a th:href="@{/producto/departamento/__${dep.id}__}" th:text="${dep.nombre}"></a></li>
+						</ol>
+					</nav>
+					<nav aria-label="breadcrumb" th:if="${Dep}">
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a th:href="@{/producto/index}">Home</a></li>
+							<li class="breadcrumb-item" th:text="${Dep.nombre}"></li>
+						</ol>
+						<ol class="breadcrumb">
+							<li class="breadcrumb-item" th:each="cat:${Dep.categoria}"><a th:href="@{/producto/categoria/__${cat.id}__}" th:text="${cat.nombre}"></a></li>
+						</ol>
+					</nav>
+					<nav aria-label="breadcrumb" th:if="${SubCat}">
+					  <ol class="breadcrumb">
+					  		<li class="breadcrumb-item"><a th:href="@{/producto/index}">Home</a></li>
+						  	<li class="breadcrumb-item"><a th:href="@{/producto/departamento/__${SubCat.categoria.departamento.id}__}" th:text="${SubCat.categoria.departamento.nombre}"></a></li>
+						    <li class="breadcrumb-item"><a th:href="@{/producto/categoria/__${SubCat.categoria.id}__}" th:text="${SubCat.categoria.nombre}"></a></li>
+						    <li class="breadcrumb-item" th:text="${SubCat.nombreSubcategoria}"></li>	   
+					  	
+					    
+					  </ol>
+					</nav>
+					<nav aria-label="breadcrumb" th:if="${Cat}">
+					  <ol class="breadcrumb">
+					  		<li class="breadcrumb-item"><a th:href="@{/producto/index}">Home</a></li>					  	
+						  	<li class="breadcrumb-item"><a th:href="@{/producto/departamento/__${Cat.departamento.id}__}" th:text="${Cat.departamento.nombre}"></a></li>
+						    <li class="breadcrumb-item active" aria-current="page" th:text="${Cat.nombre}"></li>	    
+					  </ol>
+					  <ol class="breadcrumb">					  	
+						  	<li class="breadcrumb-item" th:each="subcat:${Cat.subcategorias}"><a th:href="@{/producto/subcategoria/__${subcat.idSubcategoria}__}" th:text="${subcat.nombreSubcategoria}"></a></li>						    	    
+					  </ol>
+					</nav>
+					
+					<div class="row ml-10 mr-4">
 
 						
-											<div class="card mr-3 mb-3 mt-3" style="width: 18rem;" th:each=producto:${productos}>
-							
-												 <div class="carousel-item active" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
-											        <img th:src=${producto.imagen} class="rounded card-img-top">
-											        <!-- Para poner texto sobre imagen pero no me gusto -->
-											        <div class="carousel-caption align-text-bottom">
-											          
-											        </div>
-											     </div>
-												<div class="card-body" th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
-													<h5 class="card-title" th:text=${producto.titulo}>
-													</h5>
-													<strong  class="h5" th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
-													<p class="card-text" th:text=${producto.descripcionArticulo}></p>
-												</div>
-												<div class="card-footer"><button data-agregar th:value=${producto.idArticulo} class="btn btn-primary">Añadir a Carrito</button></div>
-											</div>
+						<div class="card mr-3 mb-3 mt-3" style="width: 18rem;"
+							th:each=producto:${productos}>
+
+							<div class="carousel-item active"
+								th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+								<img th:src=${producto.imagen} class="rounded card-img-top">
+								<!-- Para poner texto sobre imagen pero no me gusto -->
+								<div class="carousel-caption align-text-bottom"></div>
+							</div>
+							<div class="card-body"
+								th:with="result=${(producto.kardex.costoUnitario * producto.margenGanancia )+ producto.kardex.costoUnitario}">
+								<h5 class="card-title" th:text=${producto.titulo}></h5>
+								<strong class="h5"
+									th:text="'$ '+${#numbers.formatDecimal(result,1,2,'POINT')}"></strong>
+								<p class="card-text" th:text=${producto.descripcionArticulo}></p>
+							</div>
+							<div class="card-footer">
+								<button data-agregar th:value=${producto.idArticulo}
+									class="btn btn-primary">Añadir a Carrito</button>
+							</div>
+						</div>
 
 
-																
+
 
 					</div>
 					<!-- FIN DE ESPACIO DE TRABAJO -->
@@ -90,210 +131,235 @@
 	<div th:insert="fragments/modallogout::modallogout"></div>
 
 
-<!-- Modal agregar productos al carrito-->
-<div class="modal fade" id="agregarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eliminarModalCenterTitle">Agregar a carrito</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <!--<form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">-->
-        <div class="modal-body" id="agregar-producto">
-          <input type="hidden" value="" id="id-producto" name="producto_id">
-          <input type="hidden" value="0" id="modo">
-          <div class="form-group">
-            <label for="cantidad-producto">Cantidad*</label>
-            <input type="number" min="1" class="form-control" id="cantidad-producto" name="cantidad">
-            <em id="existencia" style="color: red"></em>
-          </div>
-        </div>
-        <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-	        <button type="button" id="agregar" class="btn btn-primary">Agregar</button>    
-        </div>
-      <!--</form>-->
-    </div>
-  </div>
-</div>
+	<!-- Modal agregar productos al carrito-->
+	<div class="modal fade" id="agregarCarrito" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="eliminarModalCenterTitle">Agregar
+						a carrito</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<!--<form th:action="@{/producto/agregar-producto}" method="post" id="agregarForm">-->
+				<div class="modal-body" id="agregar-producto">
+					<input type="hidden" value="" id="id-producto" name="producto_id">
+					<input type="hidden" value="0" id="modo">
+					<div class="form-group">
+						<label for="cantidad-producto">Cantidad*</label> <input
+							type="number" min="1" class="form-control" id="cantidad-producto"
+							name="cantidad"> <em id="existencia" style="color: red"></em>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Cancelar</button>
+					<button type="button" id="agregar" class="btn btn-primary">Agregar</button>
+				</div>
+				<!--</form>-->
+			</div>
+		</div>
+	</div>
 
-<!-- Modal para editar cantidad de producto en carrito-->
-<div class="modal fade" id="editarCarrito" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eliminarModalCenterTitle">Editar cantidad de producto</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-        <div class="modal-body" id="editar-producto">
-          <input type="hidden" value="" id="id_producto" name="producto_id">
-          <input type="hidden" value="1" id="modo">
-          <div class="form-group">
-            <label for="cantidad-producto">Cantidad*</label>
-            <input type="number" min="1" class="form-control" id="cantidad_producto" name="cantidad" value="">
-            <em id="existencia_edit" style="color: red"></em>
-          </div>
-        </div>
-        <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-	        <button type="button" id="btnGuardar" class="btn btn-primary">Guardar</button>    
-        </div>
-    </div>
-  </div>
-</div>
+	<!-- Modal para editar cantidad de producto en carrito-->
+	<div class="modal fade" id="editarCarrito" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="eliminarModalCenterTitle">Editar
+						cantidad de producto</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="editar-producto">
+					<input type="hidden" value="" id="id_producto" name="producto_id">
+					<input type="hidden" value="1" id="modo">
+					<div class="form-group">
+						<label for="cantidad-producto">Cantidad*</label> <input
+							type="number" min="1" class="form-control" id="cantidad_producto"
+							name="cantidad" value=""> <em id="existencia_edit"
+							style="color: red"></em>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Cancelar</button>
+					<button type="button" id="btnGuardar" class="btn btn-primary">Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 
 <script>
-	$('[data-agregar]'). on('click', lanzarModal);
+	$('[data-agregar]').on('click', lanzarModal);
 	$('#carrito').on('click', cargarProductosAgregados);
 	$('#agregar').on('click', agregarProductoCarrito);
 	$('#btnGuardar').on('click', editarCantidadProductoCarrito);
 	$(document).ready(actualizarCantidadAgregados);
-	$('#cantidad-producto').on('keyup mouseup',verificarCantidad);
-	$('#cantidad_producto').on('keyup mouseup',verificarCantidad);
+	$('#cantidad-producto').on('keyup mouseup', verificarCantidad);
+	$('#cantidad_producto').on('keyup mouseup', verificarCantidad);
 
-	function lanzarModal(){
+	function lanzarModal() {
 		$('#id-producto').attr('value', $(this).val());
 		$('#agregarCarrito').modal('show');
 	}
 
-	function cargarProductosAgregados(){
+	function cargarProductosAgregados() {
 
 		//AJAX
-		$.get('/api/productos-agregados', function(data){
-			html_productos='';
+		$
+				.get(
+						'/api/productos-agregados',
+						function(data) {
+							html_productos = '';
 
-			if(data.length==0){
-				return;
-			}
+							if (data.length == 0) {
+								return;
+							}
 
-			for(var i = 0; i < data.length; i++){
-				html_productos += 
-				'<div class="row">'+
-				'<div class="col">'+
-				'<span class="float-left font-weight-bold">' + data[i].producto.titulo + '. Cantidad: '+ data[i].cantidad +' </span>'+
-				'</div>'+
-				'<div class="col">'+
-				'<a href="/producto/remover-producto/'+data[i].producto.idArticulo+'" title="Remover" class="float-right btn btn-sm btn-danger"><i class="fas fa-minus-circle"></i></a>'+
-				'<button style="margin-right:5px;" onclick="editarModal('+data[i].producto.idArticulo+','+data[i].cantidad+')" class="float-right btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></button>'+
-				'</div>'+
-				'</div>';
-				if(i<data.length-1){
-					html_productos += '<hr>';
-				}
-			}
+							for (var i = 0; i < data.length; i++) {
+								html_productos += '<div class="row">'
+										+ '<div class="col">'
+										+ '<span class="float-left font-weight-bold">'
+										+ data[i].producto.titulo
+										+ '. Cantidad: '
+										+ data[i].cantidad
+										+ ' </span>'
+										+ '</div>'
+										+ '<div class="col">'
+										+ '<a href="/producto/remover-producto/'+data[i].producto.idArticulo+'" title="Remover" class="float-right btn btn-sm btn-danger"><i class="fas fa-minus-circle"></i></a>'
+										+ '<button style="margin-right:5px;" onclick="editarModal('
+										+ data[i].producto.idArticulo
+										+ ','
+										+ data[i].cantidad
+										+ ')" class="float-right btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></button>'
+										+ '</div>' + '</div>';
+								if (i < data.length - 1) {
+									html_productos += '<hr>';
+								}
+							}
 
-			$('#productos_agregados').html(html_productos);
-		})
+							$('#productos_agregados').html(html_productos);
+						})
 	}
-	
-	function editarModal(id,cantidad){
+
+	function editarModal(id, cantidad) {
 		$("#cantidad_producto").val(cantidad);
 		$("#id_producto").val(id);
 		$('#editarCarrito').modal();
 	}
-	
-	function editarCantidadProductoCarrito(){
+
+	function editarCantidadProductoCarrito() {
 		var cantidad = $('#cantidad_producto').val();
 		var id = $('#id_producto').val();
 
-		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
+		$.get('/producto/agregar-producto/' + cantidad + '/' + id, function(
+				data) {
 			$('#editarCarrito').modal('hide');
 		});
 	}
-	
-	function actualizarCantidadAgregados(){
+
+	function actualizarCantidadAgregados() {
 
 		//AJAX
-		$.get('/api/productos-agregados', function(data){
+		$.get('/api/productos-agregados', function(data) {
 
-			if(data.length==0){
+			if (data.length == 0) {
 				return;
 			}
 
-			$('#cantidad_agregada').text(data.length+'+');
+			$('#cantidad_agregada').text(data.length + '+');
 		})
 	}
 
-	function agregarProductoCarrito(){
+	function agregarProductoCarrito() {
 		var cantidad = $('#cantidad-producto').val();
 		var id = $('#id-producto').val();
-		
-		$.get('/producto/agregar-producto/'+cantidad+'/'+id, function(data){
-			
+
+		$.get('/producto/agregar-producto/' + cantidad + '/' + id, function(
+				data) {
+
 			//$('#agregarForm')[0].reset();
 			$('#agregarCarrito').modal('hide');
 			actualizarCantidadAgregados();
-			 $('#cantidad-producto').val("");
-			 $('#id-producto').val("");
+			$('#cantidad-producto').val("");
+			$('#id-producto').val("");
 		});
 	}
 
-	function verificarCantidad(){
+	function verificarCantidad() {
 		var modo = 0;
-		if($('#id-producto').val() == "")
+		if ($('#id-producto').val() == "")
 			modo = 1;
-		
+
 		var id = 0;
 		var cantidad = 0;
-		
-		if(modo == 0){
+
+		if (modo == 0) {
 			id = $('#id-producto').val();
 			cantidad = $('#cantidad-producto').val();
-		}else{
+		} else {
 			id = $('#id_producto').val();
 			cantidad = $('#cantidad_producto').val();
 		}
 
-		if(cantidad == 0){
-			if(modo == 0){
-				$('#agregar').attr('disabled', 'true');	
-			}else{
+		if (cantidad == 0) {
+			if (modo == 0) {
+				$('#agregar').attr('disabled', 'true');
+			} else {
 				$('#btnGuardar').attr('disabled', 'true');
 			}
 			return;
 		}
 
 		var num = cantidad % 1;
-		if(!Number.isInteger(num)){
-			if(modo == 0){
+		if (!Number.isInteger(num)) {
+			if (modo == 0) {
 				$('#agregar').attr('disabled', 'true');
 				$('#existencia').text('Debe ingresar un número entero');
-			}else{
+			} else {
 				$('#btnGuardar').attr('disabled', 'true');
 				$('#existencia_edit').text('Debe ingresar un número entero');
 			}
 			return;
 		}
 
-		$.get('/api/cantidad-disponible/'+id, function(existencia){
+		$
+				.get(
+						'/api/cantidad-disponible/' + id,
+						function(existencia) {
 
-			if(existencia < cantidad){
-				if(modo == 0){
-					$('#agregar').attr('disabled', 'true');
-					$('#existencia').text('La cantidad ingresada supera las unidades disponibles');	
-				}else{
-					$('#btnGuardar').attr('disabled', 'true');
-					$('#existencia_edit').text('La cantidad ingresada supera las unidades disponibles');	
-				}
-			}else{
-				if(modo == 0){
-					$('#existencia').text('');
-					$('#agregar').removeAttr('disabled');	
-				}else{
-					$('#existencia_edit').text('');
-					$('#btnGuardar').removeAttr('disabled');
-				}
-			}
-		})
+							if (existencia < cantidad) {
+								if (modo == 0) {
+									$('#agregar').attr('disabled', 'true');
+									$('#existencia')
+											.text(
+													'La cantidad ingresada supera las unidades disponibles');
+								} else {
+									$('#btnGuardar').attr('disabled', 'true');
+									$('#existencia_edit')
+											.text(
+													'La cantidad ingresada supera las unidades disponibles');
+								}
+							} else {
+								if (modo == 0) {
+									$('#existencia').text('');
+									$('#agregar').removeAttr('disabled');
+								} else {
+									$('#existencia_edit').text('');
+									$('#btnGuardar').removeAttr('disabled');
+								}
+							}
+						})
 	}
-
-	
 </script>
 
 </html>

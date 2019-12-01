@@ -63,7 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				//Prueba de que no me funciona :( la busqueda por el security
 				"/producto/subcategoria/**",
 				"/producto/categoria/**",
-				"/producto/searchProduct/**"
+				"/producto/searchProduct/**",
+				"/producto/departamento/**"
 				).permitAll()
 		.antMatchers("/css/**","/img/**","/js/**","/scss/**","/vendor/**","/img_products/**").permitAll()
 		.anyRequest().authenticated()
