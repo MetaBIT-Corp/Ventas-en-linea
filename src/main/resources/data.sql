@@ -118,11 +118,11 @@ INSERT INTO paises (id_pais, costo_envio, impuesto, nombre_pais) VALUES
 INSERT INTO paises (id_pais, costo_envio, impuesto, nombre_pais) VALUES
 (35, 0.745289, 0.380926, 'Venezuela');
 
-INSERT INTO estados(id_estado, titulo_estado) VALUES 
+INSERT INTO estados(idEstado, titulo_estado) VALUES 
 (1,'Enviado');
-INSERT INTO estados(id_estado, titulo_estado) VALUES 
+INSERT INTO estados(idEstado, titulo_estado) VALUES 
 (2,'Pendiente');
-INSERT INTO estados(id_estado, titulo_estado) VALUES 
+INSERT INTO estados(idEstado, titulo_estado) VALUES 
 (3,'Autorizado');
-INSERT INTO estados(id_estado, titulo_estado) VALUES 
+INSERT INTO estados(idEstado, titulo_estado) VALUES 
 (4,'Solicitado');
