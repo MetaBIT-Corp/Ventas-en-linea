@@ -12,7 +12,7 @@ public class Pais {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "idPais", nullable = false)
+	@Column(name = "id_pais", nullable = false)
 	private int idPais;
 
 	@Column(name = "nombre_pais", nullable = false)
